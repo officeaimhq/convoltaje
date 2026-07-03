@@ -155,11 +155,11 @@ const InteractiveNeuralVortex = () => {
       pointer.current.tY = e.clientY;
     };
 
-    window.addEventListener('pointermove', handleMouseMove as any);
+    window.addEventListener('pointermove', handleMouseMove as EventListener);
     
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('pointermove', handleMouseMove as any);
+      window.removeEventListener('pointermove', handleMouseMove as EventListener);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
