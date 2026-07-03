@@ -11,151 +11,109 @@ export const FAQ_ITEMS: FAQItem[] = [
   {
     id: "faq-1",
     category: "instalacion",
-    question: "¿Cuánto tiempo tarda la instalación de un sistema solar?",
+    question: "¿Qué tipo de cable se usa en una instalación solar profesional?",
     answer:
-      "La instalación típica de un sistema solar completo toma entre 10-15 días hábiles. Esto incluye: inspección del sitio (1-2 días), preparación de estructuras (2-3 días), instalación de paneles (2-3 días), conexión de baterías (2-3 días), pruebas y puesta en marcha (2-3 días). El tiempo puede variar según la complejidad del proyecto y las condiciones climáticas.",
+      "En Convoltaje usamos exclusivamente cable solar certificado, diseñado para trabajar a la intemperie y resistir la radiación ultravioleta. Nunca usamos cable eléctrico común en nuestras instalaciones — aunque visualmente pueda parecerse, el cable eléctrico no está preparado para soportar las condiciones de un sistema solar y representa un riesgo serio. Si ves en tu casa a un instalador usando cable eléctrico donde debe ir cable solar, ese instalador no es profesional. En Convoltaje, cada detalle de la instalación se hace de forma profesional y medida.",
   },
   {
     id: "faq-2",
     category: "instalacion",
-    question: "¿Necesito hacer modificaciones en mi casa para instalar paneles solares?",
+    question: "¿Por qué es peligroso usar dos cables finos en lugar de uno grueso?",
     answer:
-      "Las modificaciones dependen de tu tipo de vivienda. En apartamentos, generalmente instalamos en azoteas o terrazas sin modificaciones estructurales. En casas, podemos instalar en techos, patios o estructuras independientes. Nuestro equipo realiza una evaluación gratuita para determinar la mejor ubicación sin afectar la estructura de tu propiedad.",
+      "Es una práctica que vemos en instalaciones de baja calidad y es directamente peligrosa. Un inversor de capacidad media puede manejar hasta 120 amperes de corriente. Unir dos cables finitos no equivale a tener un cable grueso certificado — el sistema puede sobrecalentarse, fallar, o generar un incendio. En Convoltaje usamos el calibre de cable correcto para cada punto del sistema, sin atajos.",
   },
   {
     id: "faq-3",
     category: "instalacion",
-    question: "¿Qué mantenimiento requiere un sistema solar?",
+    question: "¿Cómo sé si la estructura de mis paneles solares está bien instalada?",
     answer:
-      "El mantenimiento es mínimo. Recomendamos: limpieza de paneles cada 3-6 meses (especialmente en temporada de polvo), inspección visual mensual de conexiones, revisión anual profesional de todo el sistema. Los paneles tienen una vida útil de 25-30 años con degradación mínima (~0.5% anual). Las baterías requieren revisión cada 2-3 años.",
+      "Una señal de alarma inmediata: si puedes mover o aflojar un panel solar con la mano, la instalación no es profesional. La estructura debe ser completamente rígida, capaz de soportar vientos fuertes y las condiciones climáticas de Cuba. En Convoltaje revisamos cada punto de fijación antes de dar por completada cualquier instalación.",
   },
   {
     id: "faq-4",
     category: "instalacion",
-    question: "¿Puedo instalar paneles solares en un apartamento?",
+    question: "¿Cuánto tiempo tarda la instalación?",
     answer:
-      "Sí, absolutamente. Muchos de nuestros clientes viven en apartamentos. Instalamos en azoteas comunitarias, terrazas privadas o balcones. Es importante obtener autorización de la junta directiva si es azotea compartida. Ofrecemos sistemas portátiles y modulares para espacios limitados.",
+      "El tiempo promedio de instalación es de 10 a 15 días hábiles, sujeto a disponibilidad del equipamiento en almacén. Esto incluye la inspección del sitio, preparación de estructuras, instalación de paneles, conexión de baterías e inversor, y las pruebas de puesta en marcha. No damos el trabajo por terminado hasta que el sistema funciona al 100%.",
   },
-
-  // Baterías
   {
     id: "faq-5",
-    category: "baterias",
-    question: "¿Cuál es la vida útil de las baterías?",
+    category: "instalacion",
+    question: "¿Qué incluye el servicio de instalación de Convoltaje?",
     answer:
-      "Nuestras baterías de litio tienen una vida útil de 8-10 años con garantía de 5 años. Después de este período, mantienen aproximadamente 80-85% de su capacidad. Esto significa que incluso después de 10 años, tu batería seguirá funcionando eficientemente. El costo de reemplazo es significativamente menor que el sistema inicial.",
+      "Nuestro servicio es completamente llave en mano: incluye el suministro de todos los equipos, estructuras de montaje, cable solar certificado, cableado profesional completo, configuración del inversor y baterías, y la puesta en marcha del sistema. Trabajamos con técnicos e ingenieros calificados. No terminamos el trabajo hasta que el sistema esté funcionando correctamente.",
   },
+
+  // Garantía
   {
     id: "faq-6",
-    category: "baterias",
-    question: "¿Qué diferencia hay entre baterías de litio y plomo-ácido?",
+    category: "garantia",
+    question: "¿Qué garantía ofrece Convoltaje?",
     answer:
-      "Las baterías de litio (que usamos en Convoltaje) ofrecen: mayor densidad energética, ciclos de vida 3-5 veces más largos, cero mantenimiento, mejor rendimiento en temperaturas extremas, y recuperación más rápida. Las baterías de plomo-ácido son más económicas inicialmente pero requieren mantenimiento regular, tienen menor vida útil (3-5 años) y ocupan más espacio.",
+      "Ofrecemos 90 días de garantía sobre la instalación y los trabajos realizados. Trabajamos con baterías certificadas, cableado profesional y equipos de calidad. Es importante aclarar que las garantías de fábrica de los equipos (paneles, inversores, baterías) son responsabilidad directa de cada fabricante — nosotros te ayudamos a gestionarlas si las necesitas.",
   },
   {
     id: "faq-7",
-    category: "baterias",
-    question: "¿Qué pasa si la batería se descarga completamente?",
+    category: "garantia",
+    question: "¿Tengo que pagar algo antes de que instalen el sistema?",
     answer:
-      "Nuestros sistemas tienen protección automática que evita descargas completas. Cuando la batería llega a 10% de capacidad, el sistema desconecta automáticamente los equipos no esenciales. Esto protege la batería y extiende su vida útil. Puedes recargar manualmente en cualquier momento usando paneles solares o la red eléctrica si está disponible.",
+      "No. Convoltaje trabaja bajo un modelo único: no solicitamos ningún anticipo ni pago previo. El pago se realiza únicamente cuando la instalación está completamente terminada y el sistema funciona al 100%. Esto refleja nuestra confianza en la calidad del trabajo que entregamos.",
   },
   {
     id: "faq-8",
-    category: "baterias",
-    question: "¿Las baterías funcionan en climas cálidos como Cuba?",
+    category: "garantia",
+    question: "¿Ofrecen financiamiento o planes de pago?",
     answer:
-      "Perfectamente. Nuestras baterías están diseñadas específicamente para climas tropicales. Incluyen sistemas de ventilación y regulación térmica que mantienen la temperatura óptima incluso en días muy calurosos. De hecho, el clima cálido de Cuba es ideal para paneles solares, que generan más energía con temperaturas moderadas.",
+      "No trabajamos con planes de financiamiento. Nuestro modelo es simple: el cliente paga el valor total del sistema una sola vez, al finalizar la instalación y confirmar que todo funciona correctamente. Sin cuotas, sin intereses, sin pagos por adelantado.",
   },
 
   // Consumo
   {
     id: "faq-9",
     category: "consumo",
-    question: "¿Cómo calculo mi consumo energético diario?",
+    question: "¿Puedo usar aire acondicionado con un sistema solar?",
     answer:
-      "Usa nuestra calculadora solar interactiva que está en esta página. Simplemente: 1) Selecciona tu tipo de vivienda, 2) Agrega los equipos que usas con cantidad y horas de uso, 3) Indica las horas de sol en tu región, 4) Obtendrás tu consumo diario y la recomendación de kit perfecto. Si prefieres hacerlo manualmente: Consumo (kWh) = (Watts × Horas de uso) / 1000.",
+      "Sí, y es una de las preguntas más frecuentes que nos hacen. Con el sistema adecuado, podés dormir con el aire acondicionado encendido todas las noches sin preocuparte por el consumo. La clave está en dimensionar bien el sistema — por eso tenemos nuestra calculadora solar en esta misma página, para que sepas exactamente qué sistema necesitás según tu consumo real.",
   },
   {
     id: "faq-10",
     category: "consumo",
-    question: "¿Un aire acondicionado consume mucha energía?",
+    question: "¿Cómo sé cuánta energía necesito?",
     answer:
-      "Sí, los aires acondicionados son los electrodomésticos que más energía consumen (~1500W). 6 horas de uso diario = 9 kWh/día. Sin embargo, nuestros sistemas de 7.2kW pueden manejar esto sin problemas. Para máxima eficiencia, recomendamos usar aire acondicionado durante las horas más calurosas (10am-4pm) cuando los paneles generan más energía.",
-  },
-  {
-    id: "faq-11",
-    category: "consumo",
-    question: "¿Qué equipos consumen más energía en una casa?",
-    answer:
-      "Los principales consumidores son: Aire acondicionado (1500W), Horno eléctrico (2000W), Lavadora (500W), Refrigerador (200W), Televisor (150W), Laptop (65W). La mayoría de estos funcionan durante horas específicas, excepto el refrigerador que está 24/7. Nuestra calculadora te ayuda a identificar exactamente cuánto consume cada uno.",
-  },
-  {
-    id: "faq-12",
-    category: "consumo",
-    question: "¿Puedo usar mi sistema solar para cargar vehículos eléctricos?",
-    answer:
-      "Sí, pero requiere un sistema más grande. Un auto eléctrico típico consume 15-20 kWh para cargar completamente. Recomendamos nuestro sistema Premium 10000W para esto. Además, es ideal cargar durante el día cuando los paneles generan máxima energía. Podemos diseñar un sistema híbrido que maneje tanto consumo doméstico como carga de vehículos.",
-  },
-
-  // Garantía
-  {
-    id: "faq-13",
-    category: "garantia",
-    question: "¿Qué incluye la garantía del sistema?",
-    answer:
-      "Nuestros sistemas incluyen: Garantía de paneles solares: 25 años (degradación máxima 0.8% anual), Garantía de baterías: 5 años (cobertura completa), Garantía de inversor: 5 años, Garantía de instalación: 2 años (mano de obra). Además ofrecemos servicio técnico 24/7 por WhatsApp.",
-  },
-  {
-    id: "faq-14",
-    category: "garantia",
-    question: "¿Qué cubre la garantía si hay daños por tormenta?",
-    answer:
-      "La garantía estándar cubre defectos de fabricación. Para daños por tormentas, recomendamos contratar un seguro adicional que cubre eventos climáticos extremos. Ofrecemos paquetes de seguros a partir de $50/año que cubren daños por rayos, huracanes y inundaciones. Consulta con nuestro equipo comercial para más detalles.",
-  },
-  {
-    id: "faq-15",
-    category: "garantia",
-    question: "¿Qué pasa si mi sistema falla después de la garantía?",
-    answer:
-      "Ofrecemos planes de mantenimiento extendido y reparación a costos muy accesibles. La mayoría de reparaciones son menores (reemplazo de conexiones, limpieza, etc.). Los componentes principales (paneles, baterías, inversores) rara vez fallan. Contamos con piezas de repuesto en stock y técnicos certificados disponibles.",
+      "Usá nuestra Calculadora Solar Inteligente en esta página. En 4 pasos simples calculás tu consumo diario real según tu tipo de vivienda y los equipos que usás, y el sistema te recomienda automáticamente el kit más adecuado para tus necesidades.",
   },
 
   // General
   {
-    id: "faq-16",
+    id: "faq-11",
     category: "general",
-    question: "¿Cuál es el costo inicial de un sistema solar?",
+    question: "¿Por qué elegir Convoltaje y no otro instalador?",
     answer:
-      "Los precios varían según el tamaño del sistema: Sistema Básico (1.5kW): $1,745 USD, Sistema Medio (3kW): $2,750 USD, Sistema Grande (6kW): $3,950-6,950 USD, Sistema Premium (10kW): $9,850 USD. Ofrecemos planes de financiamiento sin interés hasta 12 meses. Usa nuestra calculadora para obtener una prefactura personalizada.",
+      "Tres razones principales: primero, trabajamos con materiales certificados y correctos — cable solar, no cable eléctrico; estructuras rígidas, no improvisadas. Segundo, no cobramos hasta que el sistema esté funcionando — si no quedás satisfecho, no pagás. Tercero, nuestros técnicos e ingenieros explican cada detalle del proceso y te enseñan a usar tu sistema correctamente. En Cuba hay muchos instaladores; pocos trabajan con estos estándares.",
   },
   {
-    id: "faq-17",
+    id: "faq-12",
     category: "general",
-    question: "¿Cuánto dinero ahorraré con energía solar?",
+    question: "¿Qué pasa si hay un problema después de la instalación?",
     answer:
-      "El ahorro depende de tu consumo actual. Un cliente promedio ahorra $80-150 USD mensuales en electricidad. Con un sistema de $3,500 USD, el retorno de inversión es de 2-3 años. Después, toda la energía es prácticamente gratis. Además, aumenta el valor de tu propiedad en 3-4%.",
+      "Tenés 90 días de garantía sobre nuestra instalación. Cualquier problema relacionado con el trabajo realizado lo resolvemos sin costo adicional. Además, nuestro equipo está disponible por WhatsApp para responder dudas y orientarte sobre el uso correcto del sistema.",
+  },
+
+  // Baterías
+  {
+    id: "faq-13",
+    category: "baterias",
+    question: "¿Qué tipo de baterías usan?",
+    answer:
+      "Trabajamos con baterías certificadas de tecnología LiFePO4 (litio ferrofosfato), que son las más seguras y durables del mercado para sistemas solares residenciales. Son baterías diseñadas específicamente para este uso, no adaptaciones de otras tecnologías.",
   },
   {
-    id: "faq-18",
-    category: "general",
-    question: "¿Necesito permisos del gobierno para instalar paneles?",
+    id: "faq-14",
+    category: "baterias",
+    question: "¿Los equipos que instalan son originales?",
     answer:
-      "En Cuba, los requisitos varían por municipio. Nuestro equipo se encarga de toda la documentación y permisos necesarios. Generalmente necesitas: Autorización de la propiedad, Inspección técnica, Registro en la empresa eléctrica local. Todo esto lo manejamos nosotros, tú solo firmas los documentos.",
-  },
-  {
-    id: "faq-19",
-    category: "general",
-    question: "¿Puedo expandir mi sistema solar después?",
-    answer:
-      "Absolutamente. Todos nuestros sistemas son modulares y expandibles. Puedes agregar más paneles, baterías adicionales o un inversor más grande en el futuro. Esto es ventajoso porque puedes comenzar con un sistema básico y crecer según tus necesidades. Nuestro equipo puede diseñar la expansión sin afectar el sistema existente.",
-  },
-  {
-    id: "faq-20",
-    category: "general",
-    question: "¿Qué pasa si tengo días nublados seguidos?",
-    answer:
-      "Nuestros sistemas están diseñados para esto. Las baterías almacenan energía de días soleados para usar en días nublados. Un sistema bien dimensionado puede mantener 2-3 días de autonomía sin sol. Además, en Cuba tenemos más de 300 días soleados al año, así que esto es muy raro. Si necesitas más seguridad, recomendamos un sistema más grande o conexión a la red eléctrica como respaldo.",
-  },
+      "Sí. Trabajamos con marcas reconocidas internacionalmente como MUST, EcoFlow, Bluetti y Anker, con equipos originales y documentación de fábrica. Podés verificar la autenticidad de cualquier equipo que instalemos.",
+  }
 ];
 
 export const FAQ_CATEGORIES = [
