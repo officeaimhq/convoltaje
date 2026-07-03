@@ -64,7 +64,7 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
           {/* Right Content - Character */}
           <div className="relative h-64 sm:h-80 lg:h-full flex items-center justify-center animate-slide-up mb-8 lg:mb-0">
             <img
-              src="/images/solucionapagon.jpg"
+              src="/images/solucion-apagon.jpg"
               alt="Samuel el Panel - Mascota de Convoltaje"
               className="max-h-full w-auto max-w-sm lg:max-w-md drop-shadow-2xl object-contain rounded-xl"
             />
