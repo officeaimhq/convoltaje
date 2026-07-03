@@ -183,14 +183,18 @@ export default function SolarCalculator() {
               Paso {currentStep} de 4
             </div>
 
-            <Button
-              onClick={() => setCurrentStep((prev) => Math.min(4, prev + 1) as Step)}
-              disabled={!canProceedToNextStep() || currentStep === 4}
-              className="gap-2 bg-secondary hover:bg-secondary/90 w-full sm:w-auto order-2 sm:order-3 py-6 sm:py-2 text-base sm:text-sm"
-            >
-              Siguiente
-              <ChevronRight className="w-5 h-5 sm:w-4 sm:h-4" />
-            </Button>
+            {currentStep < 4 ? (
+              <Button
+                onClick={() => setCurrentStep((prev) => Math.min(4, prev + 1) as Step)}
+                disabled={!canProceedToNextStep()}
+                className="gap-2 bg-secondary hover:bg-secondary/90 w-full sm:w-auto order-2 sm:order-3 py-6 sm:py-2 text-base sm:text-sm"
+              >
+                Siguiente
+                <ChevronRight className="w-5 h-5 sm:w-4 sm:h-4" />
+              </Button>
+            ) : (
+              <div className="w-full sm:w-auto order-2 sm:order-3" />
+            )}
           </div>
         </Card>
       </div>

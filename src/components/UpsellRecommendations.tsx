@@ -1,4 +1,5 @@
-import { Zap, TrendingUp, AlertCircle } from "lucide-react";
+import { useState } from "react";
+import { Zap, TrendingUp, AlertCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CONVOLTAJE_PRODUCTS, WHATSAPP_NUMBERS } from "@/lib/products";
@@ -14,6 +15,16 @@ export default function UpsellRecommendations({
   kitPrice,
   onProductClick,
 }: UpsellRecommendationsProps) {
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
+
+  const toggleProduct = (productId: string) => {
+    setSelectedProductIds((prev) => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+    onProductClick(productId);
+  };
   // Find complementary products based on consumption
   const getRecommendations = () => {
     const recommendations: typeof CONVOLTAJE_PRODUCTS = [];
@@ -46,7 +57,9 @@ export default function UpsellRecommendations({
   };
 
   const recommendations = getRecommendations();
-  const totalValue = recommendations.reduce((sum, p) => sum + p.price, 0);
+  
+  const selectedProducts = recommendations.filter(p => selectedProductIds.includes(p.id));
+  const totalValue = selectedProducts.reduce((sum, p) => sum + p.price, 0);
   const bundleDiscount = Math.round((totalValue * 0.15) * 100) / 100; // 15% bundle discount
 
   if (recommendations.length === 0) return null;
@@ -86,20 +99,28 @@ export default function UpsellRecommendations({
                 </div>
               </div>
               <Button
-                onClick={() => onProductClick(product.id)}
-                variant="outline"
+                onClick={() => toggleProduct(product.id)}
+                variant={selectedProductIds.includes(product.id) ? "default" : "outline"}
                 size="sm"
-                className="text-secondary hover:bg-secondary/10"
+                className={selectedProductIds.includes(product.id) ? "bg-secondary hover:bg-secondary/90 text-secondary-foreground" : "text-secondary hover:bg-secondary/10"}
               >
-                Agregar
+                {selectedProductIds.includes(product.id) ? (
+                  <>
+                    <Check className="w-4 h-4 mr-1" />
+                    Agregado
+                  </>
+                ) : (
+                  "Agregar"
+                )}
               </Button>
             </div>
           </Card>
         ))}
       </div>
 
-      {/* Bundle Offer */}
-      <Card className="p-4 bg-accent/10 border-accent/30">
+      {/* Bundle Offer - Only show if something is selected */}
+      {selectedProducts.length > 0 && (
+        <Card className="p-4 bg-accent/10 border-accent/30">
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
           <div>
@@ -141,6 +162,7 @@ export default function UpsellRecommendations({
           </div>
         </div>
       </Card>
+      )}
     </div>
   );
 }

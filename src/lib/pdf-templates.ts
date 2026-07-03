@@ -369,7 +369,7 @@ export function generateQuotationHTML(data: QuotationData): string {
         2. Contacta a nuestro equipo comercial<br>
         3. Confirma tu pedido y procede con el pago<br>
         4. ¡Disfruta de tu energía limpia!<br><br>
-        <strong>WhatsApp:</strong> <span class="whatsapp-link">+53 55 14 40 97</span><br>
+        <strong>WhatsApp:</strong> <span class="whatsapp-link">5355144097</span><br>
         <strong>Email:</strong> contacto@convoltaje.com
       </div>
     </div>
@@ -378,7 +378,7 @@ export function generateQuotationHTML(data: QuotationData): string {
     <div class="footer">
       <div class="contact-info">
         Convoltaje - Soluciones de Energía Solar<br>
-        WhatsApp: +53 55 14 40 97 | Email: contacto@convoltaje.com<br>
+        WhatsApp: 5355144097 | Email: contacto@convoltaje.com<br>
         Esta prefactura es válida por 30 días desde su emisión.
       </div>
     </div>
@@ -443,7 +443,7 @@ PRÓXIMOS PASOS
 3. Confirma tu pedido y procede con el pago
 4. ¡Disfruta de tu energía limpia!
 
-Contacto: WhatsApp +53 55 14 40 97
+Contacto: WhatsApp 5355144097
 Email: contacto@convoltaje.com
 
 ---

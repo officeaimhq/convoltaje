@@ -168,7 +168,7 @@ export default function LeadCaptureModal({
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="+53 5514 4097"
+                  placeholder="5355144097"
                   className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 />
               </div>

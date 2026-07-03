@@ -318,11 +318,10 @@ export async function generatePDF(options: PDFGeneratorOptions): Promise<Blob> {
           </ol>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
           <p>Convoltaje - Energía Solar Confiable</p>
           <div class="footer-contact">
-            📱 WhatsApp: +53 5514 4097 | 📧 Email: convoltaje@gmail.com
+            📱 WhatsApp: 5355144097 | 📧 Email: convoltaje@gmail.com
           </div>
           <p style="margin-top: 15px;">Esta prefactura fue generada automáticamente el ${new Date().toLocaleString("es-ES")}</p>
         </div>
@@ -332,20 +331,9 @@ export async function generatePDF(options: PDFGeneratorOptions): Promise<Blob> {
   `;
 
   // Convert HTML to PDF using html2pdf library
-  // Since we're in a browser environment, we'll use a simple approach with canvas
   try {
     // Import html2pdf dynamically
     const html2pdf = (await import("html2pdf.js")).default;
-
-    const element = document.createElement("div");
-    element.innerHTML = htmlContent;
-    
-    // Crucial for html2canvas: element MUST be in the DOM to render its layout
-    element.style.position = "absolute";
-    element.style.left = "-9999px";
-    element.style.top = "0";
-    element.style.width = "800px";
-    document.body.appendChild(element);
 
     const options: any = {
       margin: 0,
@@ -358,19 +346,11 @@ export async function generatePDF(options: PDFGeneratorOptions): Promise<Blob> {
     return new Promise((resolve, reject) => {
       html2pdf()
         .set(options)
-        .from(element)
+        .from(htmlContent)
         .toPdf()
         .output("blob")
-        .then((blob: Blob) => {
-          document.body.removeChild(element);
-          resolve(blob);
-        })
-        .catch((error: any) => {
-          if (document.body.contains(element)) {
-            document.body.removeChild(element);
-          }
-          reject(error);
-        });
+        .then((blob: Blob) => resolve(blob))
+        .catch(reject);
     });
   } catch (error) {
     // Fallback: Return the HTML content as a file

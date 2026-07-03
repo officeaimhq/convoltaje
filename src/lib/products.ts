@@ -265,8 +265,8 @@ export const TINTAFLASH_PRODUCTS: Product[] = [
 ];
 
 export const WHATSAPP_NUMBERS = {
-  convoltaje: "+5355507913",
-  tintaflash: "+5355507913",
+  convoltaje: "5355144097",
+  tintaflash: "5355144097",
 };
 
 export const CONTACT_INFO = {

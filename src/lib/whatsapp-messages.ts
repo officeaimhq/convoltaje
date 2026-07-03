@@ -147,7 +147,7 @@ export function getGenericInquiryMessage(topic: string): string {
  */
 export function getWhatsAppLink(
   message: string,
-  phoneNumber: string = "5355507913"
+  phoneNumber: string = "5355144097"
 ): string {
   const encodedMessage = encodeURIComponent(message);
   return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
