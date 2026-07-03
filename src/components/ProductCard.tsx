@@ -49,41 +49,51 @@ export default function ProductCard({
             -{product.discount}%
           </div>
         )}
+        {/* Out of Stock Badge */}
+        {product.outOfStock && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-4 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider z-20 shadow-lg whitespace-nowrap">
+            Agotado
+          </div>
+        )}
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col h-full">
-        <h3 className="font-accent text-lg text-foreground mb-2 line-clamp-2">
-          {product.name}
-        </h3>
+      <div className="p-4 flex flex-col h-full justify-between flex-grow">
+        <div>
+          <h3 className="font-accent text-lg text-foreground mb-2 line-clamp-2">
+            {product.name}
+          </h3>
 
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-grow">
-          {product.description}
-        </p>
-
-        {/* Pricing */}
-        <div className="mb-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-primary">
-              ${discountedPrice}
-            </span>
-            {product.discount && (
-              <span className="text-sm text-muted-foreground line-through">
-                ${product.price}
-              </span>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">USD</p>
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+            {product.description}
+          </p>
         </div>
 
-        {/* CTA Button */}
-        <Button
-          onClick={() => onWhatsappClick(product)}
-          className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base py-6 btn-scale-active"
-        >
-          <MessageCircle className="w-5 h-5 mr-2 flex-shrink-0" />
-          Comprobar disponibilidad
-        </Button>
+        <div className="mt-auto">
+          {/* Pricing */}
+          <div className="mb-4">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-primary">
+                ${discountedPrice}
+              </span>
+              {product.discount && (
+                <span className="text-sm text-muted-foreground line-through">
+                  ${product.price}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">USD</p>
+          </div>
+
+          {/* CTA Button */}
+          <Button
+            onClick={() => onWhatsappClick(product)}
+            className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base py-6 btn-scale-active"
+          >
+            <MessageCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+            {product.outOfStock ? "Consultar disponibilidad" : "Comprobar disponibilidad"}
+          </Button>
+        </div>
       </div>
     </div>
   );

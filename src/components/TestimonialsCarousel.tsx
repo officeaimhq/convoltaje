@@ -3,20 +3,20 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 
 const clients = [
-  { id: 1, src: "/images/cliente-01.jpg", alt: "Cliente satisfecho de Convoltaje 1" },
-  { id: 2, src: "/images/cliente-02.jpg", alt: "Cliente satisfecho de Convoltaje 2" },
-  { id: 3, src: "/images/cliente-03.jpg", alt: "Cliente satisfecho de Convoltaje 3" },
-  { id: 4, src: "/images/cliente-04.jpg", alt: "Cliente satisfecho de Convoltaje 4" },
-  { id: 5, src: "/images/cliente-05.jpg", alt: "Cliente satisfecho de Convoltaje 5" },
-  { id: 6, src: "/images/cliente-06.jpg", alt: "Cliente satisfecho de Convoltaje 6" },
-  { id: 7, src: "/images/cliente-07.jpg", alt: "Cliente satisfecho de Convoltaje 7" },
+  { id: 1, src: "/images/cliente-01.jpg", alt: "Cliente satisfecho de Convoltaje 1", quote: "Instalación impecable, el equipo fue muy profesional. Ya llevamos 6 meses sin apagones." },
+  { id: 2, src: "/images/cliente-02.jpg", alt: "Cliente satisfecho de Convoltaje 2", quote: "Lo mejor fue que no tuve que pagar nada hasta que el sistema estaba funcionando al 100%." },
+  { id: 3, src: "/images/cliente-03.jpg", alt: "Cliente satisfecho de Convoltaje 3", quote: "En menos de 2 semanas teníamos el sistema instalado y andando. Superó mis expectativas." },
+  { id: 4, src: "/images/cliente-04.jpg", alt: "Cliente satisfecho de Convoltaje 4", quote: "Excelente inversión. El aire acondicionado funciona todo el día sin problema." },
+  { id: 5, src: "/images/cliente-05.jpg", alt: "Cliente satisfecho de Convoltaje 5", quote: "Profesionales de verdad. Me explicaron todo el proceso y quedé muy satisfecho." },
+  { id: 6, src: "/images/cliente-06.jpg", alt: "Cliente satisfecho de Convoltaje 6", quote: "La calculadora me ayudó a elegir exactamente el sistema que necesitaba para mi casa." },
+  { id: 7, src: "/images/cliente-07.jpg", alt: "Cliente satisfecho de Convoltaje 7", quote: "Recomendado al 100%. Trabajo serio, sin cobros por adelantado y resultado garantizado." },
 ];
 
 export function TestimonialsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex === clients.length - 1 ? 0 : prevIndex + 1));
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % clients.length);
   }, []);
 
   const prevSlide = useCallback(() => {
@@ -26,7 +26,7 @@ export function TestimonialsCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
-    }, 4000);
+    }, 6000);
 
     return () => clearInterval(timer);
   }, [nextSlide]);
@@ -43,33 +43,23 @@ export function TestimonialsCarousel() {
           </p>
         </div>
 
-        <div className="relative max-w-[1400px] mx-auto">
+        <div className="relative max-w-3xl mx-auto">
           {/* Carousel Track Container */}
           <div className="relative flex items-center justify-center">
             {/* The wrapper that masks overflow */}
-            <div className="w-full overflow-hidden px-4 md:px-0 py-4">
+            <div className="w-full overflow-hidden">
               <div 
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ 
-                  transform: `translateX(calc(-${currentIndex * 100}% - ${currentIndex > 0 ? currentIndex * 16 : 0}px))` 
+                  transform: `translateX(-${currentIndex * 100}%)` 
                 }}
               >
                 {clients.map((client, index) => (
                   <div 
                     key={client.id} 
-                    className={`
-                      shrink-0 w-full md:w-[60%] lg:w-[50%] mr-4 md:mr-4
-                      transition-all duration-500 ease-in-out
-                      ${index === currentIndex ? 'scale-100 opacity-100 drop-shadow-2xl z-10' : 'scale-90 opacity-40 drop-shadow-none z-0'}
-                    `}
-                    style={{
-                      // In desktop, to center the active slide since they are 60% or 50% width:
-                      // We need to offset the track based on window width, but a simpler CSS approach is letting the flex track slide,
-                      // and using marginLeft magic or just accepting the left-aligned slide on mobile, but centered on desktop.
-                      // Wait, the translateX above assumes full width. If slides are 50%, translateX needs to account for that.
-                    }}
+                    className="w-full shrink-0 flex flex-col items-center px-2"
                   >
-                    <div className="aspect-[4/3] md:aspect-[16/10] bg-white rounded-2xl overflow-hidden border border-slate-200">
+                    <div className="w-full aspect-[4/3] md:aspect-[16/10] bg-white rounded-2xl overflow-hidden border border-slate-200 mb-6 drop-shadow-xl">
                       <img
                         src={client.src}
                         alt={client.alt}
@@ -77,6 +67,13 @@ export function TestimonialsCarousel() {
                         loading="lazy"
                       />
                     </div>
+                    
+                    {/* Testimonial Quote */}
+                    <p 
+                      className={`text-[15px] md:text-lg text-foreground italic text-center max-w-2xl px-4 transition-opacity duration-500 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+                    >
+                      "{client.quote}"
+                    </p>
                   </div>
                 ))}
               </div>
@@ -87,7 +84,7 @@ export function TestimonialsCarousel() {
               variant="outline"
               size="icon"
               onClick={prevSlide}
-              className="absolute left-2 md:left-8 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg hover:bg-white hover:text-primary transition-all text-slate-700 hidden md:flex"
+              className="absolute left-[-16px] md:left-[-48px] z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg hover:bg-white hover:text-primary transition-all text-slate-700 hidden md:flex"
             >
               <ChevronLeft className="h-6 w-6" />
               <span className="sr-only">Anterior</span>
@@ -97,7 +94,7 @@ export function TestimonialsCarousel() {
               variant="outline"
               size="icon"
               onClick={nextSlide}
-              className="absolute right-2 md:right-8 z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg hover:bg-white hover:text-primary transition-all text-slate-700 hidden md:flex"
+              className="absolute right-[-16px] md:right-[-48px] z-20 w-12 h-12 rounded-full bg-white/90 shadow-lg hover:bg-white hover:text-primary transition-all text-slate-700 hidden md:flex"
             >
               <ChevronRight className="h-6 w-6" />
               <span className="sr-only">Siguiente</span>

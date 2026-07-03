@@ -9,6 +9,7 @@ export interface Product {
   category: string;
   popular?: boolean;
   discount?: number;
+  outOfStock?: boolean;
 }
 
 export const CONVOLTAJE_PRODUCTS: Product[] = [
@@ -87,6 +88,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     price: 2150,
     image: "https://img2.elyerromenu.com/images/convoltaje/sistema-basico-plus-u-18e/img.webp",
     category: "Sistemas Solares Completos",
+    outOfStock: true,
   },
   {
     id: "conv-7",
