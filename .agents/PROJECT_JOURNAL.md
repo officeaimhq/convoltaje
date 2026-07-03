@@ -13,10 +13,23 @@
 - Diagnosticamos y arreglamos el bug crítico de generación de PDF: el elemento HTML nunca se insertaba en el DOM antes de capturarlo con html2canvas, resultando en PDFs vacíos. Se corrigió insertándolo fuera de pantalla con document.body.appendChild() antes de generar, y removiéndolo después.
 - Hicimos las imágenes de producto circulares y uniformes en ProductCard.
 
+- Arreglo del toast de Tintaflash: se agregó el contenedor `<Toaster />` de `sonner` en `App.tsx` para permitir que el toast de "Próximamente" en `Header.tsx` se visualice.
+- Flujo de ventas hacia Calculadora: Se eliminó el botón de CTA de WhatsApp redundante en el banner final de `ConvoltajeSection.tsx` y se cambió el copy para invitar a usar la calculadora, agregando un botón que hace scroll suave hacia ella.
+- Refinamiento Visual en Catálogo: Se confirmó que el precio en `ProductCard.tsx` es grande y siempre visible por encima del CTA, gracias a las clases `flex-grow` y `line-clamp-2` que truncan descripciones largas.
+- Independencia del Kit Recomendado: Se refactorizó y comprobó que `UpsellRecommendations.tsx` (que ofrece el descuento en paquete) maneja su precio total de manera totalmente separada de la tarjeta principal del Kit (en `Step4Results.tsx`), de manera que no confunda al usuario con números cruzados.
+- Callejón sin salida arreglado: Se ocultó condicionalmente el botón "Siguiente" en el paso 4 de la calculadora, convirtiendo los botones "Descargar PDF" y "Solicitar este Sistema" en los pasos de cierre oficiales (que generan el PDF sin flash y envían WhatsApp).
+
+## Estado Final de Hoy (MVP Completo)
+- Precios visibles en tarjetas (fix de overflow/flex)
+- Formulario completo con dirección, fecha y comercial
+- PDF con datos reales del cliente y logo de "Samuel el Panel" en el encabezado
+- FAQ con contenido real de videos de Convoltaje
+- Carrusel de 7 fotos de clientes con citas
+- Garantías corregidas a 90 días
+- Bloque informativo de garantía en tabla comparativa
+
 ## Próximos Pasos (Próxima Sesión)
-1. Confirmar manualmente (Rody) que el PDF de prefactura ahora se genera con contenido visible real, no solo que el archivo no esté vacío.
-2. Imagen de "Samuel el Panel" para el Hero sigue siendo un placeholder temporal (solucionapagon.jpg) — falta decidir si se genera arte oficial de la mascota o se cambia el enfoque visual del Hero.
-3. Revisar el contenido completo del Sistema Híbrido 5000W (no tiene imagen propia en el catálogo del cliente, usa ícono genérico por ahora).
-4. Tintaflash sigue fuera de scope — solo tiene un toast de "Próximamente".
-5. Pendiente grande de producto (fuera del scope de UI): el cliente quiere un sistema de captura de leads más robusto — base de datos automatizada (tipo Excel/CRM) de las conversaciones con la comercial, y un sistema de encuestas de satisfacción post-venta que le lleguen directamente al dueño para evaluar el desempeño del equipo comercial. Esto no se ha empezado, está en fase de definición con el usuario.
-6. Validar el flujo completo en un teléfono real de punta a punta (Hero → catálogo → calculadora → PDF → WhatsApp) antes de presentárselo al dueño de Convoltaje.
+1. Setup de repositorio en GitHub y despliegue continuo en Netlify.
+2. Definir y avanzar en el sistema CRM de captura de leads y encuestas de satisfacción.
+3. Decidir si se genera arte oficial de la mascota "Samuel el Panel" para el Hero (sigue el placeholder actual) o se cambia el enfoque visual.
+4. Validación final del proyecto en vivo.

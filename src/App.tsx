@@ -7,6 +7,7 @@ import KitComparisonTable from "./components/KitComparisonTable";
 import Footer from "./components/Footer";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import SolarCalculator from "./components/calculator/SolarCalculator";
+import { TestimonialsCarousel } from "./components/TestimonialsCarousel";
 
 import { Toaster } from "sonner";
 
@@ -41,6 +42,7 @@ function App() {
       <div className="container mx-auto px-4 py-16" ref={calculatorRef}>
         <SolarCalculator />
       </div>
+      <TestimonialsCarousel />
       <KitComparisonTable />
       <FAQSection />
       <Footer />
