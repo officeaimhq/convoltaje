@@ -26,36 +26,6 @@ export default function Step4Results({
 }: Step4ResultsProps) {
   const [showLeadModal, setShowLeadModal] = useState(false);
 
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const handleGeneratePDF = async () => {
-    if (!recommendedKit) return;
-    setIsGenerating(true);
-    try {
-      const pdfBlob = await generatePDF({
-        clientName: "Cliente",
-        clientPhone: "No especificado",
-        clientEmail: "No especificado",
-        kit: recommendedKit,
-        dailyConsumption,
-        purchaseType: "unitaria",
-      });
-
-      const url = URL.createObjectURL(pdfBlob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Prefactura_Estimada_${recommendedKit.name.replace(/\s+/g, "_")}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
   return (
     <div>
       <h3 className="font-display text-2xl text-foreground mb-2">
@@ -167,13 +137,12 @@ export default function Step4Results({
         </Button>
 
         <Button
-          onClick={handleGeneratePDF}
+          onClick={() => setShowLeadModal(true)}
           variant="outline"
           className="w-full font-accent text-lg py-6"
-          disabled={isGenerating || !recommendedKit}
         >
           <Download className="w-5 h-5 mr-2" />
-          {isGenerating ? "Generando PDF..." : "Descargar Prefactura PDF"}
+          Descargar Prefactura PDF
         </Button>
 
         <Button

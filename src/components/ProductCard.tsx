@@ -12,12 +12,9 @@ export default function ProductCard({
   product,
   onWhatsappClick,
 }: ProductCardProps) {
-  const discountedPrice = product.discount
-    ? Math.round(product.price * (1 - product.discount / 100))
-    : product.price;
 
   return (
-    <div className="card-hover group relative bg-card rounded-xl overflow-hidden shadow-md border border-border transition-all duration-300">
+    <div className="card-hover group relative bg-card rounded-xl overflow-hidden shadow-md border border-border transition-all duration-300 flex flex-col h-full">
       {/* Image Section */}
       <div className="relative pt-6 pb-4 flex items-center justify-center bg-muted/5">
         {/* Circular Image Container */}
@@ -58,7 +55,7 @@ export default function ProductCard({
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col h-full justify-between flex-grow">
+      <div className="p-4 flex flex-col justify-between flex-grow">
         <div>
           <h3 className="font-accent text-lg text-foreground mb-2 line-clamp-2">
             {product.name}
@@ -74,11 +71,11 @@ export default function ProductCard({
           <div className="mb-4">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-primary">
-                ${discountedPrice}
+                ${product.price}
               </span>
-              {product.discount && (
+              {product.originalPrice && (
                 <span className="text-sm text-muted-foreground line-through">
-                  ${product.price}
+                  ${product.originalPrice}
                 </span>
               )}
             </div>

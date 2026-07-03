@@ -25,6 +25,9 @@ export default function LeadCaptureModal({
     phone: "",
     email: "",
     purchaseType: "unitaria" as "unitaria" | "mayorista",
+    installationAddress: "",
+    installationDate: "",
+    salesAgent: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -48,6 +51,10 @@ export default function LeadCaptureModal({
     }
     if (!formData.email.trim()) {
       alert("Por favor ingresa tu email");
+      return false;
+    }
+    if (!formData.installationAddress.trim()) {
+      alert("Por favor ingresa la dirección de instalación");
       return false;
     }
     // Basic phone validation
@@ -74,6 +81,9 @@ export default function LeadCaptureModal({
         kit: kit,
         dailyConsumption: dailyConsumption,
         purchaseType: formData.purchaseType,
+        installationAddress: formData.installationAddress,
+        installationDate: formData.installationDate,
+        salesAgent: formData.salesAgent,
       });
 
       // Download PDF
@@ -183,6 +193,47 @@ export default function LeadCaptureModal({
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="tu@email.com"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-accent text-foreground mb-2">
+                  Dirección de instalación *
+                </label>
+                <input
+                  type="text"
+                  name="installationAddress"
+                  value={formData.installationAddress}
+                  onChange={handleInputChange}
+                  placeholder="Calle 123, Habana..."
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-accent text-foreground mb-2">
+                  Fecha preferida de instalación
+                </label>
+                <input
+                  type="date"
+                  name="installationDate"
+                  value={formData.installationDate}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-accent text-foreground mb-2">
+                  Nombre del comercial (opcional)
+                </label>
+                <input
+                  type="text"
+                  name="salesAgent"
+                  value={formData.salesAgent}
+                  onChange={handleInputChange}
+                  placeholder="Ninguno / Me contacté por la web"
                   className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 />
               </div>
