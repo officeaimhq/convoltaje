@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import SolarCalculator from "./components/calculator/SolarCalculator";
 import { TestimonialsCarousel } from "./components/TestimonialsCarousel";
+import InteractiveNeuralVortex from "./components/ui/interactive-neural-vortex-background";
 
 import { Toaster } from "sonner";
 
@@ -32,7 +33,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground relative">
+      <InteractiveNeuralVortex />
       <Header onSectionClick={handleSectionClick} />
       <HeroSection onExploreClick={handleExploreClick} />
       <ConvoltajeSection 
