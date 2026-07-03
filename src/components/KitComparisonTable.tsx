@@ -44,16 +44,10 @@ export default function KitComparisonTable() {
       tooltip: "Cantidad de paneles en el kit base",
     },
     {
-      label: "Garantía de Paneles",
-      key: "panelWarranty",
-      unit: "años",
-      tooltip: "Cobertura de garantía de los paneles solares",
-    },
-    {
-      label: "Garantía de Batería",
-      key: "batteryWarranty",
-      unit: "años",
-      tooltip: "Cobertura de garantía de la batería",
+      label: "Garantía",
+      key: "warranty",
+      unit: "días",
+      tooltip: "Garantía de cortesía sobre instalación",
     },
     {
       label: "Tiempo de Instalación",
@@ -84,10 +78,8 @@ export default function KitComparisonTable() {
         if (kit.inverterPower <= 3.6) return "4";
         if (kit.inverterPower <= 7.2) return "6";
         return "8";
-      case "panelWarranty":
-        return "25";
-      case "batteryWarranty":
-        return "5";
+      case "warranty":
+        return "90";
       case "installation":
         return "10-15";
       case "price":
@@ -355,6 +347,21 @@ export default function KitComparisonTable() {
             </div>
           </div>
         </Card>
+
+        {/* Warranty Notice */}
+        <div className="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-lg shadow-sm">
+          <h4 className="font-display text-lg text-amber-900 mb-3 flex items-center gap-2">
+            ⚠️ Sobre la Garantía de los Equipos
+          </h4>
+          <p className="text-sm text-amber-800 leading-relaxed">
+            Convoltaje ofrece 90 días de garantía de cortesía sobre la instalación y los trabajos realizados. 
+            Los equipos (paneles, inversores y baterías) cuentan con garantía de fábrica directamente con el fabricante. 
+            Es importante aclarar que, al tratarse de equipos operando en Cuba, Convoltaje no puede garantizar que el 
+            fabricante asuma su garantía de origen, ya que las políticas de devolución y soporte internacional varían. 
+            Sin embargo, nos comprometemos a ayudarte con los trámites necesarios ante el fabricante en caso de que 
+            necesites hacer uso de esa garantía.
+          </p>
+        </div>
 
         {/* Bottom CTA */}
         <div className="mt-12 text-center">
