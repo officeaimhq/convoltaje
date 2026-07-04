@@ -7,9 +7,10 @@ import { Calculator } from "lucide-react";
 interface ConvoltajeSectionProps {
   onRef?: (ref: HTMLElement | null) => void;
   onCalculatorClick?: () => void;
+  onViewDetails?: (product: Product) => void;
 }
 
-export default function ConvoltajeSection({ onRef, onCalculatorClick }: ConvoltajeSectionProps) {
+export default function ConvoltajeSection({ onRef, onCalculatorClick, onViewDetails }: ConvoltajeSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const systemsProducts = CONVOLTAJE_PRODUCTS.filter(
     (p) => p.category === "Sistemas Solares Completos"
@@ -65,6 +66,7 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick }: Convolta
                 product={product}
                 whatsappNumber={WHATSAPP_NUMBERS.convoltaje}
                 onWhatsappClick={handleWhatsappClick}
+                onViewDetails={onViewDetails}
               />
             ))}
           </div>
@@ -82,6 +84,7 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick }: Convolta
                 product={product}
                 whatsappNumber={WHATSAPP_NUMBERS.convoltaje}
                 onWhatsappClick={handleWhatsappClick}
+                onViewDetails={onViewDetails}
               />
             ))}
           </div>

@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import InteractiveNeuralVortex from "@/components/ui/interactive-neural-vortex-background";
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -8,23 +9,33 @@ interface HeroSectionProps {
 export default function HeroSection({ onExploreClick }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary z-0" />
+      {/* Background WebGL */}
+      <InteractiveNeuralVortex />
+      {/* Fallback Dark Background */}
+      <div className="absolute inset-0 bg-[#050510] z-[-1]" />
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10 py-20 lg:py-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
-          <div className="text-white animate-fade-in text-center lg:text-left mt-8 lg:mt-0">
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight">
-              Energiza tu vida
+          <div className="bg-black/50 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 shadow-2xl text-white animate-fade-in text-center lg:text-left mt-8 lg:mt-0">
+            <h1 
+              className="font-display text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight text-white font-bold"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.9)' }}
+            >
+              Energiza tu vida — Convoltaje
             </h1>
-            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl mb-6 text-secondary">
-              Energía limpia + Creatividad personal
+            <h2 
+              className="font-display text-2xl md:text-3xl lg:text-4xl mb-6 text-[#00D9FF] font-bold"
+              style={{ textShadow: '0 0 20px rgba(0,217,255,0.5)' }}
+            >
+              La solución al apagón que ya funciona en más de 500 hogares cubanos
             </h2>
-            <p className="text-base md:text-lg mb-8 text-white/90 max-w-md mx-auto lg:mx-0">
-              Descubre soluciones de energía solar confiables y merchandising
-              personalizado. Dos marcas, una misión: empoderarte.
+            <p 
+              className="text-base md:text-lg mb-8 text-white font-medium max-w-md mx-auto lg:mx-0"
+              style={{ textShadow: '0 1px 6px rgba(0,0,0,0.9)' }}
+            >
+              Sistemas solares completos, instalación profesional y pago solo cuando tu hogar tenga luz. Sin adelantos. Sin sorpresas.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
@@ -38,7 +49,7 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
               <Button
                 variant="outline"
                 onClick={onExploreClick}
-                className="w-full sm:w-auto bg-white/90 border-transparent text-primary hover:bg-white font-accent text-base md:text-lg px-8 py-6"
+                className="w-full sm:w-auto bg-white/15 backdrop-blur-sm border border-white/40 text-white font-semibold hover:bg-white/20 font-accent text-base md:text-lg px-8 py-6"
               >
                 Saber Más
               </Button>
@@ -46,17 +57,26 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
 
             {/* Trust Badges */}
             <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm justify-center lg:justify-start">
-              <div className="flex items-center gap-2 justify-center">
-                <div className="w-3 h-3 rounded-full bg-secondary flex-shrink-0" />
-                <span>Instalación en 15 días</span>
+              <div 
+                className="flex items-center gap-2 justify-center text-white font-semibold"
+                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.9)' }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[#00D9FF] flex-shrink-0" />
+                <span>+500 familias con luz continua</span>
               </div>
-              <div className="flex items-center gap-2 justify-center">
-                <div className="w-3 h-3 rounded-full bg-secondary flex-shrink-0" />
-                <span>Personalización al instante</span>
+              <div 
+                className="flex items-center gap-2 justify-center text-white font-semibold"
+                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.9)' }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[#00D9FF] flex-shrink-0" />
+                <span>Instalación en 10-15 días</span>
               </div>
-              <div className="flex items-center gap-2 justify-center">
-                <div className="w-3 h-3 rounded-full bg-secondary flex-shrink-0" />
-                <span>Soporte WhatsApp 24/7</span>
+              <div 
+                className="flex items-center gap-2 justify-center text-white font-semibold"
+                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.9)' }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[#00D9FF] flex-shrink-0" />
+                <span>Pagas solo cuando funciona</span>
               </div>
             </div>
           </div>
