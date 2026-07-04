@@ -46,8 +46,53 @@ import puppeteer from 'puppeteer';
   });
   
   await new Promise(r => setTimeout(r, 1500));
-  await page.screenshot({ path: 'product_detail_10000w_mobile.png', fullPage: true });
-  console.log('Took screenshot of Sistema Premium 10000W');
   
+  // SCENARIO: Kit Comparison Flow
+  try {
+    console.log('Capturing Kit Comparison Flow...');
+    
+    // Navigate to the table view by clicking the catalog button or scrolling
+    // Let's just reload the page and scroll down to the table
+    await page.goto('http://localhost:5173');
+    await new Promise(r => setTimeout(r, 2000));
+    
+    // Scroll down to the table
+    await page.evaluate(() => {
+      window.scrollBy(0, 3500);
+    });
+    await new Promise(r => setTimeout(r, 1000));
+    
+    // Click "Comparar" on the first two kits
+    // In table view, they are inside td elements
+    const compareButtons = await page.$$('table button');
+    
+    if (compareButtons.length >= 2) {
+      await compareButtons[0].click();
+      await new Promise(r => setTimeout(r, 500));
+      await compareButtons[1].click();
+      await new Promise(r => setTimeout(r, 1000));
+      
+      console.log('Captured Comparison Bar screenshot');
+      await page.screenshot({ path: 'screenshot_comparison_bar.png', fullPage: true });
+      
+      // Click "Comparar ahora" in the floating bar
+      const floatingBarButtons = await page.$$('.fixed.bottom-0 button');
+      // The last button in the floating bar should be "Comparar ahora"
+      if (floatingBarButtons.length > 0) {
+        await floatingBarButtons[floatingBarButtons.length - 1].click();
+        await new Promise(r => setTimeout(r, 1500));
+        
+        console.log('Captured Kit Comparison Page screenshot');
+        await page.screenshot({ path: 'screenshot_kit_comparison.png', fullPage: true });
+      } else {
+        console.log('Could not find floating bar button');
+      }
+    } else {
+      console.log('Could not find compare buttons in table');
+    }
+  } catch (error) {
+    console.error('Error during Kit Comparison flow:', error);
+  }
+
   await browser.close();
 })();

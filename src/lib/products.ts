@@ -49,13 +49,13 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     description: "¡Tu primer paso para dejar los apagones! Sistema completamente 110v, ideal para quienes quieren comenzar a vivir con energía limpia. Permite mantener una nevera funcionando durante el día gracias a sus paneles solares, y por la noche dormirás tranquilo con ventiladores y luces alimentados por su batería. Perfecto para hogares pequeños que quieren tranquilidad básica durante los cortes eléctricos.",
     price: 1745,
     originalPrice: 1950,
-    image: "https://img2.elyerromenu.com/images/convoltaje/paneles-basicos-1200w/img.webp",
+    image: "https://img2.elyerromenu.com/images/convoltaje/sistema-basico-plus-u-18e/img.webp",
     category: "Sistemas Solares Completos",
     popular: true,
     discount: 11,
     slug: "sistema-basico-1500w",
     images: [
-      "https://img2.elyerromenu.com/images/convoltaje/paneles-basicos-1200w/img.webp",
+      "https://img2.elyerromenu.com/images/convoltaje/sistema-basico-plus-u-18e/img.webp",
       "https://img2.elyerromenu.com/images/convoltaje/paneles-basicos-1200w-z3bk/img.webp",
       "https://img2.elyerromenu.com/images/convoltaje/paneles-basicos-1200w-3ywo/img.webp"
     ],
@@ -126,7 +126,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     discount: 11,
     slug: "sistema-solar-ac-3000w",
     images: [
-      "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado/img.webp"
+      "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado/img.webp",
+      "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado-gg1/img.webp"
     ],
     specs: [
       "1 Inversor solar 3000W 220V",
@@ -164,7 +165,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     discount: 13,
     slug: "sistema-avanzado-6000w",
     images: [
-      "https://img2.elyerromenu.com/images/convoltaje/sistema-avanzado-5000w/img.webp"
+      "https://img2.elyerromenu.com/images/convoltaje/sistema-avanzado-5000w/img.webp",
+      "https://img2.elyerromenu.com/images/convoltaje/sistema-avanzado-5000w-ofo/img.webp"
     ],
     specs: [
       "Inversor Zonglón 6kW",
