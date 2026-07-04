@@ -19,17 +19,21 @@
 - Independencia del Kit Recomendado: Se refactorizó y comprobó que `UpsellRecommendations.tsx` (que ofrece el descuento en paquete) maneja su precio total de manera totalmente separada de la tarjeta principal del Kit (en `Step4Results.tsx`), de manera que no confunda al usuario con números cruzados.
 - Callejón sin salida arreglado: Se ocultó condicionalmente el botón "Siguiente" en el paso 4 de la calculadora, convirtiendo los botones "Descargar PDF" y "Solicitar este Sistema" en los pasos de cierre oficiales (que generan el PDF sin flash y envían WhatsApp).
 
-## Estado Final de Hoy (MVP Completo)
-- Precios visibles en tarjetas (fix de overflow/flex)
-- Formulario completo con dirección, fecha y comercial
-- PDF con datos reales del cliente y logo de "Samuel el Panel" en el encabezado
-- FAQ con contenido real de videos de Convoltaje
-- Carrusel de 7 fotos de clientes con citas
-- Garantías corregidas a 90 días
-- Bloque informativo de garantía en tabla comparativa
+## Estado Final de Hoy (MVP Completo y Desplegado)
+- **Deploy exitoso en Netlify**: [https://convoltaje.netlify.app/](https://convoltaje.netlify.app/) (Conectado a github.com/Ramonbonachea8102/convoltaje)
+- Hero con fondo WebGL animado, glassmorphism y textos de alto impacto.
+- Catálogo interactivo con precios reales, imágenes del cliente y páginas de detalle por producto.
+- Comparador de hasta 3 kits lado a lado.
+- Calculadora solar (4 pasos) + prefactura PDF real con datos del cliente y datos comerciales.
+- Ficha técnica en PDF descargable por producto.
+- Carrusel de 7 testimonios de clientes con citas.
+- FAQ con contenido real de videos de Convoltaje.
+- Garantías actualizadas a 90 días.
+- WhatsApp oficial unificado (+5355144097).
 
 ## Próximos Pasos (Próxima Sesión)
-1. Setup de repositorio en GitHub y despliegue continuo en Netlify.
-2. Definir y avanzar en el sistema CRM de captura de leads y encuestas de satisfacción.
-3. Decidir si se genera arte oficial de la mascota "Samuel el Panel" para el Hero (sigue el placeholder actual) o se cambia el enfoque visual.
-4. Validación final del proyecto en vivo.
+1. Verificar en el sitio live los 3 bugs pendientes (imagen AC 3000W, botón comparador, scroll al catálogo en "Volver").
+2. Esperar feedback de Angel.
+3. Definir arte oficial de "Samuel el Panel" o cambiar el enfoque visual del Hero.
+4. Implementar librería de manuales de usuario.
+5. Desarrollar sistema CRM de captura de leads y encuestas de satisfacción (Fase 2).

@@ -32,10 +32,8 @@ Adicionalmente, revisa los siguientes archivos en `.agents/rules/` para guías d
 - `.agents/rules/known-issues.md`: Lista viva de problemas y verificaciones pendientes.
 
 ## Lista de Tareas Pendientes Conocidas
-1. Rody debe confirmar visualmente los cambios recientes (toast de Tintaflash, CTA de catálogo y separación de precios de paquete).
-2. Setup de repositorio en GitHub y despliegue continuo en Netlify.
+1. Verificar en el sitio live (Netlify) los 3 bugs solucionados recientemente (imagen AC 3000W, botón comparador, scroll al catálogo en "Volver").
+2. Esperar feedback general del cliente (Angel).
 3. Imagen de "Samuel el Panel" para el Hero sigue siendo un placeholder temporal (solucionapagon.jpg) — falta decidir si se genera arte oficial de la mascota o se cambia el enfoque visual del Hero.
-4. Revisar el contenido completo del Sistema Híbrido 5000W (no tiene imagen propia en el catálogo del cliente, usa ícono genérico por ahora).
-5. Tintaflash sigue fuera de scope — solo tiene un toast de "Próximamente".
-6. Pendiente grande de producto (fuera del scope de UI): el cliente quiere un sistema de captura de leads más robusto — base de datos automatizada (tipo Excel/CRM) de las conversaciones con la comercial, y un sistema de encuestas de satisfacción post-venta que le lleguen directamente al dueño para evaluar el desempeño del equipo comercial. Esto no se ha empezado, está en fase de definición con el usuario.
-7. Validar el flujo completo en un teléfono real de punta a punta (Hero → catálogo → calculadora → PDF → WhatsApp) antes de presentárselo al dueño de Convoltaje.
+4. Crear librería de manuales de usuario.
+5. Desarrollar sistema de captura de leads más robusto — base de datos automatizada (tipo Excel/CRM) de las conversaciones con la comercial, y un sistema de encuestas de satisfacción post-venta que le lleguen directamente al dueño para evaluar el desempeño del equipo comercial. Esto está en fase de definición (Fase 2).
