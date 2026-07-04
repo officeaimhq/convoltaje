@@ -1,4 +1,5 @@
 import { EcoPowerKit } from "@/lib/calculator";
+import { Product } from "@/lib/products";
 
 interface PDFGeneratorOptions {
   clientName: string;
@@ -259,5 +260,167 @@ export async function generatePDF(options: PDFGeneratorOptions): Promise<Blob> {
     // Create an HTML blob
     const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
     return blob;
+  }
+}
+
+export async function generateProductSheet(product: Product): Promise<Blob> {
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; color: #1A1F2E; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px; }
+        .header {
+          border-bottom: 3px solid #0F3A7D;
+          padding-bottom: 20px;
+          margin-bottom: 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .header h1 { color: #0F3A7D; font-size: 26px; }
+        .header h2 { color: #FF6B35; font-size: 16px; margin-top: 5px; font-weight: normal; }
+        
+        .product-title {
+          font-size: 32px;
+          color: #1A1F2E;
+          margin-bottom: 10px;
+        }
+        .product-price {
+          font-size: 24px;
+          color: #0F3A7D;
+          font-weight: bold;
+          margin-bottom: 20px;
+        }
+        .product-desc {
+          font-size: 16px;
+          margin-bottom: 30px;
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 30px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #E0E4E8; }
+        th { background-color: #F8F9FA; font-weight: bold; color: #0F3A7D; font-size: 14px; }
+        td { font-size: 14px; }
+        
+        .supports-box {
+          background-color: #E6F9FC;
+          border: 1px solid #00D9FF;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 30px;
+        }
+        .supports-title {
+          color: #00D9FF;
+          font-weight: bold;
+          font-size: 18px;
+          margin-bottom: 5px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        
+        .note {
+          background-color: #FFF9F5;
+          border-left: 4px solid #FF6B35;
+          padding: 15px;
+          font-size: 12px;
+          color: #4B5563;
+          margin-bottom: 40px;
+        }
+        
+        .footer {
+          border-top: 2px solid #0F3A7D;
+          padding-top: 20px;
+          text-align: center;
+          color: #6B7280;
+          font-size: 12px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <!-- Header -->
+        <div class="header">
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <img src="https://img2.elyerromenu.com/images/convoltaje/logo-c/img.webp" 
+                 style="width:80px; height:80px; object-fit:contain; border-radius:50%;" 
+                 alt="Convoltaje Logo"/>
+            <div>
+              <h1>FICHA TÉCNICA</h1>
+              <h2>ConVoltaje — Energía Solar Confiable</h2>
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 12px; color: #6B7280;">
+            <p>WhatsApp: <b>5355144097</b></p>
+            <p>convoltaje@gmail.com</p>
+          </div>
+        </div>
+
+        <!-- Product Info -->
+        <h1 class="product-title">${product.name}</h1>
+        <div class="product-price">$${product.price} USD</div>
+        <p class="product-desc">${product.description}</p>
+
+        <!-- Supports -->
+        ${product.supports ? `
+        <div class="supports-box">
+          <div class="supports-title">⚡ Soporta:</div>
+          <p>${product.supports}</p>
+        </div>
+        ` : ''}
+
+        <!-- Specs Table -->
+        ${product.specs && product.specs.length > 0 ? `
+        <table>
+          <tr>
+            <th>Especificaciones Técnicas y Materiales Incluidos</th>
+          </tr>
+          ${product.specs.map(spec => `
+          <tr>
+            <td>✓ ${spec}</td>
+          </tr>
+          `).join('')}
+        </table>
+        ` : ''}
+
+        <!-- Important Note -->
+        <div class="note">
+          <strong>NOTA IMPORTANTE:</strong> El presente kit incluye los materiales detallados. En caso de que durante la instalación sea necesario utilizar materiales eléctricos adicionales debido a condiciones específicas del inmueble, recorrido del cableado o requerimientos técnicos de seguridad, estos serán informados al cliente y facturados por separado. — Atentamente ConVoltaje
+        </div>
+
+        <div class="footer">
+          <p><strong>90 días de garantía en instalación. Pago solo al finalizar.</strong></p>
+          <p style="margin-top: 10px;">Generado el ${new Date().toLocaleDateString("es-ES")}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  try {
+    const html2pdf = (await import("html2pdf.js")).default;
+    const options: any = {
+      margin: 0,
+      filename: `Ficha-${product.slug || product.id}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, allowTaint: false, logging: true },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    };
+
+    return new Promise((resolve, reject) => {
+      html2pdf()
+        .set(options)
+        .from(htmlContent)
+        .toPdf()
+        .output("blob")
+        .then((blob: Blob) => resolve(blob))
+        .catch(reject);
+    });
+  } catch (error) {
+    console.warn("html2pdf failed or not available, using HTML fallback", error);
+    return new Blob([htmlContent], { type: "text/html;charset=utf-8" });
   }
 }

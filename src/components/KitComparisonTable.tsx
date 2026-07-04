@@ -1,14 +1,25 @@
 import { useState } from "react";
-import { Check, X, Info } from "lucide-react";
+import { Check, X, Info, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ECOPOWER_KITS } from "@/lib/calculator";
 import { WHATSAPP_NUMBERS } from "@/lib/products";
 import { getKitWhatsAppLink } from "@/lib/whatsapp-messages";
+import { toast } from "sonner";
 
 type ViewMode = "table" | "cards";
 
-export default function KitComparisonTable() {
+interface KitComparisonTableProps {
+  comparisonSlugs: string[];
+  onToggleCompare: (slug: string) => void;
+  onCompareNow: () => void;
+}
+
+export default function KitComparisonTable({
+  comparisonSlugs,
+  onToggleCompare,
+  onCompareNow
+}: KitComparisonTableProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("table");
   const [selectedKit, setSelectedKit] = useState<string | null>(null);
 
@@ -211,16 +222,39 @@ export default function KitComparisonTable() {
                   <td className="p-4 font-accent text-foreground sticky left-0 bg-background z-10">
                     Acción
                   </td>
-                  {ECOPOWER_KITS.map((kit) => (
-                    <td key={`${kit.id}-cta`} className="p-4 text-center">
-            <Button
-              onClick={() => handleWhatsAppClick(kit.id)}
-              className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent"
-            >
-              💬 Solicitar Información
-            </Button>
-                    </td>
-                  ))}
+                  {ECOPOWER_KITS.map((kit) => {
+                    const isSelected = comparisonSlugs.includes(kit.id);
+                    return (
+                      <td key={`${kit.id}-cta`} className="p-4 text-center">
+                        <Button
+                          onClick={() => {
+                            if (!isSelected && comparisonSlugs.length >= 3) {
+                              toast.error("Máximo 3 kits para comparar. Quitá uno primero.");
+                              return;
+                            }
+                            onToggleCompare(kit.id);
+                          }}
+                          className={`w-full font-accent transition-colors ${
+                            isSelected 
+                              ? "bg-green-600 hover:bg-green-700 text-white" 
+                              : "bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                          }`}
+                        >
+                          {isSelected ? (
+                            <>
+                              <Check className="w-4 h-4 mr-2" />
+                              Seleccionado
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-4 h-4 mr-2" />
+                              Comparar
+                            </>
+                          )}
+                        </Button>
+                      </td>
+                    );
+                  })}
                 </tr>
               </tbody>
             </table>
@@ -299,10 +333,31 @@ export default function KitComparisonTable() {
 
                 {/* CTA */}
                 <Button
-                  onClick={() => handleWhatsAppClick(kit.id)}
-                  className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent"
+                  onClick={() => {
+                    const isSelected = comparisonSlugs.includes(kit.id);
+                    if (!isSelected && comparisonSlugs.length >= 3) {
+                      toast.error("Máximo 3 kits para comparar. Quitá uno primero.");
+                      return;
+                    }
+                    onToggleCompare(kit.id);
+                  }}
+                  className={`w-full font-accent transition-colors ${
+                    comparisonSlugs.includes(kit.id)
+                      ? "bg-green-600 hover:bg-green-700 text-white" 
+                      : "bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                  }`}
                 >
-                  Solicitar Información
+                  {comparisonSlugs.includes(kit.id) ? (
+                    <>
+                      <Check className="w-4 h-4 mr-2" />
+                      Seleccionado
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Comparar
+                    </>
+                  )}
                 </Button>
               </Card>
             ))}
@@ -383,6 +438,47 @@ export default function KitComparisonTable() {
           </Button>
         </div>
       </div>
+
+      {/* Floating Comparison Bar */}
+      {comparisonSlugs.length >= 2 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-primary shadow-[0_-4px_15px_rgba(0,0,0,0.2)] z-50 animate-fade-in slide-in-from-bottom">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3 overflow-x-auto flex-1 w-full pb-2 sm:pb-0 hide-scrollbar">
+                <span className="text-white/80 font-accent text-sm whitespace-nowrap">
+                  Kits seleccionados:
+                </span>
+                {comparisonSlugs.map((slug) => {
+                  const kit = ECOPOWER_KITS.find(k => k.id === slug);
+                  if (!kit) return null;
+                  return (
+                    <div 
+                      key={slug}
+                      className="bg-primary-foreground/10 text-white px-3 py-1.5 rounded-full text-xs font-accent flex items-center gap-2 whitespace-nowrap border border-white/20"
+                    >
+                      {kit.name}
+                      <button 
+                        onClick={() => onToggleCompare(slug)}
+                        className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <Button 
+                id="comparar-ahora-btn"
+                onClick={onCompareNow}
+                className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display text-lg py-6 sm:py-4 px-8 shadow-lg shrink-0"
+              >
+                Comparar ahora ({comparisonSlugs.length}/3)
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

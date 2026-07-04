@@ -20,9 +20,9 @@ export default function Header({ onSectionClick }: HeaderProps) {
             alt="Convoltaje Logo"
             className="w-10 h-10 object-contain rounded-md"
           />
-          <div className="hidden sm:block">
-            <h1 className="font-display text-xl text-primary">Convoltaje</h1>
-            <p className="text-xs text-muted-foreground">& Tintaflash</p>
+          <div className="flex flex-col">
+            <h1 className="font-display text-lg sm:text-xl text-primary">Convoltaje</h1>
+            <p className="text-[10px] sm:text-xs text-muted-foreground leading-none">& Tintaflash</p>
           </div>
         </div>
 

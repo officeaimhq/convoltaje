@@ -6,11 +6,13 @@ interface ProductCardProps {
   product: Product;
   whatsappNumber: string;
   onWhatsappClick: (product: Product) => void;
+  onViewDetails?: (product: Product) => void;
 }
 
 export default function ProductCard({
   product,
   onWhatsappClick,
+  onViewDetails,
 }: ProductCardProps) {
 
   return (
@@ -82,14 +84,23 @@ export default function ProductCard({
             <p className="text-xs text-muted-foreground mt-1">USD</p>
           </div>
 
-          {/* CTA Button */}
-          <Button
-            onClick={() => onWhatsappClick(product)}
-            className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base py-6 btn-scale-active"
-          >
-            <MessageCircle className="w-5 h-5 mr-2 flex-shrink-0" />
-            {product.outOfStock ? "Consultar disponibilidad" : "Comprobar disponibilidad"}
-          </Button>
+          {/* CTA Buttons */}
+          <div className="flex flex-col gap-2">
+            <Button
+              onClick={() => onViewDetails && onViewDetails(product)}
+              className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base py-5 btn-scale-active shadow-sm"
+            >
+              {product.outOfStock ? "Consultar disponibilidad" : "Ver detalles"}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => onWhatsappClick(product)}
+              className="w-full text-muted-foreground hover:text-foreground hover:bg-muted/50 text-sm py-2 h-auto"
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              WhatsApp directo
+            </Button>
+          </div>
         </div>
       </div>
     </div>
