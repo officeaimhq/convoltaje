@@ -469,6 +469,7 @@ export default function KitComparisonTable({
               </div>
               
               <Button 
+                id="comparar-ahora-btn"
                 onClick={onCompareNow}
                 className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-secondary-foreground font-display text-lg py-6 sm:py-4 px-8 shadow-lg shrink-0"
               >

@@ -120,13 +120,12 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     description: "Ideal para hogares completos. Gracias a su inversor de fase dividida, ofrece corriente 110V y 220V simultáneos, cubriendo necesidades más avanzadas. Hasta 4 baterías y 4 paneles de 550W permiten alimentar aire acondicionado durante el día y varios equipos por la noche, incluyendo 2 neveras, luces, TV y ventiladores. Una solución poderosa sin llegar al nivel de negocio.",
     price: 3950,
     originalPrice: 4425,
-    image: "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado/img.webp",
+    image: "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado-gg1/img.webp",
     category: "Sistemas Solares Completos",
     popular: true,
     discount: 11,
     slug: "sistema-solar-ac-3000w",
     images: [
-      "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado/img.webp",
       "https://img2.elyerromenu.com/images/convoltaje/sistema-solar-aire-acondicionado-gg1/img.webp"
     ],
     specs: [

@@ -10,6 +10,7 @@ import SolarCalculator from "./components/calculator/SolarCalculator";
 import { TestimonialsCarousel } from "./components/TestimonialsCarousel";
 import ProductDetailPage from "./components/ProductDetailPage";
 import KitComparison from "./components/KitComparison";
+import { ECOPOWER_KITS } from "./lib/calculator";
 import { CONVOLTAJE_PRODUCTS, TINTAFLASH_PRODUCTS, WHATSAPP_NUMBERS } from "./lib/products";
 
 import { Toaster } from "sonner";
@@ -54,7 +55,11 @@ function App() {
 
   const allProducts = [...CONVOLTAJE_PRODUCTS, ...TINTAFLASH_PRODUCTS];
   const selectedProduct = selectedProductSlug ? allProducts.find(p => p.slug === selectedProductSlug) : null;
-  const comparisonProducts = comparisonSlugs.map(slug => allProducts.find(p => p.id === slug)).filter(Boolean) as any[];
+  
+  const comparisonProducts = comparisonSlugs.map(slug => {
+    const kit = ECOPOWER_KITS.find(k => k.id === slug);
+    return kit ? allProducts.find(p => p.name === kit.name) : null;
+  }).filter(Boolean) as any[];
 
   const handleToggleCompare = (slug: string) => {
     setComparisonSlugs(prev => {
@@ -70,8 +75,16 @@ function App() {
     <div className="min-h-screen bg-background text-foreground relative">
       {selectedProduct ? (
         <ProductDetailPage 
-          product={selectedProduct} 
-          onClose={() => setSelectedProductSlug(null)}
+          product={selectedProduct!} 
+          onClose={() => {
+            setSelectedProductSlug(null);
+            setTimeout(() => {
+              const catalogSection = document.getElementById('catalogo') || document.querySelector('[data-section="catalogo"]');
+              if (catalogSection) {
+                catalogSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }, 100);
+          }}
           onWhatsappClick={handleWhatsappClick}
           onCalculatorClick={() => {
             setSelectedProductSlug(null);
@@ -83,7 +96,15 @@ function App() {
       ) : showComparison && comparisonProducts.length >= 2 ? (
         <KitComparison 
           products={comparisonProducts}
-          onBack={() => setShowComparison(false)}
+          onBack={() => {
+            setShowComparison(false);
+            setTimeout(() => {
+              const catalogSection = document.getElementById('catalogo') || document.querySelector('[data-section="catalogo"]');
+              if (catalogSection) {
+                catalogSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }, 100);
+          }}
           onViewDetails={(product) => {
             setShowComparison(false);
             setSelectedProductSlug(product.slug);

@@ -76,16 +76,15 @@ import puppeteer from 'puppeteer';
       await page.screenshot({ path: 'screenshot_comparison_bar.png', fullPage: true });
       
       // Click "Comparar ahora" in the floating bar
-      const floatingBarButtons = await page.$$('.fixed.bottom-0 button');
-      // The last button in the floating bar should be "Comparar ahora"
-      if (floatingBarButtons.length > 0) {
-        await floatingBarButtons[floatingBarButtons.length - 1].click();
+      try {
+        await page.waitForSelector('#comparar-ahora-btn', { visible: true, timeout: 5000 });
+        await page.click('#comparar-ahora-btn');
         await new Promise(r => setTimeout(r, 1500));
         
         console.log('Captured Kit Comparison Page screenshot');
         await page.screenshot({ path: 'screenshot_kit_comparison.png', fullPage: true });
-      } else {
-        console.log('Could not find floating bar button');
+      } catch (err) {
+        console.log('Could not find floating bar button', err);
       }
     } else {
       console.log('Could not find compare buttons in table');

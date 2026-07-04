@@ -34,6 +34,7 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick, onViewDeta
 
   return (
     <section
+      id="catalogo"
       ref={sectionRef}
       className="py-16 lg:py-24 bg-gradient-to-b from-background to-muted/30"
     >
