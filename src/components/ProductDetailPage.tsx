@@ -139,7 +139,7 @@ export default function ProductDetailPage({
               {product.name}
             </h1>
             
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="text-foreground text-lg mb-8">
               {product.description}
             </p>
 
@@ -158,15 +158,15 @@ export default function ProductDetailPage({
 
               {/* Bloques de disponibilidad y pago */}
               <div className="flex flex-col gap-3 mb-6">
-                <div className={`px-4 py-3 rounded-lg text-sm font-medium flex items-center ${product.outOfStock ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' : 'bg-green-500/10 text-green-600 border border-green-500/20'}`}>
+                <div className={`px-4 py-3 rounded-lg text-sm flex items-center ${product.outOfStock ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20 font-medium' : 'bg-green-500/10 text-green-700 font-semibold border border-green-500/20'}`}>
                   {product.outOfStock ? "⚠️ Temporalmente agotado" : "✅ Disponible — instalación en 10-15 días"}
                 </div>
-                <div className="bg-muted/50 px-4 py-3 rounded-lg text-sm text-foreground/80 border border-border">
+                <div className="bg-muted/50 px-4 py-3 rounded-lg text-sm text-foreground font-medium border border-border">
                   💵 Efectivo USD al finalizar la instalación. Sin anticipos.
                 </div>
                 <Button 
                   variant="outline" 
-                  className="w-full text-[#00D9FF] border-[#00D9FF]/30 hover:bg-[#00D9FF]/5 font-accent text-xs py-2 mt-1"
+                  className="w-full text-primary border-primary hover:bg-primary/5 font-accent font-semibold text-sm py-3 mt-1 shadow-sm"
                   onClick={() => setShowFinancingModal(true)}
                 >
                   💳 ¿Quieres financiar tu compra?

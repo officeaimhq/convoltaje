@@ -246,7 +246,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     popular: true,
     discount: 14,
     slug: "ecoflow-delta-2",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-estacion-de-energia-portatil-inteligente/img-s.webp"]
+    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-estacion-de-energia-portatil-inteligente/img-s.webp"],
+    manuals: [{ nombre: "Centro de Descargas EcoFlow DELTA 2 (ES)", url: "https://www.ecoflow.com/es/support/download/delta-2" }]
   },
   {
     id: "conv-8",
@@ -257,7 +258,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     category: "PowerStations",
     popular: true,
     slug: "ecoflow-delta-2-max",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-max-estacion-de-energia-de-alta-capacidad/img-s.webp"]
+    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-max-estacion-de-energia-de-alta-capacidad/img-s.webp"],
+    manuals: [{ nombre: "Centro de Descargas EcoFlow DELTA 2 Max (ES)", url: "https://www.ecoflow.com/es/support/download/delta-2-max" }]
   },
   {
     id: "conv-9",
@@ -269,7 +271,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     category: "PowerStations",
     discount: 9,
     slug: "bluetti-ac200p",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/bluetti-ac200p/img-s.webp"]
+    images: ["https://img2.elyerromenu.com/images/convoltaje/bluetti-ac200p/img-s.webp"],
+    manuals: [{ nombre: "Manual BLUETTI AC200P (Centro de Descargas ES)", url: "https://es.bluettipower.eu/pages/manuals" }]
   },
   {
     id: "conv-10",
@@ -279,7 +282,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     image: "https://img2.elyerromenu.com/images/convoltaje/anker-solix-f2000/img-s.webp",
     category: "PowerStations",
     slug: "anker-solix-f2000",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/anker-solix-f2000/img-s.webp"]
+    images: ["https://img2.elyerromenu.com/images/convoltaje/anker-solix-f2000/img-s.webp"],
+    manuals: [{ nombre: "Manual Anker Solix F2000 (Centro de Soporte ES)", url: "https://www.anker.com/es/support/download" }]
   },
   {
     id: "conv-13",
