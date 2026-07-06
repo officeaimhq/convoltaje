@@ -19,6 +19,7 @@ export default function ProductDetailPage({
 }: ProductDetailPageProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [showFinancingModal, setShowFinancingModal] = useState(false);
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
   const hasMultipleImages = images.length > 1;
 
@@ -114,6 +115,22 @@ export default function ProductDetailPage({
                 )}
               </div>
             </div>
+            
+            {hasMultipleImages && (
+              <div className="flex gap-3 mt-2 overflow-x-auto pb-2">
+                {images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`flex-shrink-0 w-[60px] h-[60px] rounded-md overflow-hidden border-2 transition-all ${
+                      idx === currentImageIndex ? "border-primary ring-2 ring-primary/30" : "border-border opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Details & CTA */}
@@ -137,6 +154,23 @@ export default function ProductDetailPage({
                   </span>
                 )}
                 <span className="text-sm font-medium text-muted-foreground ml-1">USD</span>
+              </div>
+
+              {/* Bloques de disponibilidad y pago */}
+              <div className="flex flex-col gap-3 mb-6">
+                <div className={`px-4 py-3 rounded-lg text-sm font-medium flex items-center ${product.outOfStock ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' : 'bg-green-500/10 text-green-600 border border-green-500/20'}`}>
+                  {product.outOfStock ? "⚠️ Temporalmente agotado" : "✅ Disponible — instalación en 10-15 días"}
+                </div>
+                <div className="bg-muted/50 px-4 py-3 rounded-lg text-sm text-foreground/80 border border-border">
+                  💵 Efectivo USD al finalizar la instalación. Sin anticipos.
+                </div>
+                <Button 
+                  variant="outline" 
+                  className="w-full text-[#00D9FF] border-[#00D9FF]/30 hover:bg-[#00D9FF]/5 font-accent text-xs py-2 mt-1"
+                  onClick={() => setShowFinancingModal(true)}
+                >
+                  💳 ¿Quieres financiar tu compra?
+                </Button>
               </div>
 
               <div className="flex flex-col gap-3">
@@ -208,6 +242,28 @@ export default function ProductDetailPage({
                 </div>
               </div>
             )}
+
+            {/* Manuals */}
+            {product.manuals && product.manuals.length > 0 && (
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-muted-foreground" />
+                  📖 Documentación
+                </h3>
+                <div className="flex flex-col gap-3">
+                  {product.manuals.map((manual, idx) => (
+                    <Button 
+                      key={idx} 
+                      variant="outline" 
+                      className="w-fit text-muted-foreground border-border hover:bg-muted font-accent text-sm py-2 px-4"
+                      onClick={() => window.open(manual.url, "_blank")}
+                    >
+                      📄 {manual.nombre}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -229,6 +285,41 @@ export default function ProductDetailPage({
           </Button>
         </div>
       </div>
+
+      {/* Financing Modal */}
+      {showFinancingModal && (
+        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowFinancingModal(false)}>
+          <div className="bg-background border border-border rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={() => setShowFinancingModal(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-bold mb-4 font-display text-primary flex items-center gap-2">
+              💳 Financiamiento
+            </h3>
+            <div className="space-y-4 text-foreground/80">
+              <p>
+                Estamos trabajando en la solución a esta inquietud. 
+                Síguenos en nuestros canales oficiales para estar al tanto 
+                de cómo vamos a darle solución a esta necesidad.
+              </p>
+              <div className="bg-muted/30 p-4 rounded-xl border border-border space-y-2">
+                <p>📘 <strong>Facebook:</strong> @convoltajecuba</p>
+                <p>📸 <strong>Instagram:</strong> @convoltajecuba</p>
+                <p>💬 <strong>Telegram:</strong> @convoltajecuba</p>
+              </div>
+              <Button 
+                className="w-full mt-4" 
+                onClick={() => setShowFinancingModal(false)}
+              >
+                Entendido
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

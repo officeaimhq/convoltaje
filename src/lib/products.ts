@@ -15,6 +15,7 @@ export interface Product {
   images: string[];
   specs?: string[];
   supports?: string;
+  manuals?: { nombre: string; url: string }[];
 }
 
 export const CONVOLTAJE_PRODUCTS: Product[] = [
@@ -41,7 +42,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Ideal para aire acondicionado + electrodomésticos del hogar",
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
-    ]
+    ],
+    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
   },
   {
     id: "conv-2",
@@ -75,7 +77,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
     ],
-    supports: "Nevera, ventiladores, luces LED, carga de celulares"
+    supports: "Nevera, ventiladores, luces LED, carga de celulares",
+    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
   },
   {
     id: "conv-3",
@@ -112,7 +115,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
     ],
-    supports: "Aire acondicionado 110v, nevera, TV, microondas, ventiladores"
+    supports: "Aire acondicionado 110v, nevera, TV, microondas, ventiladores",
+    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
   },
   {
     id: "conv-4",
@@ -150,7 +154,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
     ],
-    supports: "Aire acondicionado, 2 neveras, TV, microondas, ventiladores, laptops"
+    supports: "Aire acondicionado, 2 neveras, TV, microondas, ventiladores, laptops",
+    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
   },
   {
     id: "conv-5",
@@ -176,7 +181,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
     ],
-    supports: "2 aires acondicionados, 8 neveras, luces, TV, microondas, carga de equipos"
+    supports: "2 aires acondicionados, 8 neveras, luces, TV, microondas, carga de equipos",
+    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
   },
   {
     id: "conv-6",
@@ -203,7 +209,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
     ],
-    supports: "Casa completa + cámaras + motores + hasta 4 aires acondicionados + 10 neveras (de noche: 1 aire acondicionado)"
+    supports: "Casa completa + cámaras + motores + hasta 4 aires acondicionados + 10 neveras (de noche: 1 aire acondicionado)",
+    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
   },
   {
     id: "conv-11",
@@ -283,7 +290,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     category: "PowerStations",
     popular: true,
     slug: "ecoflow-river-2",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-river-2-p/img.webp"]
+    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-river-2-p/img.webp"],
+    manuals: [{ nombre: "EcoFlow RIVER 2", url: "https://websiteoss.ecoflow.com/cms/upload/2023/3/20/EcoFlow%20RIVER%202-User%20Manual%20(EN)%20V1.0_1679285979806.pdf" }]
   },
   {
     id: "conv-14",
