@@ -1,27 +1,22 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
+import AboutUsPlaceholder from "./components/AboutUsPlaceholder";
 import ConvoltajeSection from "./components/ConvoltajeSection";
 import FAQSection from "./components/FAQSection";
-import KitComparisonTable from "./components/KitComparisonTable";
 import Footer from "./components/Footer";
-import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import FloatingNav from "./components/FloatingNav";
 import SolarCalculator from "./components/calculator/SolarCalculator";
-import { TestimonialsCarousel } from "./components/TestimonialsCarousel";
+import { ReviewSection } from "./components/ReviewSection";
 import ProductDetailPage from "./components/ProductDetailPage";
-import KitComparison from "./components/KitComparison";
-import { ECOPOWER_KITS } from "./lib/calculator";
 import { CONVOLTAJE_PRODUCTS, TINTAFLASH_PRODUCTS, WHATSAPP_NUMBERS } from "./lib/products";
 
+import SplashWelcome from "./components/SplashWelcome";
 import { Toaster } from "sonner";
 
 function App() {
-  const convoltajeRef = useRef<HTMLElement | null>(null);
-  const calculatorRef = useRef<HTMLDivElement | null>(null);
-  
+  const [selectedBrand, setSelectedBrand] = useState<"none" | "convoltaje" | "tintaflash">("none");
   const [selectedProductSlug, setSelectedProductSlug] = useState<string | null>(null);
-  const [comparisonSlugs, setComparisonSlugs] = useState<string[]>([]);
-  const [showComparison, setShowComparison] = useState(false);
 
   // Sync scrolling to top when entering product detail page
   useEffect(() => {
@@ -30,19 +25,17 @@ function App() {
     }
   }, [selectedProductSlug]);
 
-  const handleSectionClick = (section: "convoltaje" | "tintaflash") => {
-    if (section === "convoltaje" && convoltajeRef.current) {
-      convoltajeRef.current.scrollIntoView({ behavior: "smooth" });
+  const handleExploreClick = () => {
+    const catalogSection = document.getElementById("catalogo");
+    if (catalogSection) {
+      catalogSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const handleExploreClick = () => {
-    handleSectionClick("convoltaje");
-  };
-
   const handleCalculatorClick = () => {
-    if (calculatorRef.current) {
-      calculatorRef.current.scrollIntoView({ behavior: "smooth" });
+    const calculatorSection = document.getElementById("calculadora");
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -55,27 +48,25 @@ function App() {
 
   const allProducts = [...CONVOLTAJE_PRODUCTS, ...TINTAFLASH_PRODUCTS];
   const selectedProduct = selectedProductSlug ? allProducts.find(p => p.slug === selectedProductSlug) : null;
-  
-  const comparisonProducts = comparisonSlugs.map(slug => {
-    const kit = ECOPOWER_KITS.find(k => k.id === slug);
-    return kit ? allProducts.find(p => p.name === kit.name) : null;
-  }).filter(Boolean) as any[];
-
-  const handleToggleCompare = (slug: string) => {
-    setComparisonSlugs(prev => {
-      if (prev.includes(slug)) {
-        return prev.filter(s => s !== slug);
-      }
-      if (prev.length >= 3) return prev;
-      return [...prev, slug];
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
-      {selectedProduct ? (
+      {selectedBrand === "none" ? (
+        <SplashWelcome onSelectBrand={setSelectedBrand} />
+      ) : selectedBrand === "tintaflash" ? (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4">
+          <h1 className="text-4xl font-display font-bold text-primary mb-4">Tinta Flash</h1>
+          <p className="text-lg text-muted-foreground mb-8 text-center max-w-md">Próximamente: Todos nuestros servicios de personalización e impresión.</p>
+          <button 
+            onClick={() => setSelectedBrand("none")}
+            className="text-primary hover:underline"
+          >
+            Volver al inicio
+          </button>
+        </div>
+      ) : selectedProduct ? (
         <ProductDetailPage 
-          product={selectedProduct!} 
+          product={selectedProduct} 
           onClose={() => {
             setSelectedProductSlug(null);
             setTimeout(() => {
@@ -93,45 +84,22 @@ function App() {
             }, 300);
           }}
         />
-      ) : showComparison && comparisonProducts.length >= 2 ? (
-        <KitComparison 
-          products={comparisonProducts}
-          onBack={() => {
-            setShowComparison(false);
-            setTimeout(() => {
-              const catalogSection = document.getElementById('catalogo') || document.querySelector('[data-section="catalogo"]');
-              if (catalogSection) {
-                catalogSection.scrollIntoView({ behavior: 'smooth' });
-              }
-            }, 100);
-          }}
-          onViewDetails={(product) => {
-            setShowComparison(false);
-            setSelectedProductSlug(product.slug);
-          }}
-          onWhatsappClick={handleWhatsappClick}
-        />
       ) : (
         <>
-          <Header onSectionClick={handleSectionClick} />
+          <Header />
           <HeroSection onExploreClick={handleExploreClick} />
+          <AboutUsPlaceholder />
           <ConvoltajeSection 
-            onRef={(ref) => (convoltajeRef.current = ref)} 
             onCalculatorClick={handleCalculatorClick}
             onViewDetails={(product) => setSelectedProductSlug(product.slug)}
           />
-          <div className="container mx-auto px-4 py-16" ref={calculatorRef}>
+          <div id="calculadora" className="container mx-auto px-4 py-16 scroll-mt-20">
             <SolarCalculator />
           </div>
-          <TestimonialsCarousel />
-          <KitComparisonTable 
-            comparisonSlugs={comparisonSlugs}
-            onToggleCompare={handleToggleCompare}
-            onCompareNow={() => setShowComparison(true)}
-          />
+          <ReviewSection />
           <FAQSection />
           <Footer />
-          <FloatingWhatsApp />
+          <FloatingNav />
         </>
       )}
       <Toaster position="top-center" />

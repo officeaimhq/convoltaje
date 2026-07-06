@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import InteractiveNeuralVortex from "@/components/ui/interactive-neural-vortex-background";
+
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -8,9 +8,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onExploreClick }: HeroSectionProps) {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background WebGL */}
-      <InteractiveNeuralVortex />
+    <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Fallback Dark Background */}
       <div className="absolute inset-0 bg-[#050510] z-[-1]" />
 

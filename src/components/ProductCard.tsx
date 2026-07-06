@@ -1,4 +1,4 @@
-import { MessageCircle, Zap } from "lucide-react";
+import { Zap, Tv2, Wind, Refrigerator, Lightbulb, Smartphone, Laptop } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/products";
 
@@ -11,21 +11,41 @@ interface ProductCardProps {
 
 export default function ProductCard({
   product,
-  onWhatsappClick,
   onViewDetails,
 }: ProductCardProps) {
 
+  // Parse supports to icons
+  const getSupportIcons = () => {
+    if (!product.supports) return null;
+    const s = product.supports.toLowerCase();
+    const icons = [];
+    if (s.includes("aire acondicionado")) icons.push(<span key="wind" title="Aire acondicionado"><Wind className="w-5 h-5 text-muted-foreground" /></span>);
+    if (s.includes("nevera") || s.includes("refrigerador")) icons.push(<span key="fridge" title="Nevera"><Refrigerator className="w-5 h-5 text-muted-foreground" /></span>);
+    if (s.includes("tv") || s.includes("televisor")) icons.push(<span key="tv" title="Televisor"><Tv2 className="w-5 h-5 text-muted-foreground" /></span>);
+    if (s.includes("luces") || s.includes("led")) icons.push(<span key="lights" title="Luces LED"><Lightbulb className="w-5 h-5 text-muted-foreground" /></span>);
+    if (s.includes("celular") || s.includes("carga de equipos") || s.includes("celulares")) icons.push(<span key="phone" title="Celulares"><Smartphone className="w-5 h-5 text-muted-foreground" /></span>);
+    if (s.includes("laptop")) icons.push(<span key="laptop" title="Laptops"><Laptop className="w-5 h-5 text-muted-foreground" /></span>);
+    
+    if (icons.length === 0) return null;
+    
+    return (
+      <div className="flex gap-3 items-center mt-3 justify-center">
+        {icons}
+      </div>
+    );
+  };
+
   return (
-    <div className="card-hover group relative bg-card rounded-xl overflow-hidden shadow-md border border-border transition-all duration-300 flex flex-col h-full">
+    <div className="card-hover group relative bg-card rounded-xl overflow-hidden shadow-md border border-border transition-all duration-300 flex flex-col h-full text-center">
       {/* Image Section */}
-      <div className="relative pt-6 pb-4 flex items-center justify-center bg-muted/5">
+      <div className="relative pt-6 pb-2 flex items-center justify-center bg-muted/5">
         {/* Circular Image Container */}
         <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-white shadow-inner flex items-center justify-center border-4 border-muted/20">
           {product.image ? (
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground bg-muted/10">
@@ -57,22 +77,21 @@ export default function ProductCard({
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col justify-between flex-grow">
-        <div>
-          <h3 className="font-accent text-lg text-foreground mb-2 line-clamp-2">
+      <div className="p-4 flex flex-col justify-between flex-grow items-center">
+        <div className="w-full">
+          <h3 className="font-accent text-lg font-bold text-foreground mb-1 line-clamp-2">
             {product.name}
           </h3>
-
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-            {product.description}
-          </p>
+          
+          {/* Appliance Icons */}
+          {getSupportIcons()}
         </div>
 
-        <div className="mt-auto">
+        <div className="mt-4 w-full">
           {/* Pricing */}
           <div className="mb-4">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary">
+            <div className="flex items-baseline justify-center gap-2">
+              <span className="text-3xl font-bold text-primary">
                 ${product.price}
               </span>
               {product.originalPrice && (
@@ -81,24 +100,16 @@ export default function ProductCard({
                 </span>
               )}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">USD</p>
+            <p className="text-xs text-muted-foreground mt-1 uppercase tracking-widest">USD</p>
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col gap-2">
             <Button
               onClick={() => onViewDetails && onViewDetails(product)}
-              className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base py-5 btn-scale-active shadow-sm"
+              className="w-full bg-[#00D9FF] hover:bg-[#00D9FF]/90 text-black font-accent text-base py-5 btn-scale-active shadow-sm font-semibold"
             >
-              {product.outOfStock ? "Consultar disponibilidad" : "Ver detalles"}
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => onWhatsappClick(product)}
-              className="w-full text-muted-foreground hover:text-foreground hover:bg-muted/50 text-sm py-2 h-auto"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              WhatsApp directo
+              {product.outOfStock ? "Consultar disponibilidad" : "COMPRAR"}
             </Button>
           </div>
         </div>

@@ -43,7 +43,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía de instalación 90 días"
     ],
-    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
+    manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
   },
   {
     id: "conv-2",
@@ -78,7 +78,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Garantía de instalación 90 días"
     ],
     supports: "Nevera, ventiladores, luces LED, carga de celulares",
-    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
+    manuals: [{ nombre: "Manual Inversor MUST 3000W (ES)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
   },
   {
     id: "conv-3",
@@ -116,7 +116,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Garantía de instalación 90 días"
     ],
     supports: "Aire acondicionado 110v, nevera, TV, microondas, ventiladores",
-    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
+    manuals: [{ nombre: "Manual Inversor MUST Axpert MAX 3.6-7.2kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
   },
   {
     id: "conv-4",
@@ -155,7 +155,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Garantía de instalación 90 días"
     ],
     supports: "Aire acondicionado, 2 neveras, TV, microondas, ventiladores, laptops",
-    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
+    manuals: [{ nombre: "Manual Inversor MUST Axpert MAX 3.6-7.2kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
   },
   {
     id: "conv-5",
@@ -182,7 +182,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Garantía de instalación 90 días"
     ],
     supports: "2 aires acondicionados, 8 neveras, luces, TV, microondas, carga de equipos",
-    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
+    manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
   },
   {
     id: "conv-6",
@@ -210,7 +210,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Garantía de instalación 90 días"
     ],
     supports: "Casa completa + cámaras + motores + hasta 4 aires acondicionados + 10 neveras (de noche: 1 aire acondicionado)",
-    manuals: [{ nombre: "Manual del Inversor MUST (PDF)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
+    manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
   },
   {
     id: "conv-11",
@@ -241,25 +241,25 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     description: "Capacidad: 1024 Wh. Potencia: 1800 W. Recarga rápida: 0-80% en 50 minutos.",
     price: 950,
     originalPrice: 1100,
-    image: "https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-estacion-de-energia-portatil-inteligente/img-s.webp",
+    image: "https://nl.ecoflow.com/cdn/shop/files/ecoflow-delta-2-portable-power-station-52097645347159.png",
     category: "PowerStations",
     popular: true,
     discount: 14,
     slug: "ecoflow-delta-2",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-estacion-de-energia-portatil-inteligente/img-s.webp"],
-    manuals: [{ nombre: "Centro de Descargas EcoFlow DELTA 2 (ES)", url: "https://www.ecoflow.com/es/support/download/delta-2" }]
+    images: ["https://nl.ecoflow.com/cdn/shop/files/ecoflow-delta-2-portable-power-station-52097645347159.png"],
+    manuals: [{ nombre: "Manual EcoFlow DELTA 2 (ES)", url: "https://manuals.ecoflow.com/eu/product/delta-2-portable-power-station?lang=es_ES" }]
   },
   {
     id: "conv-8",
     name: "EcoFlow DELTA 2 Max",
     description: "Capacidad: 2048 Wh. Potencia: 2400 W. Ideal para respaldo del hogar.",
     price: 1800,
-    image: "https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-max-estacion-de-energia-de-alta-capacidad/img-s.webp",
+    image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAFEAXAMBIgACEQEDEQH/xAAcAAABBAMBAAAAAAAAAAAAAAAAAQQFBwIDBgj/xABBEAABAwICBAoFCAsAAAAAAAABAAIDBBEFIQYSMUEHEzZRYXF0kbGyIjJyksEUFRYmNVNUoSMlMzREUlViY3PR/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFxEBAQEBAAAAAAAAAAAAAAAAABEBMf/aAAwDAQACEQMRAD8AvFCEh2FBUGK6TY2/FqyH5ymZFHO9jGx2ZZocQNgusqesq5s5quokv/PK4/FQc4/WdV/ud4rbVOxAQtbh7bEjOTVuR1LUYdHAbVUgccjZwuVJsfFq5vj7wqulwmtneZJ5nSuO0ySZ/mk+Y5t7We+EWLLqns1SWuaeoqM15IqeMske0lt7tcQuG+Y59waOp4UhQRYxSkMhkdPCNsbzrNt0HaEE3LjeLUx/Q4lVttu40kdxVgcHuKVmK4LJNiE5mlZO5gcWgHVsDuHSVWNbfeCDvB3LveCj7JrD/n+CmmO4QhCjQSHYUqEFB1csUeK1bZJGNIneCHOtb0jzrZiNTHJh0UUU7HBz7vax4NxnttuuuO0i5VYt26bzlP6Mji2dR+C0kTVNQNmY1wfE2+4hR2kNXDghiY6I1Uj2l7mwt9Ruy56Cb9xS4VpDDh1bP8pcBEz1gRe4BvbaEwrtKKCtqHTGcxuuCXZgnLa0ZgnK1nEDvKJuwz+ltN/Tp+4KfwHEIqttNXQtMLXPsdYgWF7G/QuTr8TwuakLIIGRyW3MaAMucZqT0YdbR+Af3O8yiutxOqp3SvAqITnukCsDgnN8FqnDNpqMiNmwKiMazlf1q6eAjkZN22TwamkWMhCFFCEIQeVdIeVWLdum85TumNms9k+ITTSLlXi/bpvOVuhdZrfZ+IVxG2SgpJ3OdLTMeXesSNqG4Php/goe5F28e0mR17D0A7I5cyyaLF54yQ63O7Z1KjH5ow38FD7qcsjip4BFDG2ONuxrRYbVrc9rWelI4G/rG3/LJHPHFizr5bedBFYwbyOV1cBPIyXtsng1Ulipu9yu3gJ5Fy9tk8GoqxkIQoBCEIPKekh+teL9um85Wcbsm+z8QtWkp+teL9um85SMds9n4qoeNewkExguAsHXN1uhlhGtxrHuy9HVcBY9NwckwD0+oKGrr21DqSDjRBHryekBqjnzOZyOWaWdGJcwghzA4HcUkj7g2FhbZdN9dBfkepAyxI3cVePATyKk7bJ4NVFV5u5XpwEciX9tk8GoqxkIQoBCEIPJ+k2WleL9um85WnjA22tldtvzU3wg6O4lg2k2Iy1NBMaWoqJJoalrCWPa52t6w2EXsQc8lzUFVBJ6F2X5iQVUPg5bIqiWIPEUj2B7S14a4jWHMehM7Rfdxe6Etovu4vdCBzrrF0gbtOZyAWi0X3cXuhI58MLS4iJg57AINdYblXxwD3+hL7/AIyTwaqEiLq6XUpIJKh5Ng2Jhee4L0bwSYJW4FohHBiUHyeommfMYTtYDYAHpsL26UV2iEIUAhCEGLvVPUqy4QP2MnWhCCrxtWR2IQqE3FS2i32mxKhBemA/ubepSaEKAQhCD//Z",
     category: "PowerStations",
     popular: true,
     slug: "ecoflow-delta-2-max",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-delta-2-max-estacion-de-energia-de-alta-capacidad/img-s.webp"],
-    manuals: [{ nombre: "Centro de Descargas EcoFlow DELTA 2 Max (ES)", url: "https://www.ecoflow.com/es/support/download/delta-2-max" }]
+    images: ["data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAFEAXAMBIgACEQEDEQH/xAAcAAABBAMBAAAAAAAAAAAAAAAAAQQFBwIDBgj/xABBEAABAwICBAoFCAsAAAAAAAABAAIDBBEFIQYSMUEHEzZRYXF0kbGyIjJyksEUFRYmNVNUoSMlMzREUlViY3PR/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFxEBAQEBAAAAAAAAAAAAAAAAABEBMf/aAAwDAQACEQMRAD8AvFCEh2FBUGK6TY2/FqyH5ymZFHO9jGx2ZZocQNgusqesq5s5quokv/PK4/FQc4/WdV/ud4rbVOxAQtbh7bEjOTVuR1LUYdHAbVUgccjZwuVJsfFq5vj7wqulwmtneZJ5nSuO0ySZ/mk+Y5t7We+EWLLqns1SWuaeoqM15IqeMske0lt7tcQuG+Y59waOp4UhQRYxSkMhkdPCNsbzrNt0HaEE3LjeLUx/Q4lVttu40kdxVgcHuKVmK4LJNiE5mlZO5gcWgHVsDuHSVWNbfeCDvB3LveCj7JrD/n+CmmO4QhCjQSHYUqEFB1csUeK1bZJGNIneCHOtb0jzrZiNTHJh0UUU7HBz7vax4NxnttuuuO0i5VYt26bzlP6Mji2dR+C0kTVNQNmY1wfE2+4hR2kNXDghiY6I1Uj2l7mwt9Ruy56Cb9xS4VpDDh1bP8pcBEz1gRe4BvbaEwrtKKCtqHTGcxuuCXZgnLa0ZgnK1nEDvKJuwz+ltN/Tp+4KfwHEIqttNXQtMLXPsdYgWF7G/QuTr8TwuakLIIGRyW3MaAMucZqT0YdbR+Af3O8yiutxOqp3SvAqITnukCsDgnN8FqnDNpqMiNmwKiMazlf1q6eAjkZN22TwamkWMhCFFCEIQeVdIeVWLdum85TumNms9k+ITTSLlXi/bpvOVuhdZrfZ+IVxG2SgpJ3OdLTMeXesSNqG4Php/goe5F28e0mR17D0A7I5cyyaLF54yQ63O7Z1KjH5ow38FD7qcsjip4BFDG2ONuxrRYbVrc9rWelI4G/rG3/LJHPHFizr5bedBFYwbyOV1cBPIyXtsng1Ulipu9yu3gJ5Fy9tk8GoqxkIQoBCEIPKekh+teL9um85Wcbsm+z8QtWkp+teL9um85SMds9n4qoeNewkExguAsHXN1uhlhGtxrHuy9HVcBY9NwckwD0+oKGrr21DqSDjRBHryekBqjnzOZyOWaWdGJcwghzA4HcUkj7g2FhbZdN9dBfkepAyxI3cVePATyKk7bJ4NVFV5u5XpwEciX9tk8GoqxkIQoBCEIPJ+k2WleL9um85WnjA22tldtvzU3wg6O4lg2k2Iy1NBMaWoqJJoalrCWPa52t6w2EXsQc8lzUFVBJ6F2X5iQVUPg5bIqiWIPEUj2B7S14a4jWHMehM7Rfdxe6Etovu4vdCBzrrF0gbtOZyAWi0X3cXuhI58MLS4iJg57AINdYblXxwD3+hL7/AIyTwaqEiLq6XUpIJKh5Ng2Jhee4L0bwSYJW4FohHBiUHyeommfMYTtYDYAHpsL26UV2iEIUAhCEGLvVPUqy4QP2MnWhCCrxtWR2IQqE3FS2i32mxKhBemA/ubepSaEKAQhCD//Z"],
+    manuals: [{ nombre: "Manual EcoFlow DELTA 2 Max (ES)", url: "https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/manual/1704188312270/EcoFlow%20DELTA%202%20Max%20-%20Manual%20de%20usuario(es).pdf" }]
   },
   {
     id: "conv-9",
@@ -267,35 +267,35 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     description: "Capacidad: 2000 Wh. Potencia: 2000 W. Pantalla táctil intuitiva.",
     price: 860,
     originalPrice: 950,
-    image: "https://img2.elyerromenu.com/images/convoltaje/bluetti-ac200p/img-s.webp",
+    image: "https://www.bluettipower.eu/cdn/shop/files/AC200PL-ZT1.png?v=1710490177&width=1200",
     category: "PowerStations",
     discount: 9,
     slug: "bluetti-ac200p",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/bluetti-ac200p/img-s.webp"],
-    manuals: [{ nombre: "Manual BLUETTI AC200P (Centro de Descargas ES)", url: "https://es.bluettipower.eu/pages/manuals" }]
+    images: ["https://www.bluettipower.eu/cdn/shop/files/AC200PL-ZT1.png?v=1710490177&width=1200"],
+    manuals: [{ nombre: "Manual Bluetti AC200P (ES)", url: "https://www.manualslib.es/manual/674258/Bluetti-Ac200P.html" }]
   },
   {
     id: "conv-10",
     name: "Anker Solix F2000",
     description: "Capacidad: 2048 Wh. Potencia: 2300 W. Recarga 0-80% en 1.4 horas.",
     price: 1100,
-    image: "https://img2.elyerromenu.com/images/convoltaje/anker-solix-f2000/img-s.webp",
+    image: "https://www.onlinecamerashop.nl//media/nextgenimages/media/catalog/product/cache/350c0dac84622638a906c7177340801e/2/0/20d8f5342c9a21c250d1547fb9db5abb74d6704de36c87931d5cc21f009a492c-c769c233.webp",
     category: "PowerStations",
     slug: "anker-solix-f2000",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/anker-solix-f2000/img-s.webp"],
-    manuals: [{ nombre: "Manual Anker Solix F2000 (Centro de Soporte ES)", url: "https://www.anker.com/es/support/download" }]
+    images: ["https://www.onlinecamerashop.nl//media/nextgenimages/media/catalog/product/cache/350c0dac84622638a906c7177340801e/2/0/20d8f5342c9a21c250d1547fb9db5abb74d6704de36c87931d5cc21f009a492c-c769c233.webp"],
+    manuals: [{ nombre: "Manual Anker Solix F2000 (ES/EN)", url: "https://cdn.solarpowersupply.eu/files/A1780_EU_Manual_210x145mm_20230927-20231218.pdf" }]
   },
   {
     id: "conv-13",
     name: "EcoFlow RIVER 2",
     description: "Capacidad: 256 Wh. Potencia: 300 W (X-Boost 600 W). Ultra portátil y carga rápida en 1 hora.",
     price: 750,
-    image: "https://img2.elyerromenu.com/images/convoltaje/ecoflow-river-2-p/img.webp",
+    image: "https://eu.ecoflow.com/cdn/shop/products/ecoflow-river-2-portable-power-station-42462876860580.png",
     category: "PowerStations",
     popular: true,
     slug: "ecoflow-river-2",
-    images: ["https://img2.elyerromenu.com/images/convoltaje/ecoflow-river-2-p/img.webp"],
-    manuals: [{ nombre: "EcoFlow RIVER 2", url: "https://websiteoss.ecoflow.com/cms/upload/2023/3/20/EcoFlow%20RIVER%202-User%20Manual%20(EN)%20V1.0_1679285979806.pdf" }]
+    images: ["https://eu.ecoflow.com/cdn/shop/products/ecoflow-river-2-portable-power-station-42462876860580.png"],
+    manuals: [{ nombre: "Manual EcoFlow RIVER 2 (ES)", url: "https://manuals.ecoflow.com/eu/product/river-2-portable-power-station?lang=es_ES" }]
   },
   {
     id: "conv-14",
