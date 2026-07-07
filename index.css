@@ -44,18 +44,18 @@
 
 :root {
   /* Solar Pulse Design System */
-  /* Primary: Deep Ocean Blue (#0F3A7D) - Trust, stability, technology */
+  /* Primary: Deep Ocean Blue (#193182) - Trust, stability, technology */
   /* Secondary: Electric Cyan (#00D9FF) - Energy, innovation, action */
-  /* Accent: Warm Coral (#FF6B35) - Creativity, warmth, humanity */
+  /* Accent: Warm Coral (#ff4500) - Creativity, warmth, humanity */
   
-  --primary: #0F3A7D;
+  --primary: #193182;
   --primary-foreground: #F8F9FA;
-  --sidebar-primary: #0F3A7D;
+  --sidebar-primary: #193182;
   --sidebar-primary-foreground: #F8F9FA;
   --chart-1: #00D9FF;
-  --chart-2: #0F3A7D;
-  --chart-3: #FF6B35;
-  --chart-4: #0F3A7D;
+  --chart-2: #193182;
+  --chart-3: #ff4500;
+  --chart-4: #193182;
   --chart-5: #00D9FF;
   --radius: 0.75rem;
   --background: #F8F9FA;
@@ -65,10 +65,10 @@
   --popover: #FFFFFF;
   --popover-foreground: #1A1F2E;
   --secondary: #00D9FF;
-  --secondary-foreground: #0F3A7D;
+  --secondary-foreground: #193182;
   --muted: #E0E4E8;
   --muted-foreground: #6B7280;
-  --accent: #FF6B35;
+  --accent: #ff4500;
   --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
@@ -160,18 +160,45 @@
     font-family: 'Poppins', sans-serif;
   }
 
-  /* Animation: Energy Pulse */
-  @keyframes pulse-glow {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.7);
+  /* Animation: Fade In */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
     }
-    50% {
-      box-shadow: 0 0 0 10px rgba(0, 217, 255, 0);
+    to {
+      opacity: 1;
     }
   }
 
-  .pulse-glow {
-    animation: pulse-glow 2s infinite;
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+
+  /* Animation: Neon Pulse */
+  @keyframes neon-pulse {
+    0%, 100% {
+      box-shadow: 0 0 5px #193182, 0 0 10px #193182, 0 0 20px #193182;
+      border-color: #193182;
+      background-color: #193182;
+      color: #FFFFFF;
+    }
+    50% {
+      box-shadow: 0 0 5px #ff4500, 0 0 15px #ff4500, 0 0 30px #ff4500;
+      border-color: #ff4500;
+      background-color: #ff4500;
+      color: #FFFFFF;
+    }
+  }
+
+  .neon-btn {
+    animation: neon-pulse 3s infinite alternate;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .neon-btn:hover {
+    filter: brightness(1.2);
+    transform: scale(1.05);
   }
 
   /* Animation: Fade In */

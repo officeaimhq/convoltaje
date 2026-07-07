@@ -16,7 +16,7 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
       <div className="container mx-auto px-4 relative z-10 py-20 lg:py-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
-          <div className="bg-black/50 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 shadow-2xl text-white animate-fade-in text-center lg:text-left mt-8 lg:mt-0">
+          <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/40 shadow-2xl text-slate-900 animate-fade-in text-center lg:text-left mt-8 lg:mt-0">
             <h1 
               className="font-display text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight text-white font-bold"
               style={{ textShadow: '0 2px 12px rgba(0,0,0,0.9)' }}
@@ -39,7 +39,7 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
               <Button
                 onClick={onExploreClick}
-                className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base md:text-lg px-8 py-6 btn-scale-active"
+                className="w-full sm:w-auto font-accent text-base md:text-lg px-8 py-6 neon-btn"
               >
                 Explorar Catálogos
                 <ArrowRight className="w-5 h-5 ml-2" />

@@ -121,7 +121,7 @@ export function ReviewSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Form */}
-          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 sticky top-24">
+          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 md:sticky md:top-24">
             <h3 className="text-2xl font-display font-bold text-primary mb-6">Deja tu reseña</h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>

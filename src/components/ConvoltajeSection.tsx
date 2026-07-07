@@ -101,7 +101,7 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick, onViewDeta
           </p>
           <Button
             onClick={onCalculatorClick}
-            className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-base md:text-lg px-8 py-6 btn-scale-active"
+            className="w-full sm:w-auto font-accent text-base md:text-lg px-8 py-6 neon-btn"
           >
             <Calculator className="w-5 h-5 mr-2 flex-shrink-0" />
             Usar Calculadora Solar
