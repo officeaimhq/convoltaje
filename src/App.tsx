@@ -6,6 +6,7 @@ import ConvoltajeSection from "./components/ConvoltajeSection";
 import FAQSection from "./components/FAQSection";
 import Footer from "./components/Footer";
 import FloatingNav from "./components/FloatingNav";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import SolarCalculator from "./components/calculator/SolarCalculator";
 import { ReviewSection } from "./components/ReviewSection";
 import ProductDetailPage from "./components/ProductDetailPage";
@@ -100,6 +101,7 @@ function App() {
           <FAQSection />
           <Footer />
           <FloatingNav />
+          <FloatingWhatsApp />
         </>
       )}
       <Toaster position="top-center" />

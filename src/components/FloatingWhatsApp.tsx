@@ -12,7 +12,7 @@ export default function FloatingWhatsApp() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex flex-col gap-3 items-center">
+    <div className="fixed bottom-4 left-4 md:bottom-6 md:left-auto md:right-6 z-50 flex flex-col gap-3 items-center">
       <button
         onClick={handleReviewClick}
         className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 rounded-full p-3 shadow-lg transition-all duration-300 active:scale-95 flex items-center justify-center"

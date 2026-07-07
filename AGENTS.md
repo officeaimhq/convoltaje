@@ -30,6 +30,23 @@ React + Vite + TypeScript + Tailwind + shadcn/ui + wouter
    - **NUNCA modificar** archivos en `Convoltaje/Decisiones/` ni `Convoltaje/Productos/` — esas carpetas las maneja exclusivamente OpenCode.
    - El repo de GitHub sigue siendo el territorio exclusivo de Antigravity para todo el código y `AGENTS.md`.
 
+## Protocolo de Reinicio de Sesión (LLM Wiki)
+
+Para evitar recargar millones de tokens de caché al iniciar una nueva sesión, **siempre** sigue estos pasos al arrancar:
+
+1. Lee estos 3 archivos en orden para restaurar el contexto completo en < 5.000 tokens:
+   - `README.md` en el vault de Obsidian (visión general del proyecto)
+   - Este archivo `AGENTS.md` (reglas y configuración del proyecto)
+   - `Contexto-Actual.md` en el vault de Obsidian (estado actual del proyecto)
+   - El archivo de sesión más reciente en `Sesiones/YYYY-MM-DD.md`
+
+2. Después de leerlos, confirma al usuario:
+   "Contexto restaurado desde Obsidian. Última sesión: [fecha]. Pendientes: [lista de pendientes]."
+
+3. Si el usuario pide "continuar", retoma exactamente desde donde quedó la última sesión.
+
+4. **Siempre** registra el resumen de la sesión en `Sesiones/YYYY-MM-DD.md` al cerrar.
+
 ## Configuración del Entorno
 `OBSIDIAN_VAULT=/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje`
 

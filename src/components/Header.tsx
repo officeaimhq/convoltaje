@@ -84,12 +84,6 @@ export default function Header() {
               Calculadora
             </button>
             <button
-              onClick={() => scrollTo("reviews-section")}
-              className={`pb-1 transition-colors font-medium border-b-2 ${activeTab === 'reviews-section' ? 'border-cyan-500 text-cyan-600' : 'border-transparent text-foreground hover:text-cyan-500'}`}
-            >
-              Reseñas
-            </button>
-            <button
               onClick={() => scrollTo("contacto")}
               className={`pb-1 transition-colors font-medium border-b-2 ${activeTab === 'contacto' ? 'border-cyan-500 text-cyan-600' : 'border-transparent text-foreground hover:text-cyan-500'}`}
             >
