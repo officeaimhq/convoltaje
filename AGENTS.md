@@ -24,6 +24,14 @@ React + Vite + TypeScript + Tailwind + shadcn/ui + wouter
 6. **Regla de Borrado**: Antes de borrar o mover archivos, SIEMPRE hay que confirmar con el usuario si no está 100% claro que no se usan.
 7. **Control de Versiones (Git)**: Cada cambio o conjunto de tareas probado y confirmado por el usuario debe terminar en un commit de Git con un mensaje descriptivo y claro. No hacer push ni vincular a remotos sin consultar primero.
 8. **Cómo correr el proyecto**: Ejecutar `npm install && npm run dev`
+9. **Reglas de Integración con Obsidian y OpenCode**:
+   - El vault de Obsidian en `/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje/` es de **LECTURA Y ESCRITURA para logs de sesión únicamente**.
+   - **Solo escribir** en `Convoltaje/Sesiones/YYYY-MM-DD.md` al cerrar cada sesión.
+   - **NUNCA modificar** archivos en `Convoltaje/Decisiones/` ni `Convoltaje/Productos/` — esas carpetas las maneja exclusivamente OpenCode.
+   - El repo de GitHub sigue siendo el territorio exclusivo de Antigravity para todo el código y `AGENTS.md`.
+
+## Configuración del Entorno
+`OBSIDIAN_VAULT=/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje`
 
 ## Contexto y Reglas Extendidas
 Adicionalmente, revisa los siguientes archivos en `.agents/rules/` para guías detalladas:
