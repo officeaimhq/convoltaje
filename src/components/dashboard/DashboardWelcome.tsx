@@ -1,8 +1,20 @@
-import { Zap, Palette, Search, Settings } from "lucide-react";
+import { Search, Zap, Palette, Settings } from "lucide-react";
 import { useLocation } from "wouter";
 
-export default function DashboardWelcome() {
+interface DashboardWelcomeProps {
+  onSelectBrand?: (brand: "none" | "convoltaje" | "tintaflash") => void;
+}
+
+export default function DashboardWelcome({ onSelectBrand }: DashboardWelcomeProps = {}) {
   const [, setLocation] = useLocation();
+
+  const handleConvoltajeClick = () => {
+    if (onSelectBrand) {
+      onSelectBrand("convoltaje");
+    } else {
+      setLocation("/");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0b3c8f] to-[#082c6b] text-white flex flex-col items-center justify-center p-4 relative font-sans">
@@ -51,7 +63,7 @@ export default function DashboardWelcome() {
         {/* Tarjetas de Negocios */}
         <div className="w-full max-w-xs mx-auto mb-6">
           {/* Convoltaje */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-between shadow-lg transition-all cursor-pointer min-h-[140px]" onClick={() => setLocation("/")}>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-between shadow-lg transition-all cursor-pointer min-h-[140px]" onClick={handleConvoltajeClick}>
             <div className="text-center w-full">
               <h2 className="text-lg font-bold mb-1">Convoltaje</h2>
               <p className="text-[11px] text-blue-100/80 mb-3 leading-relaxed">Soluciones de energía solar, inversores y PowerStations.</p>

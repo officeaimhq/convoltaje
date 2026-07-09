@@ -12,7 +12,7 @@ import { ReviewSection } from "./components/ReviewSection";
 import ProductDetailPage from "./components/ProductDetailPage";
 import { CONVOLTAJE_PRODUCTS, TINTAFLASH_PRODUCTS, WHATSAPP_NUMBERS } from "./lib/products";
 
-import SplashWelcome from "./components/SplashWelcome";
+import DashboardWelcome from "./components/dashboard/DashboardWelcome";
 import { Toaster } from "sonner";
 import { Switch, Route } from "wouter";
 import DashboardMain from "./components/dashboard/DashboardMain";
@@ -62,7 +62,7 @@ function App() {
         {/* Ruta principal de la Landing Page */}
         <Route>
           {selectedBrand === "none" ? (
-            <SplashWelcome onSelectBrand={setSelectedBrand} />
+            <DashboardWelcome onSelectBrand={setSelectedBrand} />
           ) : selectedBrand === "tintaflash" ? (
             <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4">
               <h1 className="text-4xl font-display font-bold text-primary mb-4">Tinta Flash</h1>
