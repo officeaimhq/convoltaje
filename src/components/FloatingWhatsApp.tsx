@@ -23,7 +23,7 @@ export default function FloatingWhatsApp() {
       </button>
       <button
         onClick={handleWhatsAppClick}
-        className="text-white rounded-full p-3 md:p-4 shadow-lg transition-all duration-300 active:scale-95 flex items-center justify-center neon-btn"
+        className="bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full p-3 md:p-4 shadow-lg transition-all duration-300 active:scale-95 flex items-center justify-center"
         aria-label="Chat with WhatsApp"
         title="Contactar por WhatsApp"
       >

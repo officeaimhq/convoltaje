@@ -1,12 +1,13 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users, Calendar, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 
 interface HeroSectionProps {
   onExploreClick: () => void;
+  onCalculatorClick: () => void;
 }
 
-export default function HeroSection({ onExploreClick }: HeroSectionProps) {
+export default function HeroSection({ onExploreClick, onCalculatorClick }: HeroSectionProps) {
   return (
     <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Fallback Dark Background */}
@@ -21,17 +22,15 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
               className="font-display text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight text-white font-bold"
               style={{ textShadow: '0 2px 12px rgba(0,0,0,0.9)' }}
             >
-              Energiza tu vida — Convoltaje
+              Energiza tu vida
             </h1>
             <h2 
-              className="font-display text-2xl md:text-3xl lg:text-4xl mb-6 text-[#00D9FF] font-bold"
-              style={{ textShadow: '0 0 20px rgba(0,217,255,0.5)' }}
+              className="font-display text-2xl md:text-3xl lg:text-4xl mb-6 text-primary font-bold drop-shadow-sm"
             >
               La solución al apagón que ya funciona en más de 500 hogares cubanos
             </h2>
             <p 
-              className="text-base md:text-lg mb-8 text-white font-medium max-w-md mx-auto lg:mx-0"
-              style={{ textShadow: '0 1px 6px rgba(0,0,0,0.9)' }}
+              className="text-base md:text-lg mb-8 text-[#009bc2] font-semibold max-w-md mx-auto lg:mx-0 drop-shadow-sm"
             >
               Sistemas solares completos, instalación profesional y pago solo cuando tu hogar tenga luz. Sin adelantos. Sin sorpresas.
             </p>
@@ -45,35 +44,25 @@ export default function HeroSection({ onExploreClick }: HeroSectionProps) {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
               <Button
-                variant="outline"
-                onClick={onExploreClick}
-                className="w-full sm:w-auto bg-white/15 backdrop-blur-sm border border-white/40 text-white font-semibold hover:bg-white/20 font-accent text-base md:text-lg px-8 py-6"
+                onClick={onCalculatorClick}
+                className="w-full sm:w-auto bg-[#ff4500] hover:bg-[#ff4500]/90 text-white border-none shadow-lg shadow-[#ff4500]/30 font-semibold font-accent text-base md:text-lg px-8 py-6 transition-all hover:scale-105"
               >
-                Saber Más
+                Calculadora Solar
               </Button>
             </div>
 
             {/* Trust Badges */}
             <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm justify-center lg:justify-start">
-              <div 
-                className="flex items-center gap-2 justify-center text-white font-semibold"
-                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.9)' }}
-              >
-                <div className="w-3 h-3 rounded-full bg-[#00D9FF] flex-shrink-0" />
+              <div className="flex items-center gap-2 justify-center text-primary font-semibold">
+                <Users className="w-5 h-5 text-[#00D9FF] flex-shrink-0" />
                 <span>+500 familias con luz continua</span>
               </div>
-              <div 
-                className="flex items-center gap-2 justify-center text-white font-semibold"
-                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.9)' }}
-              >
-                <div className="w-3 h-3 rounded-full bg-[#00D9FF] flex-shrink-0" />
+              <div className="flex items-center gap-2 justify-center text-primary font-semibold">
+                <Calendar className="w-5 h-5 text-[#00D9FF] flex-shrink-0" />
                 <span>Instalación en 10-15 días</span>
               </div>
-              <div 
-                className="flex items-center gap-2 justify-center text-white font-semibold"
-                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.9)' }}
-              >
-                <div className="w-3 h-3 rounded-full bg-[#00D9FF] flex-shrink-0" />
+              <div className="flex items-center gap-2 justify-center text-primary font-semibold">
+                <ShieldCheck className="w-5 h-5 text-[#00D9FF] flex-shrink-0" />
                 <span>Pagas solo cuando funciona</span>
               </div>
             </div>

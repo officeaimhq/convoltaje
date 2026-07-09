@@ -88,7 +88,7 @@ function App() {
       ) : (
         <>
           <Header />
-          <HeroSection onExploreClick={handleExploreClick} />
+          <HeroSection onExploreClick={handleExploreClick} onCalculatorClick={handleCalculatorClick} />
           <AboutUsPlaceholder />
           <ConvoltajeSection 
             onCalculatorClick={handleCalculatorClick}
