@@ -2,14 +2,7 @@ import { Switch, Route } from "wouter";
 import DashboardWelcome from "./DashboardWelcome";
 import DashboardLogin from "./DashboardLogin";
 
-// Componente placeholder para el panel principal una vez logueado (Fase 2)
-function DashboardPanel() {
-  return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-      <h1 className="text-2xl font-bold text-slate-800">Panel Principal (Calendario en construcción...)</h1>
-    </div>
-  );
-}
+import DashboardPanel from "./DashboardPanel";
 
 export default function DashboardMain() {
   return (
