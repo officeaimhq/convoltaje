@@ -1,18 +1,42 @@
-import CalendarCore from "./calendar/CalendarCore";
+import { useState } from "react";
 import { LogOut } from "lucide-react";
 import { useLocation } from "wouter";
+import CalendarCore from "./calendar/CalendarCore";
+import Sidebar, { AdminView } from "./Sidebar";
+import OperationsPipeline from "./crm/OperationsPipeline";
+import InventoryMain from "./inventory/InventoryMain";
+import DashboardWelcome from "./DashboardWelcome";
 
 export default function DashboardPanel() {
   const [, setLocation] = useLocation();
+  const [currentView, setCurrentView] = useState<AdminView>('inicio');
 
   const handleLogout = () => {
-    // Aquí luego agregaremos la lógica real de Firebase Auth,
-    // por ahora solo lo mandamos al inicio
     setLocation("/");
   };
 
+  const renderContent = () => {
+    switch (currentView) {
+      case 'inicio':
+        return <DashboardWelcome />;
+      case 'calendario':
+        return <CalendarCore />;
+      case 'pipeline':
+        return <OperationsPipeline />;
+      case 'almacen':
+        return <InventoryMain />;
+      default:
+        return (
+          <div className="flex flex-col items-center justify-center h-full text-white/50">
+            <h2 className="text-2xl font-bold mb-2 text-white/80">Vista en Construcción</h2>
+            <p>El módulo de {currentView} estará disponible pronto.</p>
+          </div>
+        );
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#0d233a] relative overflow-hidden flex flex-col font-sans">
+    <div className="h-screen bg-[#0d233a] relative overflow-hidden flex font-sans">
       {/* Fondo de tuercas/herramientas (placeholder visual) */}
       <div 
         className="absolute inset-0 z-0 opacity-5 pointer-events-none"
@@ -21,32 +45,29 @@ export default function DashboardPanel() {
         }}
       />
       
-      {/* Cabecera del Panel */}
-      <div className="relative z-10 flex items-center justify-between p-4 border-b border-white/10 bg-[#0d233a]/80 backdrop-blur-md shadow-sm">
-        <div className="flex items-center gap-3">
-          <img 
-            src="/images/Logo-admin.png" 
-            alt="Logo Admin" 
-            className="w-10 h-10 object-contain [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]"
-            style={{ mixBlendMode: 'screen' }}
-          />
-          <h1 className="text-xl font-bold text-white tracking-wide">Panel de Operaciones</h1>
+      {/* Sidebar Layout */}
+      <Sidebar currentView={currentView} onChangeView={setCurrentView} />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col relative z-10 overflow-hidden h-screen">
+        
+        {/* Cabecera Superior Minimalista */}
+        <div className="flex items-center justify-end p-4 border-b border-white/5 bg-[#0d233a]/50 backdrop-blur-md">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+          >
+            <LogOut size={16} />
+            <span className="hidden sm:inline">Salir del Panel</span>
+          </button>
         </div>
-        <button 
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-        >
-          <LogOut size={16} />
-          <span className="hidden sm:inline">Salir</span>
-        </button>
+
+        {/* Dynamic Content */}
+        <div className="flex-1 overflow-hidden p-4 md:p-6 lg:p-8">
+          {renderContent()}
+        </div>
       </div>
 
-      {/* Contenedor principal del calendario */}
-      <div className="relative z-10 flex-1 p-4 lg:p-8 flex flex-col items-center">
-        <div className="w-full max-w-5xl h-[80vh] min-h-[600px]">
-          <CalendarCore />
-        </div>
-      </div>
     </div>
   );
 }
