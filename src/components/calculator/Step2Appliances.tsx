@@ -26,7 +26,7 @@ const APPLIANCE_CATEGORIES = [
   },
   {
     name: "Electrodomésticos",
-    items: ["fridge", "washer", "oven"],
+    items: ["fridge", "washer", "oven", "moto", "bomba"],
   },
   {
     name: "Tecnología",

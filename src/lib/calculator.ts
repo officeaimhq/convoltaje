@@ -101,6 +101,18 @@ export const DEFAULT_APPLIANCES: Record<string, Omit<Appliance, "id">> = {
     quantity: 1,
     hoursPerDay: 1,
   },
+  moto: {
+    name: "Carga de Moto Eléctrica 🛵",
+    watts: 600,
+    quantity: 1,
+    hoursPerDay: 5,
+  },
+  bomba: {
+    name: "Bomba de Agua 💧",
+    watts: 500,
+    quantity: 1,
+    hoursPerDay: 1,
+  },
 };
 
 // EcoPower Kit Catalog (aligned with Convoltaje inventory)

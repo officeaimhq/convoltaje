@@ -1,71 +1,96 @@
-import { useState } from "react";
-import { LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { LogOut, ChevronLeft } from "lucide-react";
 import { useLocation } from "wouter";
 import CalendarCore from "./calendar/CalendarCore";
-import Sidebar, { AdminView } from "./Sidebar";
 import OperationsPipeline from "./crm/OperationsPipeline";
 import InventoryMain from "./inventory/InventoryMain";
-import DashboardWelcome from "./DashboardWelcome";
+import MobileHomeGrid from "./MobileHomeGrid";
+import SalesTemplates from "./crm/SalesTemplates";
+import TroubleshootingGuide from "./tech/TroubleshootingGuide";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { AdminView } from "./Sidebar";
 
 export default function DashboardPanel() {
   const [, setLocation] = useLocation();
+  const { currentUser, logout } = useAuthStore();
   const [currentView, setCurrentView] = useState<AdminView>('inicio');
 
+  // Redireccionar al login si no hay usuario
+  useEffect(() => {
+    if (!currentUser) {
+      setLocation("/admin/login");
+    }
+  }, [currentUser, setLocation]);
+
   const handleLogout = () => {
-    setLocation("/");
+    logout();
+    setLocation("/admin/login");
   };
 
   const renderContent = () => {
     switch (currentView) {
       case 'inicio':
-        return <DashboardWelcome />;
+        return <MobileHomeGrid onSelectView={setCurrentView} />;
       case 'calendario':
         return <CalendarCore />;
       case 'pipeline':
         return <OperationsPipeline />;
       case 'almacen':
         return <InventoryMain />;
+      case 'plantillas':
+        return <SalesTemplates />;
+      case 'errores':
+        return <TroubleshootingGuide />;
       default:
         return (
-          <div className="flex flex-col items-center justify-center h-full text-white/50">
-            <h2 className="text-2xl font-bold mb-2 text-white/80">Vista en Construcción</h2>
-            <p>El módulo de {currentView} estará disponible pronto.</p>
+          <div className="flex flex-col items-center justify-center h-full text-white/50 py-12">
+            <h2 className="text-xl font-bold mb-2 text-white/80">Módulo en Construcción</h2>
+            <p className="text-sm">La sección de "{currentView}" estará disponible pronto.</p>
           </div>
         );
     }
   };
 
+  if (!currentUser) return null;
+
   return (
-    <div className="h-screen bg-[#0d233a] relative overflow-hidden flex font-sans">
-      {/* Fondo de tuercas/herramientas (placeholder visual) */}
-      <div 
-        className="absolute inset-0 z-0 opacity-5 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l1.43 1.43-26.686 26.687-1.43-1.43L54.627 0zm-49.254 0L32.06 26.686l-1.43 1.43L3.943 1.43 5.373 0z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`
-        }}
-      />
+    <div className="h-screen w-full bg-[#0b3c8f] text-white flex flex-col font-sans overflow-hidden">
       
-      {/* Sidebar Layout */}
-      <Sidebar currentView={currentView} onChangeView={setCurrentView} />
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col relative z-10 overflow-hidden h-screen">
-        
-        {/* Cabecera Superior Minimalista */}
-        <div className="flex items-center justify-end p-4 border-b border-white/5 bg-[#0d233a]/50 backdrop-blur-md">
+      {/* Cabecera Móvil/Escritorio unificada para el Dashboard de Botones */}
+      <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0b3c8f] relative z-20 shadow-lg">
+        {currentView !== 'inicio' ? (
           <button 
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            onClick={() => setCurrentView('inicio')}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors"
           >
-            <LogOut size={16} />
-            <span className="hidden sm:inline">Salir del Panel</span>
+            <ChevronLeft size={16} />
+            <span>Volver</span>
           </button>
-        </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-white/50">Sesión: <span className="text-[#00D9FF] font-semibold">{currentUser.name}</span></span>
+          </div>
+        )}
+        
+        <h3 className="text-sm font-bold capitalize text-white/80">
+          {currentView === 'inicio' ? 'Convoltaje Workspace' : 
+           currentView === 'pipeline' ? 'Clientes' : 
+           currentView === 'almacen' ? 'Almacén' : 
+           currentView === 'plantillas' ? 'Plantillas de Venta' : 
+           currentView === 'errores' ? 'Errores MUST' : currentView}
+        </h3>
 
-        {/* Dynamic Content */}
-        <div className="flex-1 overflow-hidden p-4 md:p-6 lg:p-8">
-          {renderContent()}
-        </div>
+        <button 
+          onClick={handleLogout}
+          className="text-xs text-white/50 hover:text-white transition-colors bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5"
+        >
+          Salir
+        </button>
+      </div>
+
+      {/* Contenido Dinámico de la vista (Grid o Módulo activo) */}
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 max-w-lg mx-auto w-full flex flex-col">
+        {renderContent()}
       </div>
 
     </div>
