@@ -7,6 +7,7 @@ import InventoryMain from "./inventory/InventoryMain";
 import MobileHomeGrid from "./MobileHomeGrid";
 import SalesTemplates from "./crm/SalesTemplates";
 import TroubleshootingGuide from "./tech/TroubleshootingGuide";
+import CrmCalculator from "./crm/CrmCalculator";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { AdminView } from "./Sidebar";
 
@@ -41,6 +42,8 @@ export default function DashboardPanel() {
         return <SalesTemplates />;
       case 'errores':
         return <TroubleshootingGuide />;
+      case 'calculadora':
+        return <CrmCalculator />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full text-white/50 py-12">
@@ -77,6 +80,7 @@ export default function DashboardPanel() {
            currentView === 'pipeline' ? 'Clientes' : 
            currentView === 'almacen' ? 'Almacén' : 
            currentView === 'plantillas' ? 'Plantillas de Venta' : 
+           currentView === 'calculadora' ? 'Calculadora Técnica' : 
            currentView === 'errores' ? 'Errores MUST' : currentView}
         </h3>
 
