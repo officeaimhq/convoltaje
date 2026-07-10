@@ -1,6 +1,6 @@
 import { Calendar, LayoutDashboard, Package, PieChart, Users } from "lucide-react";
 
-export type AdminView = 'inicio' | 'calendario' | 'pipeline' | 'almacen' | 'finanzas' | 'instalaciones' | 'quejas' | 'ajustes' | 'calculadora' | 'historial' | 'plantillas' | 'errores';
+export type AdminView = 'inicio' | 'calendario' | 'pipeline' | 'almacen' | 'finanzas' | 'instalaciones' | 'quejas' | 'ajustes' | 'calculadora' | 'historial' | 'plantillas' | 'errores' | 'manuales';
 
 interface SidebarProps {
   currentView: AdminView;

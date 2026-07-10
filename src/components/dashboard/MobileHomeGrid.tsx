@@ -3,7 +3,7 @@ import {
   UserPlus, Wrench, Flame, BarChart3, 
   Package, Calendar, Sliders, Calculator, 
   ClipboardList, Bell, Star, Asterisk,
-  AlertOctagon, MessageSquare
+  AlertOctagon, MessageSquare, BookOpen
 } from 'lucide-react';
 import { AdminView } from './Sidebar';
 
@@ -99,6 +99,13 @@ export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
       label: 'Historial',
       icon: ClipboardList,
       roles: ['admin', 'contable', 'tecnico']
+    },
+    {
+      id: 'manuales',
+      view: 'manuales' as AdminView,
+      label: 'Manuales',
+      icon: BookOpen,
+      roles: ['admin', 'comercial', 'tecnico', 'contable']
     }
   ];
 

@@ -243,27 +243,6 @@ export default function ProductDetailPage({
               </div>
             )}
 
-            {/* Manuals */}
-            {product.manuals && product.manuals.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-muted-foreground" />
-                  📖 Documentación
-                </h3>
-                <div className="flex flex-col gap-3">
-                  {product.manuals.map((manual, idx) => (
-                    <Button 
-                      key={idx} 
-                      variant="outline" 
-                      className="w-fit text-muted-foreground border-border hover:bg-muted font-accent text-sm py-2 px-4"
-                      onClick={() => window.open(manual.url, "_blank")}
-                    >
-                      📄 {manual.nombre}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
