@@ -213,7 +213,7 @@ export default function CalendarCore() {
             {viewMode === 'mes' 
               ? format(currentDate, "MMMM yyyy", { locale: es })
               : viewMode === 'semana'
-                ? `Semana del ${format(weekDays[0], "d d' de 'MMMM", { locale: es })}`
+                ? `Semana del ${format(weekDays[0], "d 'de' MMMM", { locale: es })}`
                 : format(viewMode === 'hoy' ? new Date() : viewMode === 'manana' ? addDays(new Date(), 1) : currentDate, "EEEE, d 'de' MMMM", { locale: es })}
           </span>
 
