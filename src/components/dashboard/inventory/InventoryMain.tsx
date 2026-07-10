@@ -191,7 +191,7 @@ export default function InventoryMain() {
           </h3>
 
           {filteredItems.length > 0 ? (
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {filteredItems.map((item) => {
                 const commitment = getCommittedStock(item.code);
                 const available = item.stock - commitment.total;
@@ -202,31 +202,48 @@ export default function InventoryMain() {
                   <button
                     key={item.id}
                     onClick={() => setSelectedItem(item)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between group active:scale-[0.99]
+                    className={`w-full text-left p-3.5 rounded-2xl border transition-all flex flex-col justify-between group active:scale-[0.99] h-[135px] relative overflow-hidden backdrop-blur-sm
                       ${selectedItem?.id === item.id
-                        ? 'bg-gradient-to-r from-[#00D9FF]/20 to-transparent border-[#00D9FF] text-white shadow-lg'
-                        : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/20'
+                        ? 'bg-gradient-to-br from-[#00D9FF]/20 to-transparent border-[#00D9FF] text-white shadow-lg shadow-[#00D9FF]/5'
+                        : 'bg-white/5 border-white/10 text-white/85 hover:bg-white/10 hover:border-white/20'
                       }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-xs
-                        ${isShortage ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 
-                          isLow ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 
-                          'bg-white/10 text-white/80'}`}>
-                        {isShortage ? '!' : item.stock}
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="text-sm font-bold truncate group-hover:text-[#00D9FF] transition-colors">{item.name}</h4>
-                        <p className="text-[10px] text-white/40 font-mono truncate">{item.code}</p>
-                      </div>
+                    {/* Header: Stock Counter Badge with Icon */}
+                    <div className="flex items-center justify-between w-full mb-2">
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold font-mono border
+                        ${isShortage 
+                          ? 'bg-red-500/20 text-red-400 border-red-500/30' 
+                          : isLow 
+                            ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' 
+                            : 'bg-white/10 text-white/80 border-white/10'
+                        }`}
+                      >
+                        <Package size={10} className="flex-shrink-0" />
+                        {isShortage ? `Déficit` : `${item.stock} uds`}
+                      </span>
                     </div>
-                    
-                    <div className="text-right flex-shrink-0 pl-2">
-                      <span className="text-xs font-mono font-semibold text-white/90">${item.salePrice}</span>
-                      <p className={`text-[9px] font-bold mt-0.5 
-                        ${isShortage ? 'text-red-400' : isLow ? 'text-yellow-400' : 'text-[#00FF66]'}`}>
-                        {isShortage ? 'Déficit' : isLow ? 'Stock Bajo' : 'Disponible'}
-                      </p>
+
+                    {/* Middle: Name & SKU */}
+                    <div className="min-w-0 flex-1 flex flex-col justify-center mb-2">
+                      <h4 className="text-xs font-bold leading-tight line-clamp-2 group-hover:text-[#00D9FF] transition-colors">
+                        {item.name}
+                      </h4>
+                      <span className="text-[9px] text-white/40 font-mono mt-0.5 truncate">
+                        {item.code}
+                      </span>
+                    </div>
+
+                    {/* Footer: Price & Status */}
+                    <div className="flex items-end justify-between w-full mt-auto pt-1 border-t border-white/5">
+                      <span className="text-xs font-mono font-semibold text-white/90">
+                        ${item.salePrice}
+                      </span>
+                      <span className={`w-1.5 h-1.5 rounded-full 
+                        ${isShortage ? 'bg-red-500 shadow-md shadow-red-500/50' : 
+                          isLow ? 'bg-yellow-500 shadow-md shadow-yellow-500/50' : 
+                          'bg-[#00FF66] shadow-md shadow-[#00FF66]/50'}`} 
+                        title={isShortage ? 'Déficit' : isLow ? 'Stock Bajo' : 'Disponible'}
+                      />
                     </div>
                   </button>
                 );
