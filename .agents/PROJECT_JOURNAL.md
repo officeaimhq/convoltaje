@@ -31,9 +31,13 @@
 - Garantías actualizadas a 90 días.
 - WhatsApp oficial unificado (+5355144097).
 
+## Sesión de Antigravity (2026-07-11)
+- **Correcciones de Garantía**: Actualizados los términos de garantía real de Convoltaje en `faq-data.ts`, `KitComparisonTable.tsx` y `products.ts` para reflejar la realidad del negocio en Cuba (garantía directa de Convoltaje de 3 meses para sistemas de hasta 6kW, y 1 año para sistemas de 10kW o superiores). Eliminados los rastros del número de WhatsApp incorrecto.
+- **Rediseño del Calendario**: Modificada la vista semanal en `CalendarCore.tsx` a tarjetas verticales responsivas de días. Cada día colapsado muestra una pila de píldoras de colores vivos con la nomenclatura `"userXX · tipo"`, y al hacer clic se expande en acordeón para mostrar el listado de obras detallado.
+
 ## Próximos Pasos (Próxima Sesión)
-1. Verificar en el sitio live los 3 bugs pendientes (imagen AC 3000W, botón comparador, scroll al catálogo en "Volver").
-2. Esperar feedback de Angel.
-3. Definir arte oficial de "Samuel el Panel" o cambiar el enfoque visual del Hero.
-4. Implementar librería de manuales de usuario.
-5. Desarrollar sistema CRM de captura de leads y encuestas de satisfacción (Fase 2).
+1. Esperar feedback de Ángel sobre los nuevos términos de garantía y el rediseño del Calendario.
+2. Hacer push a producción si se aprueban los cambios de hoy.
+3. Continuar con otros módulos del CRM (como inventario, pipeline de clientes o plantillas de ventas).
+4. Implementar la librería de manuales de usuario definitiva.
+5. Definir arte oficial de "Samuel el Panel" o cambiar el enfoque visual del Hero.
