@@ -10,6 +10,7 @@ import TroubleshootingGuide from "./tech/TroubleshootingGuide";
 import CrmCalculator from "./crm/CrmCalculator";
 import ManualsLibrary from "./tech/ManualsLibrary";
 import InstallationsMain from "./InstallationsMain";
+import QuejasMain from "./QuejasMain";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { AdminView } from "./Sidebar";
 
@@ -42,6 +43,8 @@ export default function DashboardPanel() {
         return <InventoryMain />;
       case 'instalaciones':
         return <InstallationsMain />;
+      case 'quejas':
+        return <QuejasMain />;
       case 'plantillas':
         return <SalesTemplates />;
       case 'errores':
