@@ -9,6 +9,7 @@ import SalesTemplates from "./crm/SalesTemplates";
 import TroubleshootingGuide from "./tech/TroubleshootingGuide";
 import CrmCalculator from "./crm/CrmCalculator";
 import ManualsLibrary from "./tech/ManualsLibrary";
+import InstallationsMain from "./InstallationsMain";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { AdminView } from "./Sidebar";
 
@@ -39,6 +40,8 @@ export default function DashboardPanel() {
         return <OperationsPipeline />;
       case 'almacen':
         return <InventoryMain />;
+      case 'instalaciones':
+        return <InstallationsMain />;
       case 'plantillas':
         return <SalesTemplates />;
       case 'errores':
