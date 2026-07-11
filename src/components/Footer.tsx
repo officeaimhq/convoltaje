@@ -167,7 +167,7 @@ export default function Footer() {
           <img
             src="/images/Samuel para el footer.png"
             alt="Samuel el Panel — Convoltaje Servicios Energéticos"
-            className="h-12 md:h-14 w-auto object-contain opacity-60 hover:opacity-90 transition-opacity duration-300"
+            className="h-12 md:h-14 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 [filter:invert(1)]"
           />
 
           {/* Legal links */}
