@@ -57,8 +57,8 @@ export default function KitComparisonTable({
     {
       label: "Garantía",
       key: "warranty",
-      unit: "días",
-      tooltip: "Garantía de cortesía sobre instalación",
+      unit: "",
+      tooltip: "Garantía real sobre equipos e instalación",
     },
     {
       label: "Tiempo de Instalación",
@@ -90,7 +90,7 @@ export default function KitComparisonTable({
         if (kit.inverterPower <= 7.2) return "6";
         return "8";
       case "warranty":
-        return "90";
+        return kit.id === "titan-12000" ? "1 año" : "3 meses";
       case "installation":
         return "10-15";
       case "price":
@@ -193,7 +193,7 @@ export default function KitComparisonTable({
                         className="p-4 text-center text-foreground"
                       >
                         <span className="font-accent">
-                          {getSpecValue(kit, spec.key)} {spec.unit}
+                          {getSpecValue(kit, spec.key)}{spec.unit ? ` ${spec.unit}` : ""}
                         </span>
                       </td>
                     ))}
@@ -404,18 +404,17 @@ export default function KitComparisonTable({
         </Card>
 
         {/* Warranty Notice */}
-        <div className="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-lg shadow-sm">
+        <div className="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-lg shadow-sm text-left">
           <h4 className="font-display text-lg text-amber-900 mb-3 flex items-center gap-2">
             ⚠️ Sobre la Garantía de los Equipos
           </h4>
-          <p className="text-sm text-amber-800 leading-relaxed">
-            Convoltaje ofrece 90 días de garantía de cortesía sobre la instalación y los trabajos realizados. 
-            Los equipos (paneles, inversores y baterías) cuentan con garantía de fábrica directamente con el fabricante. 
-            Es importante aclarar que, al tratarse de equipos operando en Cuba, Convoltaje no puede garantizar que el 
-            fabricante asuma su garantía de origen, ya que las políticas de devolución y soporte internacional varían. 
-            Sin embargo, nos comprometemos a ayudarte con los trámites necesarios ante el fabricante en caso de que 
-            necesites hacer uso de esa garantía.
-          </p>
+          <div className="text-sm text-amber-800 leading-relaxed space-y-2">
+            <p>Convoltaje ofrece garantía real cubierta 100% por nosotros. Los equipos se adquieren en tiendas fuera de Cuba que no aceptan devoluciones, por lo que Convoltaje asume directamente toda la responsabilidad de garantía ante el cliente.</p>
+            <p className="font-semibold">• Sistemas hasta 6kW: 3 meses de garantía (equipos + instalación)</p>
+            <p className="font-semibold">• Sistemas de 10kW o más: 1 año de garantía (equipos + instalación)</p>
+            <p className="font-semibold">• PowerStations integradas a sistemas: 1 mes de garantía</p>
+            <p className="mt-2">Sin cobros por adelantado. Pagas solo cuando tu sistema funciona al 100%.</p>
+          </div>
         </div>
 
         {/* Bottom CTA */}

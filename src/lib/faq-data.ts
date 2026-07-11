@@ -50,7 +50,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "garantia",
     question: "¿Qué garantía ofrece Convoltaje?",
     answer:
-      "Ofrecemos 90 días de garantía sobre la instalación y los trabajos realizados. Trabajamos con baterías certificadas, cableado profesional y equipos de calidad. Es importante aclarar que las garantías de fábrica de los equipos (paneles, inversores, baterías) son responsabilidad directa de cada fabricante — nosotros te ayudamos a gestionarlas si las necesitas.",
+      "Convoltaje ofrece garantía REAL cubierta 100% por nosotros — no por el fabricante. Esto es importante: compramos los equipos en tiendas fuera de Cuba que no aceptan devoluciones ni reclamos, por lo que somos nosotros quienes respondemos directamente ante cualquier problema.\n\nLa garantía según el sistema es:\n• PowerStations sueltas: se venden en el estado en que se encuentran, sin garantía adicional.\n• PowerStation integrada a un sistema solar: 1 mes de garantía cubierta por Convoltaje.\n• Sistemas de 1kW hasta 6kW (Básico 1500W, Medio 3000W, AC 3000W, Híbrido 5000W, Avanzado 6000W, 6K PLUS): 3 meses de garantía real que cubre equipos e instalación.\n• Sistemas de 10kW o más (Premium 10kW y superiores): 1 año de garantía real que cubre equipos e instalación.\n\nEn todos los casos: no cobramos anticipo. El pago se realiza únicamente cuando el sistema está instalado y funcionando al 100%.",
   },
   {
     id: "faq-7",

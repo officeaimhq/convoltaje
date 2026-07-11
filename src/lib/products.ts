@@ -41,7 +41,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Sistema 110V compatible con toda Cuba",
       "Ideal para aire acondicionado + electrodomésticos del hogar",
       "Instalación profesional incluida",
-      "Garantía de instalación 90 días"
+      "Garantía 3 meses — equipos e instalación"
     ],
     manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
   },
@@ -75,7 +75,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Tuberías y canaletas de PVC incluidas",
       "Sistema 110V compatible con toda Cuba",
       "Instalación profesional incluida",
-      "Garantía de instalación 90 días"
+      "Garantía 3 meses — equipos e instalación"
     ],
     supports: "Nevera, ventiladores, luces LED, carga de celulares",
     manuals: [{ nombre: "Manual Inversor MUST 3000W (ES)", url: "https://cdn.autosolar.es/pdf/manuales/Manual-Inversor-3000W-MPPT-50A-MUST.pdf" }]
@@ -113,7 +113,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "2 Breakers AC 63A y Disco Corte",
       "30 Bridas",
       "Instalación profesional incluida",
-      "Garantía de instalación 90 días"
+      "Garantía 3 meses — equipos e instalación"
     ],
     supports: "Aire acondicionado 110v, nevera, TV, microondas, ventiladores",
     manuals: [{ nombre: "Manual Inversor MUST Axpert MAX 3.6-7.2kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
@@ -152,7 +152,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "2 Breakers AC 63A y Disco Corte",
       "30 Bridas",
       "Instalación profesional incluida",
-      "Garantía de instalación 90 días"
+      "Garantía 3 meses — equipos e instalación"
     ],
     supports: "Aire acondicionado, 2 neveras, TV, microondas, ventiladores, laptops",
     manuals: [{ nombre: "Manual Inversor MUST Axpert MAX 3.6-7.2kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/05/AXPERT-MAX-3.6-7.2-MANUAL-ESPANOL.pdf" }]
@@ -179,7 +179,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Sistema 110V/220V compatible con toda Cuba",
       "Apto para pequeños negocios",
       "Instalación profesional incluida",
-      "Garantía de instalación 90 días"
+      "Garantía 3 meses — equipos e instalación"
     ],
     supports: "2 aires acondicionados, 8 neveras, luces, TV, microondas, carga de equipos",
     manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
@@ -207,7 +207,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Ideal para negocios y residencias grandes",
       "Soporta cámaras, motores y equipos industriales",
       "Instalación profesional incluida",
-      "Garantía de instalación 90 días"
+      "Garantía 1 año — equipos e instalación"
     ],
     supports: "Casa completa + cámaras + motores + hasta 4 aires acondicionados + 10 neveras (de noche: 1 aire acondicionado)",
     manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
