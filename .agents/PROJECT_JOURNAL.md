@@ -35,9 +35,10 @@
 - **Correcciones de Garantía**: Actualizados los términos de garantía real de Convoltaje en `faq-data.ts`, `KitComparisonTable.tsx` y `products.ts` para reflejar la realidad del negocio en Cuba (garantía directa de Convoltaje de 3 meses para sistemas de hasta 6kW, y 1 año para sistemas de 10kW o superiores). Eliminados los rastros del número de WhatsApp incorrecto.
 - **Rediseño del Calendario**: Modificada la vista semanal en `CalendarCore.tsx` a tarjetas verticales responsivas de días. Cada día colapsado muestra una pila de píldoras de colores vivos con la nomenclatura `"userXX · tipo"`, y al hacer clic se expande en acordeón para mostrar el listado de obras detallado.
 - **Módulo de Instalaciones CRM**: Diseñado e implementado el nuevo panel modular en `InstallationsMain.tsx` (agregando tabs para agrupar por estado de obras, checklist técnico interactivo que calcula dinámicamente el progreso visual en tiempo real, detalles expandibles con llamada/WhatsApp y formulario de registro según el protocolo de la empresa). Integrado en `DashboardPanel.tsx`.
+- **Módulo de Quejas y Soporte CRM**: Diseñado e implementado el panel interactivo en `QuejasMain.tsx` (con cálculo automático de Garantía Real en Cuba según fecha de instalación, checklist de atención de 6 fases, diagnóstico de Errores MUST y una biblioteca de 5 plantillas de WhatsApp dinámicas y autocompletadas para comunicación diaria de comerciales). Integrado en `DashboardPanel.tsx`.
 
 ## Próximos Pasos (Próxima Sesión)
-1. Esperar feedback de Ángel sobre los nuevos términos de garantía, el rediseño del Calendario y el módulo de Instalaciones.
+1. Esperar feedback de Ángel sobre los nuevos términos de garantía, el rediseño del Calendario y los módulos de Instalaciones y Quejas.
 2. Hacer push a producción si se aprueban los cambios de hoy.
 3. Continuar con otros módulos del CRM (como inventario, pipeline de clientes o plantillas de ventas).
 4. Implementar la librería de manuales de usuario definitiva.
