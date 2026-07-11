@@ -38,9 +38,10 @@
 - **Módulo de Quejas y Soporte CRM**: Diseñado e implementado el panel interactivo en `QuejasMain.tsx` (con cálculo automático de Garantía Real en Cuba según fecha de instalación, checklist de atención de 6 fases, diagnóstico de Errores MUST y una biblioteca de 5 plantillas de WhatsApp dinámicas y autocompletadas para comunicación diaria de comerciales). Integrado en `DashboardPanel.tsx`.
 - **Variante de Español Formal de Cuba**: Normalizado el contenido de `faq-data.ts` y las respuestas de WhatsApp de `QuejasMain.tsx` para eliminar rastros de voseo rioplatense y tuteos informales. Se configuraron conjugaciones formales empleando el trato de "usted" y modismos respetuosos adaptados al contexto cultural cubano de atención al cliente corporativa.
 - **Módulo de Finanzas Corporativas**: Diseñado e implementado el panel ejecutivo en `FinanzasMain.tsx` como el espejo financiero de Ángel. Incluye P&L corporativo (ventas, comisiones y nóminas fijas de Cuba), indicador de progreso del plan de ventas mensual y conversor multidivisa en base a la tasa real informal del día de El Toque ajustada a **675.00 CUP/USD**. Integrado en `DashboardPanel.tsx`.
+- **Mascota en CTA de Calculadora**: Modificada `ConvoltajeSection.tsx` para convertir el bloque CTA de la calculadora en un grid responsivo de 12 columnas, posicionando de forma lateral en pantallas de escritorio la imagen de la mascota Samuel el Panel (`como te ayudo.png`) al lado del recuadro de la CTA.
 
 ## Próximos Pasos (Próxima Sesión)
-1. Esperar feedback de Ángel sobre los nuevos términos de garantía, el rediseño del Calendario, los módulos de Instalaciones, Quejas y Finanzas, y el estilo de lenguaje formal cubano.
+1. Esperar feedback de Ángel sobre los nuevos términos de garantía, el rediseño del Calendario, los módulos del CRM (Instalaciones, Quejas y Finanzas) y la incorporación de la mascota en el CTA.
 2. Hacer push a producción si se aprueban los cambios de hoy.
 3. Continuar con otros módulos del CRM (como inventario, pipeline de clientes o plantillas de ventas).
 4. Implementar la librería de manuales de usuario definitiva.
