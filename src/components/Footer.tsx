@@ -156,7 +156,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm opacity-75">
-          <p>© {currentYear} Convoltaje & Tintaflash. Todos los derechos reservados.</p>
+          <div className="flex items-center gap-3">
+            <img
+              src="/images/Marca de agua.png"
+              alt="Convoltaje Servicios Energéticos"
+              className="h-8 md:h-10 w-auto object-contain opacity-40"
+            />
+            <p>© {currentYear} Convoltaje &amp; Tintaflash. Todos los derechos reservados.</p>
+          </div>
           <div className="flex gap-6">
             <a href="#" className="hover:opacity-100 transition-opacity">
               Política de Privacidad

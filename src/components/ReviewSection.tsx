@@ -111,6 +111,14 @@ export function ReviewSection() {
     <section id="reviews-section" className="py-24 bg-slate-50">
       <div className="container px-4 md:px-6 mx-auto">
         <div className="text-center mb-12">
+          {/* Mascota "Nos das tu opinión" */}
+          <div className="flex justify-center mb-6">
+            <img
+              src="/images/Nos das tu opinion.png"
+              alt="Samuel el Panel — ¿Nos regalas tu opinión?"
+              className="max-h-[200px] md:max-h-[240px] w-auto object-contain drop-shadow-xl hover:scale-[1.03] transition-transform duration-300"
+            />
+          </div>
           <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-4">
             ⭐ Clientes — lo que dicen de nosotros
           </h2>

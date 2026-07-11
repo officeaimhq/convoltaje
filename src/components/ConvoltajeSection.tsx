@@ -93,8 +93,26 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick, onViewDeta
 
         {/* CTA Section */}
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Card Recuadro */}
+          {/* Imagen de Samuel el Panel (Solo en Desktop - Lado Izquierdo) */}
+          <div className="hidden lg:col-span-5 lg:flex justify-center items-center">
+            <img 
+              src="/images/como te ayudo.png" 
+              alt="Samuel el Panel - ¿Cómo te ayudo?" 
+              className="max-h-[350px] w-auto object-contain hover:scale-[1.03] transition-transform duration-300 drop-shadow-2xl"
+            />
+          </div>
+
+          {/* Card Recuadro (Lado Derecho en Desktop) */}
           <div className="lg:col-span-7 bg-gradient-to-r from-primary to-primary/80 rounded-[24px] p-6 md:p-8 lg:p-10 text-center lg:text-left text-white flex flex-col justify-center shadow-lg border border-white/5 h-full">
+            {/* Imagen de Samuel el Panel (Incrustada en Móvil - Parte Superior) */}
+            <div className="block lg:hidden flex justify-center mb-6">
+              <img 
+                src="/images/como te ayudo.png" 
+                alt="Samuel el Panel - ¿Cómo te ayudo?" 
+                className="max-h-[220px] w-auto object-contain drop-shadow-xl"
+              />
+            </div>
+
             <h3 className="font-display text-2xl lg:text-3xl mb-4">
               ¿Necesitas una solución personalizada?
             </h3>
@@ -110,15 +128,6 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick, onViewDeta
                 Usar Calculadora Solar
               </Button>
             </div>
-          </div>
-
-          {/* Imagen de Samuel el Panel */}
-          <div className="lg:col-span-5 flex justify-center items-center">
-            <img 
-              src="/images/como te ayudo.png" 
-              alt="Samuel el Panel - ¿Cómo te ayudo?" 
-              className="max-h-[280px] lg:max-h-[350px] w-auto object-contain hover:scale-[1.03] transition-transform duration-300 drop-shadow-2xl"
-            />
           </div>
         </div>
       </div>

@@ -212,6 +212,12 @@ export function generateQuotationHTML(data: QuotationData): string {
       border-left: 4px solid #00d4ff;
       border-radius: 4px;
     }
+    .cta-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
     .cta-title {
       font-size: 14px;
       font-weight: bold;
@@ -363,14 +369,21 @@ export function generateQuotationHTML(data: QuotationData): string {
 
     <!-- CTA Section -->
     <div class="cta-section">
-      <div class="cta-title">📞 ¿Próximos Pasos?</div>
-      <div class="cta-text">
-        1. Revisa esta prefactura<br>
-        2. Contacta a nuestro equipo comercial<br>
-        3. Confirma tu pedido y procede con el pago<br>
-        4. ¡Disfruta de tu energía limpia!<br><br>
-        <strong>WhatsApp:</strong> <span class="whatsapp-link">5355144097</span><br>
-        <strong>Email:</strong> contacto@convoltaje.com
+      <div class="cta-container">
+        <div>
+          <div class="cta-title">📞 ¿Próximos Pasos?</div>
+          <div class="cta-text">
+            1. Revisa esta prefactura<br>
+            2. Contacta a nuestro comercial provincial<br>
+            3. Confirme su pedido y acuerde la instalación<br>
+            4. ¡Disfrute de su energía solar con garantía Convoltaje!<br><br>
+            <strong>WhatsApp:</strong> <span class="whatsapp-link">5355144097</span><br>
+            <strong>Email:</strong> convoltaje@gmail.com
+          </div>
+        </div>
+        <div style="flex-shrink: 0; display: flex; justify-content: center; align-items: center;">
+          <img src="/images/Damos garantia.png" style="width: 90px; height: auto;" alt="Damos Garantía"/>
+        </div>
       </div>
     </div>
 

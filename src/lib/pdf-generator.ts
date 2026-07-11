@@ -205,17 +205,22 @@ export async function generatePDF(options: PDFGeneratorOptions): Promise<Blob> {
         <!-- Section 5: Totals and Conditions -->
         <div class="section">
           <div class="section-title">5. Total y Condiciones</div>
-          <div class="totals-box">
-            <div class="total-row">
-              <span>TOTAL A PAGAR:</span>
-              <span style="color: #00D9FF;">$${kit.price} USD</span>
+          <div class="totals-box" style="display: flex; justify-content: space-between; align-items: center; gap: 20px;">
+            <div style="flex: 1;">
+              <div class="total-row" style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; color: #0F3A7D; margin-bottom: 15px;">
+                <span>TOTAL A PAGAR:</span>
+                <span style="color: #00D9FF;">$${kit.price} USD</span>
+              </div>
+              <div class="info-label" style="margin-bottom: 10px; color: #6B7280; font-size: 11px; font-weight: bold; text-transform: uppercase;">Método de Pago: Efectivo / Transferencia</div>
+              <ul class="conditions-list">
+                <li>Pago al finalizar la instalación. Sin cobros por adelantado.</li>
+                <li>Garantía de 3 meses — equipos e instalación.</li>
+                <li>Incluye todos los materiales, cableado solar certificado y puesta en marcha.</li>
+              </ul>
             </div>
-            <div class="info-label" style="margin-bottom: 10px;">Método de Pago: Efectivo / Transferencia</div>
-            <ul class="conditions-list">
-              <li>Pago al finalizar la instalación. Sin cobros por adelantado.</li>
-              <li>Garantía de 90 días sobre la instalación.</li>
-              <li>Incluye todos los materiales, cableado solar certificado y puesta en marcha.</li>
-            </ul>
+            <div style="flex-shrink: 0; display: flex; justify-content: center; align-items: center; padding-left: 10px;">
+              <img src="/images/Damos garantia.png" style="width: 100px; height: auto; object-fit: contain;" alt="Damos Garantía"/>
+            </div>
           </div>
         </div>
 
