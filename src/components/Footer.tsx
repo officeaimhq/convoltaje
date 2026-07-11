@@ -160,15 +160,18 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm opacity-75">
-          <div className="flex items-center gap-3 justify-center md:justify-start">
-            <img
-              src="/images/Marca de agua.png"
-              alt="Convoltaje Servicios Energéticos"
-              className="h-8 md:h-10 w-auto object-contain opacity-40"
-            />
-            <p>© {currentYear} Convoltaje &amp; Tintaflash. Todos los derechos reservados.</p>
-          </div>
-          <div className="flex gap-6">
+          {/* Copyright */}
+          <p className="text-center md:text-left">© {currentYear} Convoltaje &amp; Tintaflash. Todos los derechos reservados.</p>
+
+          {/* Samuel el Panel — logo central */}
+          <img
+            src="/images/Samuel para el footer.png"
+            alt="Samuel el Panel — Convoltaje Servicios Energéticos"
+            className="h-12 md:h-14 w-auto object-contain opacity-60 hover:opacity-90 transition-opacity duration-300"
+          />
+
+          {/* Legal links */}
+          <div className="flex gap-6 justify-center md:justify-end">
             <a href="#" className="hover:opacity-100 transition-opacity">
               Política de Privacidad
             </a>
