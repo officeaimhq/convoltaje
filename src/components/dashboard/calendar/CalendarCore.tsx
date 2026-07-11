@@ -8,10 +8,67 @@ import { useCalendarStore, CalendarEvent } from "@/hooks/useCalendarStore";
 
 type CalendarViewMode = 'semana' | 'mes' | 'hoy' | 'manana';
 
+// Helpers para generar textos y colores de píldoras al estilo de la imagen de referencia
+const getEventUserCode = (event: CalendarEvent) => {
+  if (event.clientName) {
+    const hash = event.clientName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const num = (hash % 9) + 1;
+    return `user0${num}`;
+  }
+  const num = (parseInt(event.id.replace(/\D/g, '')) % 9) + 1 || 1;
+  return `user0${num}`;
+};
+
+const getEventSystemCode = (event: CalendarEvent) => {
+  const title = event.title.toLowerCase();
+  
+  if (title.includes("6k") || title.includes("6000w")) return "6kplus";
+  if (title.includes("3000w") || title.includes("medio")) return "3kplus";
+  if (title.includes("1500w") || title.includes("básico")) return "1.5";
+  if (title.includes("10kw") || title.includes("10000w") || title.includes("premium")) return "10k";
+  if (title.includes("híbrido") || title.includes("5000w")) return "5k hybr";
+  if (title.includes("levantamiento")) return "Levantam.";
+  if (title.includes("panel") || title.includes("ecoflow")) return "Panel Ecof";
+  if (title.includes("batería")) return "Baterías";
+  if (title.includes("diagnóstico") || title.includes("error")) return "Soporte Tec";
+  
+  const cleanTitle = event.title.replace(/[^a-zA-Z0-9\s]/g, '');
+  const words = cleanTitle.split(/\s+/).filter(w => w.length > 2);
+  if (words.length > 0) {
+    return words.slice(0, 2).join(' ');
+  }
+  return "Obra";
+};
+
+const getEventPillColor = (event: CalendarEvent) => {
+  const title = event.title.toLowerCase();
+  
+  if (title.includes("levantamiento") || title.includes("factibilidad")) {
+    return "bg-orange-500 text-orange-950 hover:bg-orange-600";
+  }
+  if (title.includes("3000w") || title.includes("medio")) {
+    return "bg-emerald-400 text-emerald-950 hover:bg-emerald-500";
+  }
+  if (title.includes("6k") || title.includes("6000w")) {
+    return "bg-green-600 text-white hover:bg-green-700";
+  }
+  if (title.includes("1500w") || title.includes("básico")) {
+    return "bg-emerald-800 text-emerald-100 hover:bg-emerald-900";
+  }
+  if (title.includes("panel") || title.includes("ecoflow") || title.includes("batería")) {
+    return "bg-[#00D9FF] text-[#0b1b33] hover:bg-[#00c5e6]";
+  }
+  if (title.includes("error") || title.includes("diagnóstico") || title.includes("asistencia")) {
+    return "bg-[#FF6B35] text-white hover:bg-[#e05f2f]";
+  }
+  return "bg-slate-700 text-slate-100 hover:bg-slate-800";
+};
+
 export default function CalendarCore() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<CalendarViewMode>('semana');
   const [activeWeekDay, setActiveWeekDay] = useState(new Date()); // Día activo dentro de la vista de semana
+  const [expandedDayStr, setExpandedDayStr] = useState<string | null>(format(new Date(), "yyyy-MM-dd"));
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | undefined>(undefined);
@@ -229,44 +286,139 @@ export default function CalendarCore() {
       {/* Renderizado de Vistas */}
       <div className="space-y-4">
         
-        {/* Vista Semanal (Default) */}
+        {/* Vista Semanal (Default con diseño móvil vertical de tarjetas y acordeón) */}
         {viewMode === 'semana' && (
-          <div className="space-y-4">
-            {/* Tiras de días de la semana */}
-            <div className="grid grid-cols-7 gap-1 bg-black/10 rounded-2xl p-1 border border-white/5 text-center">
-              {weekDays.map((day, idx) => {
-                const isActive = isSameDay(activeWeekDay, day);
-                const hasEvents = getEventsForDate(day).length > 0;
-                
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveWeekDay(day)}
-                    className={`rounded-xl py-2 flex flex-col items-center gap-0.5 transition-all
-                      ${isActive 
-                        ? 'bg-[#00D9FF] text-[#0b1b33] font-bold shadow-md' 
-                        : 'text-white/80 hover:bg-white/5 hover:text-white'
-                      }`}
+          <div className="space-y-4 max-w-md mx-auto w-full">
+            {weekDays.map((day) => {
+              const dateStr = format(day, "yyyy-MM-dd");
+              const isExpanded = expandedDayStr === dateStr;
+              const dayEvents = getEventsForDate(day);
+              const dayName = format(day, "EEEE", { locale: es });
+              const dayNumber = format(day, "dd");
+              
+              return (
+                <div 
+                  key={dateStr}
+                  className="w-full bg-[#0a1e3f]/40 border border-white/10 rounded-[24px] overflow-hidden shadow-lg transition-all duration-300"
+                >
+                  {/* Header de la Tarjeta del Día */}
+                  <div 
+                    onClick={() => {
+                      setExpandedDayStr(isExpanded ? null : dateStr);
+                      setActiveWeekDay(day);
+                    }}
+                    className="w-full text-center py-4 bg-[#0a2e6b] border-b border-white/5 cursor-pointer hover:bg-[#0c367c] transition-colors flex items-center justify-between px-6 select-none"
                   >
-                    <span className="text-[9px] uppercase font-semibold">
-                      {format(day, "eee", { locale: es }).substring(0, 2)}
+                    <div className="w-6" /> {/* Espaciador para centrar el título */}
+                    <span className="font-display font-black tracking-wider text-base text-white uppercase text-center flex-1">
+                      {dayName} {dayNumber}
                     </span>
-                    <span className="text-xs font-mono font-bold">{format(day, "d")}</span>
-                    {hasEvents && (
-                      <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-[#0b1b33]' : 'bg-[#FF6B35]'}`} />
+                    <span className="text-[10px] bg-white/15 text-white/90 px-2 py-0.5 rounded-full font-mono font-bold min-w-5 text-center">
+                      {dayEvents.length}
+                    </span>
+                  </div>
+
+                  {/* Body: Píldoras apiladas (si está colapsado) o Detalle de Tareas (si está expandido) */}
+                  <div className="p-4 bg-[#071630]/30">
+                    {dayEvents.length > 0 ? (
+                      <>
+                        {/* Vista Colapsada: píldoras compactas apiladas como en la imagen */}
+                        {!isExpanded && (
+                          <div 
+                            onClick={() => {
+                              setExpandedDayStr(dateStr);
+                              setActiveWeekDay(day);
+                            }}
+                            className="flex flex-col gap-2 cursor-pointer max-w-[280px] mx-auto py-1"
+                          >
+                            {dayEvents.map((event) => {
+                              const userCode = getEventUserCode(event);
+                              const systemCode = getEventSystemCode(event);
+                              const pillColorClass = getEventPillColor(event);
+                              
+                              return (
+                                <div 
+                                  key={event.id}
+                                  className={`w-full py-2.5 px-4 rounded-[14px] text-center text-xs font-black shadow-sm transition-all hover:scale-[1.02] flex items-center justify-center gap-1 ${pillColorClass}`}
+                                >
+                                  <span>{userCode}</span>
+                                  <span>·</span>
+                                  <span className="truncate max-w-[180px]">{systemCode}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* Vista Expandida: detalle de tareas con transición */}
+                        {isExpanded && (
+                          <div className="animate-fade-in space-y-3">
+                            <div className="space-y-3">
+                              {dayEvents.map(event => (
+                                <button
+                                  key={event.id}
+                                  onClick={() => handleEventClick(event)}
+                                  className="w-full text-left p-4 rounded-[20px] bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#00D9FF]/40 transition-all flex flex-col gap-2.5 group active:scale-[0.99] shadow-md"
+                                >
+                                  <div className="flex items-center justify-between w-full">
+                                    <span className="text-xs font-bold text-[#00D9FF] flex items-center gap-1">
+                                      <Clock size={12} />
+                                      {event.time || "Todo el día"}
+                                    </span>
+                                    <span className="text-[9px] text-white/30 font-mono">ID: {event.id}</span>
+                                  </div>
+                                  
+                                  <h4 className="text-sm font-bold text-white group-hover:text-[#00D9FF] transition-colors leading-snug">
+                                    {event.title}
+                                  </h4>
+                                  
+                                  {event.clientName && (
+                                    <div className="flex items-center gap-1.5 text-xs text-white/60">
+                                      <User size={12} className="text-white/40" />
+                                      <span>Cliente: <strong className="text-white/80">{event.clientName}</strong></span>
+                                    </div>
+                                  )}
+
+                                  {event.location && (
+                                    <div className="flex items-center gap-1.5 text-xs text-white/60">
+                                      <MapPin size={12} className="text-white/40" />
+                                      <span>Lugar: <span className="text-white/80 truncate max-w-[200px]">{event.location}</span></span>
+                                    </div>
+                                  )}
+
+                                  {event.description && (
+                                    <p className="text-xs text-white/50 leading-relaxed bg-black/20 rounded-xl p-3 border border-white/5 mt-1 font-sans">
+                                      {event.description}
+                                    </p>
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                            
+                            {/* Botón para contraer la tarjeta */}
+                            <div className="pt-2 text-center">
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setExpandedDayStr(null);
+                                }}
+                                className="text-[11px] text-white/40 hover:text-white transition-colors py-2 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-[14px] inline-flex items-center gap-1 font-bold shadow-sm"
+                              >
+                                Contraer Vista
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="p-4 text-center text-white/20 text-xs py-8 border border-dashed border-white/5 rounded-[18px]">
+                        Sin tareas agendadas
+                      </div>
                     )}
-                  </button>
-                );
-              })}
-            </div>
-            
-            {/* Lista de eventos para el día seleccionado de la semana */}
-            <div>
-              <h3 className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-1">
-                Trabajos del {format(activeWeekDay, "EEEE d 'de' MMMM", { locale: es })}
-              </h3>
-              {renderEventsList(activeWeekDay)}
-            </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
 
