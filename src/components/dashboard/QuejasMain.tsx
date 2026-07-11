@@ -252,58 +252,58 @@ export default function QuejasMain() {
       {
         title: "Mensaje 1 - Recepción de Queja (Día 1)",
         desc: "Se envía inmediatamente cuando el cliente notifica el fallo por primera vez.",
-        text: `Hola ${c.clientName}, de este lado te saluda tu comercial de Convoltaje ⚡. Lamentamos mucho el inconveniente con tu sistema solar. Entendemos lo importante que es la luz para tu familia, por eso vamos a atender tu queja de inmediato.
+        text: `Estimado(a) ${c.clientName}, le saluda su comercial de Convoltaje ⚡. Lamentamos mucho el inconveniente presentado con su sistema solar. Entendemos lo importante que es contar con energía eléctrica para su familia, por lo que atenderemos su reporte con total prioridad.
 
-Para avanzar, nuestro Director Técnico, el ingeniero Yasiel, necesita evaluar el fallo. ¿Podrías por favor enviarme lo siguiente por acá?
-1️⃣ Un video de 10 segundos donde se vea la pantalla del inversor encendido y los breakers del tablero de protecciones.
-2️⃣ Foto clara del display del inversor (especialmente si muestra algún código de error o luz roja de alarma).
+Para proceder, nuestro Director Técnico, el ingeniero Yasiel, requiere evaluar el fallo. ¿Sería tan amable de enviarme lo siguiente por esta vía?
+1️⃣ Un video de 10 segundos donde se observe la pantalla del inversor encendido y los interruptores (breakers) del tablero de protecciones.
+2️⃣ Una foto clara de la pantalla del inversor (especialmente si muestra algún código de error o luz roja de alarma).
 
-Una vez que me mandes esto, Yasiel te dará un diagnóstico preliminar en menos de 4 horas para coordinar los siguientes pasos. ¡Estamos con vos!`
+Una vez que nos envíe esta información, Yasiel le ofrecerá un diagnóstico preliminar en menos de 4 horas para coordinar los pasos a seguir. Estamos a su completa disposición.`
       },
       {
         title: "Mensaje 2 - Coordinación de Visita Técnica",
         desc: "Se envía tras el diagnóstico de Yasiel para agendar la visita física del técnico de la provincia.",
-        text: `Hola ${c.clientName}, ya el ingeniero Yasiel revisó el video del inversor${errorDetails}. El diagnóstico preliminar es que requiere una inspección presencial para verificar las conexiones de las baterías y los strings de los paneles.
+        text: `Estimado(a) ${c.clientName}, el ingeniero Yasiel ya revisó el video del inversor${errorDetails}. El diagnóstico preliminar indica que se requiere una inspección presencial para verificar las conexiones de las baterías y los strings de los paneles solares.
 
-Como tu sistema cuenta con **Garantía Real Convoltaje activa** (vence el ${wInfo.expirationDate}), esta revisión y cualquier repuesto necesario están cubiertos al 100% por nosotros.
+Como su sistema cuenta con la **Garantía Real de Convoltaje activa** (vence el ${wInfo.expirationDate}), esta revisión y cualquier repuesto necesario están cubiertos al 100% por nuestra empresa, sin costo alguno para usted.
 
-Coordinamos la visita de nuestro técnico provincial para el día *${format(addDays(new Date(), 2), "EEEE d 'de' MMMM", { locale: es })}* en el horario de la mañana. ¿Te queda cómodo que pasen por tu casa a esa hora?`
+Hemos coordinado la visita de nuestro técnico provincial para el próximo *${format(addDays(new Date(), 2), "EEEE d 'de' MMMM", { locale: es })}* en el horario de la mañana. ¿Le resulta conveniente recibirlo en ese horario?`
       },
       {
         title: "Mensaje 3 - Dictamen Aceptado (Cubre Garantía)",
         desc: "Se envía cuando se confirma que aplica la garantía real para reposición del equipo.",
-        text: `Hola ${c.clientName}, te escribo para darte una respuesta sobre la inspección en sitio. El técnico confirmó que el fallo del inversor se debe a un componente defectuoso interno, por lo que **aplica tu garantía real Convoltaje**.
+        text: `Estimado(a) ${c.clientName}, le escribo para informarle sobre la inspección técnica realizada. El técnico constató que el fallo del inversor se debe a un componente defectuoso interno, por lo cual **aplica la garantía real de Convoltaje**.
 
-El Director Ángel ya autorizó la salida de un inversor MUST nuevo de nuestro almacén central para su reposición inmediata. Mañana por la mañana irá el equipo técnico a tu casa a retirar el equipo defectuoso, montar el nuevo inversor y dejar tu sistema funcionando al 100% sin cobrarte un solo centavo. 
+El Director Ángel ya autorizó la salida de un inversor MUST nuevo de nuestro almacén central para su reposición inmediata. Mañana en la mañana el equipo técnico acudirá a su vivienda para retirar el equipo defectuoso, montar el nuevo inversor y dejar su sistema funcionando al 100%, sin costo adicional.
 
-Para nosotros la palabra empeñada y la seriedad en Cuba lo es todo. Gracias por tu paciencia.`
+Para nuestra empresa, el cumplimiento del compromiso y la seriedad con nuestros clientes en Cuba son prioridad. Agradecemos su comprensión.`
       },
       {
         title: "Mensaje 4 - Dictamen Rechazado (Fuera de Garantía o Mala Manipulación)",
         desc: "Se envía si la garantía expiró o si el daño fue causado por eventos no cubiertos (rayos, soldadoras, etc.).",
-        text: `Hola ${c.clientName}, te escribo para comunicarte el dictamen técnico tras la revisión presencial en sitio. 
+        text: `Estimado(a) ${c.clientName}, le escribo para comunicarle el dictamen técnico tras la revisión presencial en su vivienda.
 
 El técnico provincial y el ingeniero Yasiel evaluaron la tarjeta de potencia del inversor y determinaron que el daño se debió a:
 ${wInfo.isActive 
-  ? `❌ Una sobrecarga masiva externa provocada por conexión de equipo industrial (soldadora de arco), lo cual excede el límite del sistema y anula la garantía de fábrica/instalación.` 
-  : `❌ El sistema ya se encuentra fuera del rango de los 90 días de la garantía de instalación (la cual expiró el ${wInfo.expirationDate}).`}
+  ? `❌ Una sobrecarga masiva externa provocada por la conexión de un equipo de alto consumo (soldadora de arco), lo cual excede la capacidad del sistema y anula la garantía de instalación y equipos.` 
+  : `❌ El sistema ya se encuentra fuera del plazo de la garantía de instalación (la cual expiró el ${wInfo.expirationDate}).`}
 
-Por este motivo, no aplica la reposición del equipo libre de costo por Convoltaje. Sin embargo, no te dejamos desamparado: te ofrecemos el servicio técnico de reparación. El costo estimado de los componentes de reemplazo y la mano de obra del técnico es de *$250 USD*. 
+Por este motivo, no aplica la reposición del equipo libre de costo por parte de Convoltaje. No obstante, le ofrecemos el servicio de reparación técnica. El costo estimado de los componentes de reemplazo y la mano de obra del técnico es de *$250 USD*.
 
-Dime si deseas que autoricemos la reparación para agendar el montaje esta misma semana.`
+Por favor, infórmenos si desea que autoricemos la reparación para coordinar el trabajo esta misma semana.`
       },
       {
         title: "Mensaje 5 - Seguimiento y Acompañamiento Diario",
         desc: "Mensaje diario de cortesía para mantener al cliente informado del estado.",
-        text: `Hola ${c.clientName}, espero que estés bien. Te escribo brevemente para mantenerte al tanto de tu caso. 
+        text: `Estimado(a) ${c.clientName}, espero que se encuentre muy bien. Le escribo para mantenerle al tanto del estado de su caso.
 
-Actualmente estamos en la fase de *${
+Actualmente nos encontramos en la fase de *${
           c.status === "diagnostico" ? "Diagnóstico técnico remoto" :
           c.status === "visita" ? "Asignación y traslado del técnico provincial" :
           c.status === "dictamen" ? "Evaluación del dictamen de cobertura" : "Preparación del equipo de reposición en almacén"
-        }*. El equipo de Convoltaje está trabajando para solucionar el corte de tu energía solar lo antes posible.
+        }*. Todo el equipo de Convoltaje está trabajando para solucionar la interrupción de su servicio solar a la mayor brevedad.
 
-Mañana te vuelvo a escribir a esta hora con una nueva actualización, o antes si el técnico me pasa detalles. Si tienes cualquier consulta, dime por acá. ¡Un abrazo!`
+Mañana le contactaré nuevamente a esta hora con una nueva actualización, o antes si el técnico nos reporta novedades. Si tiene alguna duda o consulta, puede escribirme por aquí. ¡Le deseamos un excelente día!`
       }
     ];
   };

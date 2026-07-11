@@ -27,7 +27,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "instalacion",
     question: "¿Cómo sé si la estructura de mis paneles solares está bien instalada?",
     answer:
-      "Una señal de alarma inmediata: si puedes mover o aflojar un panel solar con la mano, la instalación no es profesional. La estructura debe ser completamente rígida, capaz de soportar vientos fuertes y las condiciones climáticas de Cuba. En Convoltaje revisamos cada punto de fijación antes de dar por completada cualquier instalación.",
+      "Una señal de alarma inmediata: si usted puede mover o aflojar un panel solar con la mano, la instalación no es profesional. La estructura debe ser completamente rígida, capaz de soportar vientos fuertes y las condiciones climáticas de Cuba. En Convoltaje revisamos cada punto de fijación antes de dar por completada cualquier instalación.",
   },
   {
     id: "faq-4",
@@ -73,14 +73,14 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "consumo",
     question: "¿Puedo usar aire acondicionado con un sistema solar?",
     answer:
-      "Sí, y es una de las preguntas más frecuentes que nos hacen. Con el sistema adecuado, podés dormir con el aire acondicionado encendido todas las noches sin preocuparte por el consumo. La clave está en dimensionar bien el sistema — por eso tenemos nuestra calculadora solar en esta misma página, para que sepas exactamente qué sistema necesitás según tu consumo real.",
+      "Sí, y es una de las preguntas más frecuentes que nos hacen. Con el sistema adecuado, usted puede dormir con el aire acondicionado encendido todas las noches sin preocuparse por el consumo. La clave está en dimensionar bien el sistema; por eso tenemos nuestra calculadora solar en esta misma página, para que sepa exactamente qué sistema necesita según su consumo real.",
   },
   {
     id: "faq-10",
     category: "consumo",
     question: "¿Cómo sé cuánta energía necesito?",
     answer:
-      "Usá nuestra Calculadora Solar Inteligente en esta página. En 4 pasos simples calculás tu consumo diario real según tu tipo de vivienda y los equipos que usás, y el sistema te recomienda automáticamente el kit más adecuado para tus necesidades.",
+      "Utilice nuestra Calculadora Solar Inteligente en esta página. En 4 pasos simples usted calcula su consumo diario real según su tipo de vivienda y los equipos que utiliza, y el sistema le recomienda automáticamente el kit más adecuado para sus necesidades.",
   },
 
   // General
@@ -89,14 +89,14 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "general",
     question: "¿Por qué elegir Convoltaje y no otro instalador?",
     answer:
-      "Tres razones principales: primero, trabajamos con materiales certificados y correctos — cable solar, no cable eléctrico; estructuras rígidas, no improvisadas. Segundo, no cobramos hasta que el sistema esté funcionando — si no quedás satisfecho, no pagás. Tercero, nuestros técnicos e ingenieros explican cada detalle del proceso y te enseñan a usar tu sistema correctamente. En Cuba hay muchos instaladores; pocos trabajan con estos estándares.",
+      "Tres razones principales: primero, trabajamos con materiales certificados y adecuados — cable solar, no cable eléctrico común; estructuras rígidas, no improvisadas. Segundo, no cobramos hasta que el sistema esté funcionando; si usted no queda satisfecho, no paga. Tercero, nuestros técnicos e ingenieros explican cada detalle del proceso y le enseñan a usar su sistema correctamente. En Cuba hay muchos instaladores; pocos trabajan con estos estándares.",
   },
   {
     id: "faq-12",
     category: "general",
     question: "¿Qué pasa si hay un problema después de la instalación?",
     answer:
-      "Tenés 90 días de garantía sobre nuestra instalación. Cualquier problema relacionado con el trabajo realizado lo resolvemos sin costo adicional. Además, nuestro equipo está disponible por WhatsApp para responder dudas y orientarte sobre el uso correcto del sistema.",
+      "Usted cuenta con la garantía correspondiente a su sistema solar sobre los equipos y la instalación. Cualquier problema relacionado con el trabajo realizado lo resolvemos sin costo adicional. Además, nuestro equipo está disponible por WhatsApp para responder dudas y orientarle sobre el uso correcto del sistema.",
   },
 
   // Baterías
@@ -112,7 +112,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "baterias",
     question: "¿Los equipos que instalan son originales?",
     answer:
-      "Sí. Trabajamos con marcas reconocidas internacionalmente como MUST, EcoFlow, Bluetti y Anker, con equipos originales y documentación de fábrica. Podés verificar la autenticidad de cualquier equipo que instalemos.",
+      "Sí. Trabajamos con marcas reconocidas internacionalmente como MUST, EcoFlow, Bluetti y Anker, con equipos originales y documentación de fábrica. Usted puede verificar la autenticidad de cualquier equipo que instalemos.",
   }
 ];
 
