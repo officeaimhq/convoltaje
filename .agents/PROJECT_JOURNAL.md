@@ -36,9 +36,10 @@
 - **Rediseño del Calendario**: Modificada la vista semanal en `CalendarCore.tsx` a tarjetas verticales responsivas de días. Cada día colapsado muestra una pila de píldoras de colores vivos con la nomenclatura `"userXX · tipo"`, y al hacer clic se expande en acordeón para mostrar el listado de obras detallado.
 - **Módulo de Instalaciones CRM**: Diseñado e implementado el nuevo panel modular en `InstallationsMain.tsx` (agregando tabs para agrupar por estado de obras, checklist técnico interactivo que calcula dinámicamente el progreso visual en tiempo real, detalles expandibles con llamada/WhatsApp y formulario de registro según el protocolo de la empresa). Integrado en `DashboardPanel.tsx`.
 - **Módulo de Quejas y Soporte CRM**: Diseñado e implementado el panel interactivo en `QuejasMain.tsx` (con cálculo automático de Garantía Real en Cuba según fecha de instalación, checklist de atención de 6 fases, diagnóstico de Errores MUST y una biblioteca de 5 plantillas de WhatsApp dinámicas y autocompletadas para comunicación diaria de comerciales). Integrado en `DashboardPanel.tsx`.
+- **Variante de Español Formal de Cuba**: Normalizado el contenido de `faq-data.ts` y las respuestas de WhatsApp de `QuejasMain.tsx` para eliminar rastros de voseo rioplatense y tuteos informales. Se configuraron conjugaciones formales empleando el trato de "usted" y modismos respetuosos adaptados al contexto cultural cubano de atención al cliente corporativa.
 
 ## Próximos Pasos (Próxima Sesión)
-1. Esperar feedback de Ángel sobre los nuevos términos de garantía, el rediseño del Calendario y los módulos de Instalaciones y Quejas.
+1. Esperar feedback de Ángel sobre los nuevos términos de garantía, el rediseño del Calendario, los módulos de Instalaciones y Quejas, y el estilo de lenguaje formal cubano.
 2. Hacer push a producción si se aprueban los cambios de hoy.
 3. Continuar con otros módulos del CRM (como inventario, pipeline de clientes o plantillas de ventas).
 4. Implementar la librería de manuales de usuario definitiva.
