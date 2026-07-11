@@ -12,13 +12,17 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand & Social */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-3 mb-4">
               <img
                 src="https://img2.elyerromenu.com/images/convoltaje/logo-c/img.webp"
                 alt="Convoltaje Logo"
-                className="w-8 h-8 rounded-md object-contain"
+                className="w-8 h-8 rounded-md object-contain flex-shrink-0"
               />
-              <h3 className="font-display text-lg">Convoltaje</h3>
+              <img
+                src="/images/Marca de agua.png"
+                alt="Convoltaje Servicios Energéticos"
+                className="h-7 w-auto object-contain opacity-80"
+              />
             </div>
             <p className="text-sm opacity-90 mb-4">
               Energía limpia para tu futuro
@@ -156,7 +160,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm opacity-75">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 justify-center md:justify-start">
             <img
               src="/images/Marca de agua.png"
               alt="Convoltaje Servicios Energéticos"
