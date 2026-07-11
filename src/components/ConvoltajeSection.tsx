@@ -92,20 +92,34 @@ export default function ConvoltajeSection({ onRef, onCalculatorClick, onViewDeta
         </div>
 
         {/* CTA Section */}
-        <div className="mt-16 bg-gradient-to-r from-primary to-primary/80 rounded-xl p-6 md:p-8 lg:p-12 text-center text-white">
-          <h3 className="font-display text-2xl lg:text-3xl mb-4">
-            ¿Necesitas una solución personalizada?
-          </h3>
-          <p className="text-lg mb-6 max-w-2xl mx-auto opacity-90">
-            Usa nuestra Calculadora Solar Inteligente y descubre en minutos qué sistema se ajusta exactamente a tus necesidades.
-          </p>
-          <Button
-            onClick={onCalculatorClick}
-            className="w-full sm:w-auto font-accent text-base md:text-lg px-8 py-6 neon-btn"
-          >
-            <Calculator className="w-5 h-5 mr-2 flex-shrink-0" />
-            Usar Calculadora Solar
-          </Button>
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Card Recuadro */}
+          <div className="lg:col-span-7 bg-gradient-to-r from-primary to-primary/80 rounded-[24px] p-6 md:p-8 lg:p-10 text-center lg:text-left text-white flex flex-col justify-center shadow-lg border border-white/5 h-full">
+            <h3 className="font-display text-2xl lg:text-3xl mb-4">
+              ¿Necesitas una solución personalizada?
+            </h3>
+            <p className="text-base lg:text-lg mb-6 max-w-2xl opacity-90 leading-relaxed">
+              Usa nuestra Calculadora Solar Inteligente y descubre en minutos qué sistema se ajusta exactamente a tus necesidades.
+            </p>
+            <div>
+              <Button
+                onClick={onCalculatorClick}
+                className="w-full sm:w-auto font-accent text-base md:text-lg px-8 py-6 neon-btn"
+              >
+                <Calculator className="w-5 h-5 mr-2 flex-shrink-0" />
+                Usar Calculadora Solar
+              </Button>
+            </div>
+          </div>
+
+          {/* Imagen de Samuel el Panel */}
+          <div className="lg:col-span-5 flex justify-center items-center">
+            <img 
+              src="/images/como te ayudo.png" 
+              alt="Samuel el Panel - ¿Cómo te ayudo?" 
+              className="max-h-[280px] lg:max-h-[350px] w-auto object-contain hover:scale-[1.03] transition-transform duration-300 drop-shadow-2xl"
+            />
+          </div>
         </div>
       </div>
     </section>
