@@ -12,6 +12,11 @@ import ManualsLibrary from "./tech/ManualsLibrary";
 import InstallationsMain from "./InstallationsMain";
 import QuejasMain from "./QuejasMain";
 import FinanzasMain from "./FinanzasMain";
+import AjustesMain from "./AjustesMain";
+import AsignacionesView from "./AsignacionesView";
+import ValidationFlow from "./ValidationFlow";
+import HerramientasView from "./HerramientasView";
+import UtilesHub from "./UtilesHub";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { AdminView } from "./Sidebar";
 
@@ -19,6 +24,7 @@ export default function DashboardPanel() {
   const [, setLocation] = useLocation();
   const { currentUser, logout } = useAuthStore();
   const [currentView, setCurrentView] = useState<AdminView>('inicio');
+  const [selectedEventId, setSelectedEventId] = useState<string | undefined>(undefined);
 
   // Redireccionar al login si no hay usuario
   useEffect(() => {
@@ -30,6 +36,16 @@ export default function DashboardPanel() {
   const handleLogout = () => {
     logout();
     setLocation("/admin/login");
+  };
+
+  const handleSelectEventForValidation = (eventId: string) => {
+    setSelectedEventId(eventId);
+    setCurrentView('validacion');
+  };
+
+  const handleValidationFinished = () => {
+    setSelectedEventId(undefined);
+    setCurrentView('inicio');
   };
 
   const renderContent = () => {
@@ -56,6 +72,26 @@ export default function DashboardPanel() {
         return <CrmCalculator />;
       case 'manuales':
         return <ManualsLibrary />;
+      case 'asignaciones' as AdminView:
+        return (
+          <AsignacionesView 
+            onSelectView={setCurrentView} 
+            onSelectEventForValidation={handleSelectEventForValidation} 
+          />
+        );
+      case 'validacion' as AdminView:
+        return (
+          <ValidationFlow 
+            selectedEventId={selectedEventId} 
+            onFinished={handleValidationFinished} 
+          />
+        );
+      case 'herramientas' as AdminView:
+        return <HerramientasView />;
+      case 'ajustes':
+        return <AjustesMain />;
+      case 'utiles':
+        return <UtilesHub onSelectView={setCurrentView} />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full text-white/50 py-12">
@@ -94,7 +130,12 @@ export default function DashboardPanel() {
            currentView === 'plantillas' ? 'Plantillas de Venta' : 
            currentView === 'calculadora' ? 'Calculadora Técnica' : 
            currentView === 'manuales' ? 'Biblioteca de Manuales' : 
-           currentView === 'errores' ? 'Errores MUST' : currentView}
+           currentView === 'errores' ? 'Errores MUST' : 
+           currentView === ('asignaciones' as AdminView) ? 'Mis Asignaciones' :
+           currentView === ('validacion' as AdminView) ? 'Validación del Trabajo' :
+           currentView === ('herramientas' as AdminView) ? 'Herramientas' :
+           currentView === 'ajustes' ? 'Configuración' :
+           currentView === 'utiles' ? 'Útiles y Herramientas' : currentView}
         </h3>
 
         <button 

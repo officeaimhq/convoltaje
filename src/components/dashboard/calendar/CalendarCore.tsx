@@ -24,10 +24,10 @@ const getEventSystemCode = (event: CalendarEvent) => {
   
   if (title.includes("6k") || title.includes("6000w")) return "6kplus";
   if (title.includes("3000w") || title.includes("medio")) return "3kplus";
-  if (title.includes("1500w") || title.includes("básico")) return "1.5";
+  if (title.includes("1.5") || title.includes("1500w") || title.includes("básico")) return "1.5";
   if (title.includes("10kw") || title.includes("10000w") || title.includes("premium")) return "10k";
   if (title.includes("híbrido") || title.includes("5000w")) return "5k hybr";
-  if (title.includes("levantamiento")) return "Levantam.";
+  if (title.includes("levantamiento") || title.includes("factibilidad")) return "Levantam.";
   if (title.includes("panel") || title.includes("ecoflow")) return "Panel Ecof";
   if (title.includes("batería")) return "Baterías";
   if (title.includes("diagnóstico") || title.includes("error")) return "Soporte Tec";
@@ -41,27 +41,22 @@ const getEventSystemCode = (event: CalendarEvent) => {
 };
 
 const getEventPillColor = (event: CalendarEvent) => {
-  const title = event.title.toLowerCase();
+  const code = getEventSystemCode(event);
   
-  if (title.includes("levantamiento") || title.includes("factibilidad")) {
-    return "bg-orange-500 text-orange-950 hover:bg-orange-600";
+  switch (code) {
+    case "3kplus":
+      return "bg-[#00FF66] text-[#0b1b33] hover:bg-[#00e55b]";
+    case "6kplus":
+      return "bg-[#1b8040] text-white hover:bg-[#156633]";
+    case "1.5":
+      return "bg-[#0a4d26] text-emerald-100 hover:bg-[#07361a]";
+    case "Panel Ecof":
+      return "bg-[#00D9FF] text-[#0b1b33] hover:bg-[#00c5e6]";
+    case "Levantam.":
+      return "bg-[#FF6B35] text-white hover:bg-[#e05f2f]";
+    default:
+      return "bg-slate-700 text-slate-100 hover:bg-slate-800";
   }
-  if (title.includes("3000w") || title.includes("medio")) {
-    return "bg-emerald-400 text-emerald-950 hover:bg-emerald-500";
-  }
-  if (title.includes("6k") || title.includes("6000w")) {
-    return "bg-green-600 text-white hover:bg-green-700";
-  }
-  if (title.includes("1500w") || title.includes("básico")) {
-    return "bg-emerald-800 text-emerald-100 hover:bg-emerald-900";
-  }
-  if (title.includes("panel") || title.includes("ecoflow") || title.includes("batería")) {
-    return "bg-[#00D9FF] text-[#0b1b33] hover:bg-[#00c5e6]";
-  }
-  if (title.includes("error") || title.includes("diagnóstico") || title.includes("asistencia")) {
-    return "bg-[#FF6B35] text-white hover:bg-[#e05f2f]";
-  }
-  return "bg-slate-700 text-slate-100 hover:bg-slate-800";
 };
 
 export default function CalendarCore() {

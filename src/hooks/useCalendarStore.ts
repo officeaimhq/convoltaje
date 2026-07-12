@@ -8,9 +8,33 @@ export interface CalendarEvent {
   description?: string;
   clientName?: string;
   location?: string;
+  workType?: 'levantamiento' | 'instalacion' | 'mantenimiento' | 'defectacion';
+  assignedTecnico?: string;
+  assignedComercial?: string;
+  validated?: boolean;
+  validatedBy?: string;
+  validatedAt?: string;
+  status?: 'pendiente' | 'en_curso' | 'completado' | 'aplazado';
+  photos?: string[];
+  signature?: string;
+  paymentInfo?: {
+    method: 'efectivo' | 'online';
+    amount: number;
+    isPartial: boolean;
+    reference?: string;
+    validatedBy: string;
+    needsOnlineValidation?: boolean;
+  };
+  extraMaterials?: {
+    cableMeters?: number;
+    breakersCount?: number;
+    tubingMeters?: number;
+    mc4Pairs?: number;
+  };
+  newProposedDate?: string;
 }
 
-const STORAGE_KEY = "convoltaje_calendar_events";
+const STORAGE_KEY = "convoltaje_calendar_events_v2";
 
 const defaultEvents: CalendarEvent[] = [
   // 6 de Julio
@@ -44,20 +68,21 @@ const defaultEvents: CalendarEvent[] = [
   { id: "e18", title: "Entrega de propuesta comercial", date: "2026-07-11", time: "11:30", description: "Reunión explicativa sobre amortización solar", clientName: "Roberto Medina", location: "Mayabeque" },
   { id: "e19", title: "Asistencia Técnica - Error 07", date: "2026-07-11", time: "14:00", description: "Reset de sobrecargas de inversor", clientName: "Carlos López", location: "Pinar del Río" },
 
-  // 12 de Julio
-  { id: "e20", title: "Entrega de Inversor Deye 5kW", date: "2026-07-12", time: "09:00", description: "Suministro de equipos", clientName: "Roberto Medina", location: "Mayabeque" },
-  { id: "e21", title: "Montaje de Estructura Coplanar", date: "2026-07-12", time: "12:30", description: "Montaje de 3 estructuras de aluminio", clientName: "Roberto Medina", location: "Mayabeque" },
-  { id: "e22", title: "Monitoreo remoto de plantas activas", date: "2026-07-12", time: "15:00", description: "Revisar WiFi de clientes nuevos", clientName: "Daniel", location: "Pinar del Río" },
-
+  // 12 de Julio (HOY) - Datos para probar Módulos Nuevos
+  { id: "e20", title: "Entrega de Inversor Deye 5kW", date: "2026-07-12", time: "09:00", description: "Suministro de equipos", clientName: "Roberto Medina", location: "Mayabeque", workType: "instalacion", assignedTecnico: "Yasiel", assignedComercial: "Anabel", status: "pendiente" },
+  { id: "e21", title: "Montaje de Estructura Coplanar", date: "2026-07-12", time: "12:30", description: "Montaje de 3 estructuras de aluminio", clientName: "Roberto Medina", location: "Mayabeque", workType: "instalacion", assignedTecnico: "Daniel", assignedComercial: "Isabel", status: "pendiente" },
+  { id: "e22", title: "Instalación Kit 6kW - Pago Online", date: "2026-07-12", time: "14:00", description: "Instalación terminada, el cliente pagará online.", clientName: "Luis Felipe", location: "San José", workType: "instalacion", assignedTecnico: "Yasiel", assignedComercial: "Anabel", status: "completado", validated: false, paymentInfo: { method: "online", amount: 2500, isPartial: false, validatedBy: "", needsOnlineValidation: true } },
+  { id: "e22b", title: "Mantenimiento Preventivo", date: "2026-07-12", time: "16:00", description: "Limpieza de paneles. Pago online pendiente.", clientName: "Carlos Pérez", location: "Artemisa", workType: "mantenimiento", assignedTecnico: "Daniel", assignedComercial: "Isabel", status: "completado", validated: false, paymentInfo: { method: "online", amount: 150, isPartial: false, validatedBy: "", needsOnlineValidation: true } },
+  
   // 13 de Julio
-  { id: "e23", title: "Obra Paneles 500W x12 - Patricia Rojas", date: "2026-07-13", time: "08:30", description: "Montar 12 paneles en tejado inclinado", clientName: "Patricia Rojas", location: "San Juan, Pinar del Río" },
-  { id: "e24", title: "Conexión de strings DC", date: "2026-07-13", time: "12:00", description: "Tendido de cables y ponchado de MC4", clientName: "Patricia Rojas", location: "San Juan, Pinar del Río" },
-  { id: "e25", title: "Instalación de módulo WiFi", date: "2026-07-13", time: "15:00", description: "Configuración en app móvil", clientName: "Patricia Rojas", location: "San Juan, Pinar del Río" },
+  { id: "e23", title: "Obra Paneles 500W x12 - Patricia Rojas", date: "2026-07-13", time: "08:30", description: "Montar 12 paneles en tejado inclinado", clientName: "Patricia Rojas", location: "San Juan, Pinar del Río", workType: "instalacion", assignedTecnico: "Daniel", assignedComercial: "Isabel", status: "pendiente" },
+  { id: "e24", title: "Conexión de strings DC", date: "2026-07-13", time: "12:00", description: "Tendido de cables y ponchado de MC4", clientName: "Patricia Rojas", location: "San Juan, Pinar del Río", workType: "instalacion", assignedTecnico: "Daniel", assignedComercial: "Isabel", status: "pendiente" },
+  { id: "e25", title: "Instalación de módulo WiFi", date: "2026-07-13", time: "15:00", description: "Configuración en app móvil", clientName: "Patricia Rojas", location: "San Juan, Pinar del Río", workType: "mantenimiento", assignedTecnico: "Daniel", assignedComercial: "Isabel", status: "pendiente" },
 
   // 14 de Julio
-  { id: "e26", title: "Entrega de Batería Litio - Miguel Castro", date: "2026-07-14", time: "09:00", description: "Transporte y fijación de batería", clientName: "Miguel Castro", location: "Artemisa" },
-  { id: "e27", title: "Conexión de comunicaciones CAN", date: "2026-07-14", time: "12:00", description: "Cable RJ45 de datos batería-inversor", clientName: "Miguel Castro", location: "Artemisa" },
-  { id: "e28", title: "Pruebas de descarga profunda", date: "2026-07-14", time: "15:00", description: "Validar corte en 44V", clientName: "Miguel Castro", location: "Artemisa" }
+  { id: "e26", title: "Entrega de Batería Litio - Miguel Castro", date: "2026-07-14", time: "09:00", description: "Transporte y fijación de batería", clientName: "Miguel Castro", location: "Artemisa", workType: "instalacion", assignedTecnico: "Yasiel", assignedComercial: "Anabel", status: "pendiente" },
+  { id: "e27", title: "Conexión de comunicaciones CAN", date: "2026-07-14", time: "12:00", description: "Cable RJ45 de datos batería-inversor", clientName: "Miguel Castro", location: "Artemisa", workType: "instalacion", assignedTecnico: "Yasiel", assignedComercial: "Anabel", status: "pendiente" },
+  { id: "e28", title: "Pruebas de descarga profunda", date: "2026-07-14", time: "15:00", description: "Validar corte en 44V", clientName: "Miguel Castro", location: "Artemisa", workType: "mantenimiento", assignedTecnico: "Yasiel", assignedComercial: "Anabel", status: "pendiente" }
 ];
 
 export function useCalendarStore() {

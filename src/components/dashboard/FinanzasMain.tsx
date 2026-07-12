@@ -7,6 +7,7 @@ import {
   Trash2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSettingsStore } from "@/hooks/useSettingsStore";
 
 export interface Transaction {
   id: string;
@@ -21,7 +22,7 @@ export interface Transaction {
   status: "completado" | "pendiente";
 }
 
-const TASA_EL_TOQUE_MOCK = 675; // 670 CUP oficial + 5 CUP de ajuste
+// La tasa de cambio ahora se lee del useSettingsStore (Ajustes) en tiempo real
 
 const defaultTransactions: Transaction[] = [
   {
@@ -142,6 +143,8 @@ const defaultFixedExpenses = [
 ];
 
 export default function FinanzasMain() {
+  const { tasaCambioUSD: TASA_EL_TOQUE_MOCK } = useSettingsStore();
+
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
     const saved = localStorage.getItem("convoltaje_transactions");
     return saved ? JSON.parse(saved) : defaultTransactions;
@@ -238,7 +241,7 @@ export default function FinanzasMain() {
       date,
       paymentMethod,
       associatedCommercial: type === "comision" || type === "ingreso" ? commercial : undefined,
-      status: "completado"
+      status: "completado" as "completado" | "pendiente"
     };
 
     const updated = [newTx, ...transactions];
@@ -252,11 +255,11 @@ export default function FinanzasMain() {
 
   // Toggle commission state
   const handleToggleCommission = (txId: string) => {
-    const updated = transactions.map(t => {
+    const updated = transactions.map((t): Transaction => {
       if (t.id === txId) {
         const newStatus = t.status === "completado" ? "pendiente" : "completado";
         toast.success(newStatus === "completado" ? "Comisión pagada y asentada." : "Comisión marcada como pendiente.");
-        return { ...t, status: newStatus };
+        return { ...t, status: newStatus as "completado" | "pendiente" };
       }
       return t;
     });
