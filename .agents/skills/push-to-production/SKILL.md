@@ -20,8 +20,8 @@ Solo debes activar esta skill si el usuario dice explícitamente frases inequív
    - Si el usuario solicita un push pero su instrucción es ambigua o no dice claramente "estoy seguro de consumir créditos", DEBES detenerte y preguntarle: *"Atención: Estás a punto de hacer un push a producción. Esto activará el build en Netlify y consumirá créditos de despliegue. ¿Confirmas que deseas proceder con el `git push`?"*
 
 2. **Ejecución del Push**
-   - Una vez confirmada la acción sin lugar a dudas, ejecuta el comando de despliegue:
-     `git push origin main` (o el remoto/rama configurado para producción).
+   - Una vez confirmada la acción sin lugar a dudas, ejecuta el comando de despliegue directo al repositorio principal:
+     `git push upstream main` (Asegurando que apunte a https://github.com/Ramonbonachea8102/convoltaje).
 
 3. **Reporte Final**
    - Informa al usuario que el código ha sido enviado al servidor.
