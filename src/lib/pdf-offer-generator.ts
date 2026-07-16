@@ -275,9 +275,25 @@ export const generateOfferPdf = async (
     margin:       0,
     filename:     `${isInvoice ? 'Factura' : 'Oferta'}_ConVoltaje_${client.name.replace(/\s+/g, '_')}.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false },
+    html2canvas:  { scale: 2, useCORS: true, logging: true },
     jsPDF:        { unit: 'pt', format: 'letter', orientation: 'portrait' }
   };
 
-  await html2pdf().from(container).set(opt).save();
+  try {
+    console.log("Starting PDF generation with opt:", opt);
+    // Append temporarily to body so it has layout for html2canvas
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    document.body.appendChild(container);
+
+    await html2pdf().from(container).set(opt).save();
+    console.log("PDF generated and saved.");
+  } catch (error) {
+    console.error("html2pdf generation error:", error);
+    throw error;
+  } finally {
+    if (container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+  }
 };

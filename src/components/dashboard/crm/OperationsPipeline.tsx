@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useRefundsStore } from '@/hooks/useRefundsStore';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { generateOfferPdf } from '@/lib/pdf-offer-generator';
-import { products } from '@/lib/products';
+import { CONVOLTAJE_PRODUCTS as products } from '@/lib/products';
 import { FileText } from 'lucide-react';
 
 const STAGES: DealStage[] = ['Contacto', 'En Producción', 'Terminado', 'Facturado', 'Feedback'];
@@ -264,6 +264,7 @@ export default function OperationsPipeline() {
                     await generateOfferPdf(product, clientData, selectedDeal.stage === 'Terminado' || selectedDeal.stage === 'Facturado');
                     toast.success("Documento generado correctamente");
                   } catch (error) {
+                    console.error("Failed to generate PDF:", error);
                     toast.error("Error al generar el documento");
                   }
                 }}
