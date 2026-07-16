@@ -62,3 +62,7 @@ Adicionalmente, revisa los siguientes archivos en `.agents/rules/` para guías d
 3. Imagen de "Samuel el Panel" para el Hero sigue siendo un placeholder temporal (solucionapagon.jpg) — falta decidir si se genera arte oficial de la mascota o se cambia el enfoque visual del Hero.
 4. Crear librería de manuales de usuario.
 5. Desarrollar sistema de captura de leads más robusto — base de datos automatizada (tipo Excel/CRM) de las conversaciones con la comercial, y un sistema de encuestas de satisfacción post-venta que le lleguen directamente al dueño para evaluar el desempeño del equipo comercial. Esto está en fase de definición (Fase 2).
+
+66. **Identidad Visual Móvil (Dashboard)**: El layout del Panel de Administración (`MobileHomeGrid`, `DashboardPanel`) **SIEMPRE** debe mantener su fondo azul oscuro institucional (`bg-[#0b3c8f]`) y modo oscuro para componentes base (glassmorphism `bg-white/5`, textos blancos). NUNCA revertir a fondos blancos (`bg-slate-50`) ni esquemas claros.
+
+67. **Orden visual de catálogo**: Siempre que las imágenes estén disponibles, la prioridad de la galería de fotos de un equipo en la Landing Page debe ser: 1) Foto del Equipo en sí, 2) Foto con el Cliente (social proof), y 3) Foto de los Paneles. Esto se debe respetar en la propiedad `images` de `src/lib/products.ts`.

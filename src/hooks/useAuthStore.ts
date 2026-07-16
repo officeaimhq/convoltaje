@@ -13,6 +13,7 @@ export interface UserSession {
   avatarZoom?: number;   // Escala de zoom (ej: 2.2)
   clientsCount?: number;
   reviewsCount?: number;
+  phone?: string;
 }
 
 interface AuthState {
@@ -80,25 +81,27 @@ const mockUsers: UserSession[] = [
   },
   {
     id: "u6",
-    name: "Anabel",
+    name: "Niurki",
     role: "comercial",
-    title: "Comercial - Mayabeque",
-    avatar: "/images/fotos-plantilla-convoltaje/Anabel Mayabeque - comercial01.jpeg",
+    title: "Comercial Principal",
+    avatar: "/images/fotos-plantilla-convoltaje/Niurki Comercial.jpg",
     avatarOrigin: "center 22%",
     avatarZoom: 2.2,
     clientsCount: 580,
-    reviewsCount: 90
+    reviewsCount: 90,
+    phone: "+5353097058"
   },
   {
     id: "u7",
-    name: "Isabel",
+    name: "Diana Rosa",
     role: "comercial",
-    title: "Comercial - Artemisa",
-    avatar: "/images/fotos-plantilla-convoltaje/Isabel, Artemisa comercial02.jpg",
+    title: "Comercial",
+    avatar: "/images/fotos-plantilla-convoltaje/Diana Rosa comercial.jpg",
     avatarOrigin: "center 22%",
     avatarZoom: 2.2,
     clientsCount: 320,
-    reviewsCount: 45
+    reviewsCount: 45,
+    phone: "+5355507913"
   },
   {
     id: "u8",
@@ -125,7 +128,8 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ currentUser: null })
     }),
     {
-      name: 'convoltaje-auth-storage',
+      name: 'convoltaje-auth-storage-v2',
+      partialize: (state) => ({ currentUser: state.currentUser }),
     }
   )
 );

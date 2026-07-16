@@ -1,6 +1,8 @@
 import { ArrowLeft, Check, MessageCircle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/products";
+import { useState } from "react";
+import { SalesRepsModal } from "@/components/SalesRepsModal";
 
 interface KitComparisonProps {
   products: Product[];
@@ -15,6 +17,14 @@ export default function KitComparison({
   onViewDetails,
   onWhatsappClick,
 }: KitComparisonProps) {
+  const [showSalesRepsModal, setShowSalesRepsModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleWhatsappClick = (product: Product) => {
+    setSelectedProduct(product);
+    setShowSalesRepsModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col animate-fade-in">
       {/* Header */}
@@ -114,7 +124,7 @@ export default function KitComparison({
                   {/* Actions */}
                   <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-border">
                     <Button
-                      onClick={() => onWhatsappClick(product)}
+                      onClick={() => handleWhatsappClick(product)}
                       className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent py-6 text-base"
                     >
                       <MessageCircle className="w-5 h-5 mr-2" />
@@ -134,7 +144,13 @@ export default function KitComparison({
             );
           })}
         </div>
-      </div>
+      </main>
+
+      <SalesRepsModal 
+        isOpen={showSalesRepsModal} 
+        onClose={() => setShowSalesRepsModal(false)} 
+        productName={selectedProduct?.name}
+      />
     </div>
   );
 }

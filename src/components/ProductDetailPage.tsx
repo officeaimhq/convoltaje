@@ -3,6 +3,7 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Check, Zap, MessageCircle, FileTe
 import { Product } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { generateProductSheet } from "@/lib/pdf-generator";
+import { SalesRepsModal } from "@/components/SalesRepsModal";
 
 interface ProductDetailPageProps {
   product: Product;
@@ -20,6 +21,7 @@ export default function ProductDetailPage({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [showFinancingModal, setShowFinancingModal] = useState(false);
+  const [showSalesRepsModal, setShowSalesRepsModal] = useState(false);
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
   const hasMultipleImages = images.length > 1;
 
@@ -175,7 +177,7 @@ export default function ProductDetailPage({
 
               <div className="flex flex-col gap-3">
                 <Button
-                  onClick={() => onWhatsappClick(product)}
+                  onClick={() => setShowSalesRepsModal(true)}
                   className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent text-lg py-6"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
@@ -237,7 +239,7 @@ export default function ProductDetailPage({
                 <div className="mt-6 bg-primary/5 border border-primary/20 rounded-xl p-4 text-sm text-foreground/80 flex items-start gap-3">
                   <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <p>
-                    <strong>Garantía y Pago:</strong> 90 días de garantía en instalación. Pago solo al finalizar. Sin adelantos.
+                    <strong>Garantía y Pago:</strong> {product.specs?.find(s => s.startsWith("Garantía")) || "90 días de garantía en instalación"}. Pago solo al finalizar. Sin adelantos.
                   </p>
                 </div>
               </div>
@@ -299,6 +301,12 @@ export default function ProductDetailPage({
           </div>
         </div>
       )}
+      
+      <SalesRepsModal 
+        isOpen={showSalesRepsModal} 
+        onClose={() => setShowSalesRepsModal(false)} 
+        productName={product.name}
+      />
     </div>
   );
 }

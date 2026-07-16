@@ -8,27 +8,8 @@ import {
 import { toast } from "sonner";
 import { differenceInDays, parseISO, format, addDays, addMonths } from "date-fns";
 import { es } from "date-fns/locale";
-
-export interface Complaint {
-  id: string;
-  clientName: string;
-  phone: string;
-  location: string;
-  provincia: string;
-  systemType: string;
-  installationDate: string; // YYYY-MM-DD
-  warrantyMonths: number; // 1, 3 o 12 meses
-  symptom: string;
-  status: "diagnostico" | "visita" | "dictamen" | "resolucion" | "resuelta" | "rechazada";
-  assignedTech?: string;
-  errorMust?: string; // Código de error MUST si aplica (ej. Error 08, Error 07)
-  checklist: {
-    id: string;
-    label: string;
-    completed: boolean;
-  }[];
-  isEcoFlow?: boolean;
-}
+import { useQuejasStore, Complaint, QuejaPriority } from "@/hooks/useQuejasStore";
+import { useEffect } from "react";
 
 const defaultComplaints: Complaint[] = [
   {
@@ -44,6 +25,7 @@ const defaultComplaints: Complaint[] = [
     status: "visita",
     assignedTech: "Yasiel (Director Técnico)",
     errorMust: "Error 08 (Sobretensión de Bus)",
+    priority_category: "mal_funcionamiento",
     checklist: [
       { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
       { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Error 08)", completed: true },
@@ -65,6 +47,7 @@ const defaultComplaints: Complaint[] = [
     symptom: "El inversor no enciende después de una tormenta eléctrica con descargas el fin de semana. Los breakers de paneles estaban abajo.",
     status: "dictamen",
     assignedTech: "Carlos (Técnico Matanzas)",
+    priority_category: "instalacion_incompleta",
     checklist: [
       { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
       { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Fallo de encendido)", completed: true },
@@ -86,6 +69,7 @@ const defaultComplaints: Complaint[] = [
     symptom: "La EcoFlow se apaga repentinamente al encender la olla arrocera de noche, a pesar de estar al 80% de carga.",
     status: "diagnostico",
     isEcoFlow: true,
+    priority_category: "incendio",
     checklist: [
       { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
       { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Sobrecarga de potencia)", completed: false },
@@ -98,10 +82,83 @@ const defaultComplaints: Complaint[] = [
 ];
 
 export default function QuejasMain() {
-  const [complaints, setComplaints] = useState<Complaint[]>(() => {
-    const saved = localStorage.getItem("convoltaje_complaints");
-    return saved ? JSON.parse(saved) : defaultComplaints;
-  });
+  const { complaints, addComplaint, deleteComplaint, toggleChecklistItem } = useQuejasStore();
+  
+  // Initialize default complaints if empty
+  useEffect(() => {
+    if (complaints.length === 0) {
+      const defaultComps: Complaint[] = [
+        {
+          id: "queja-1",
+          clientName: "Marta Valdés",
+          phone: "+5353829104",
+          location: "Calle 10 #1405, Vedado, La Habana",
+          provincia: "La Habana",
+          systemType: "Sistema 6K PLUS",
+          installationDate: "2026-06-15",
+          warrantyMonths: 3,
+          symptom: "El inversor MUST se apaga constantemente y muestra el Error 08 (Sobretensión del bus de CC) en la pantalla. Pitido continuo molesto.",
+          status: "visita",
+          assignedTech: "Yasiel (Director Técnico)",
+          errorMust: "Error 08 (Sobretensión de Bus)",
+          priority_category: "mal_funcionamiento",
+          checklist: [
+            { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
+            { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Error 08)", completed: true },
+            { id: "ch-3", label: "Inspección técnica provincial en sitio", completed: false },
+            { id: "ch-4", label: "Dictamen: Reposición autorizada por Ángel", completed: false },
+            { id: "ch-5", label: "Montaje de inversor de reemplazo y pruebas", completed: false },
+            { id: "ch-6", label: "Firma de conformidad y cierre de garantía", completed: false }
+          ]
+        },
+        {
+          id: "queja-2",
+          clientName: "Pedro Martínez",
+          phone: "+5354928172",
+          location: "Cárdenas, Matanzas",
+          provincia: "Matanzas",
+          systemType: "Sistema Básico - 1500W",
+          installationDate: "2026-03-10",
+          warrantyMonths: 3,
+          symptom: "El inversor no enciende después de una tormenta eléctrica con descargas el fin de semana. Los breakers de paneles estaban abajo.",
+          status: "dictamen",
+          assignedTech: "Carlos (Técnico Matanzas)",
+          priority_category: "instalacion_incompleta",
+          checklist: [
+            { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
+            { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Fallo de encendido)", completed: true },
+            { id: "ch-3", label: "Inspección técnica provincial en sitio", completed: true },
+            { id: "ch-4", label: "Dictamen: Expiró garantía. Presupuesto reparación enviado.", completed: false },
+            { id: "ch-5", label: "Reparación/Sustitución con costo completada", completed: false },
+            { id: "ch-6", label: "Firma de conformidad y cobro del servicio", completed: false }
+          ]
+        },
+        {
+          id: "queja-3",
+          clientName: "Roberto Blanco",
+          phone: "+5352819304",
+          location: "San Antonio de los Baños, Artemisa",
+          provincia: "Artemisa",
+          systemType: "EcoFlow DELTA 2 Max (integrado)",
+          installationDate: "2026-07-02",
+          warrantyMonths: 1,
+          symptom: "La EcoFlow se apaga repentinamente al encender la olla arrocera de noche, a pesar de estar al 80% de carga.",
+          status: "diagnostico",
+          isEcoFlow: true,
+          priority_category: "incendio",
+          checklist: [
+            { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
+            { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Sobrecarga de potencia)", completed: false },
+            { id: "ch-3", label: "Inspección técnica provincial en sitio", completed: false },
+            { id: "ch-4", label: "Dictamen: Reposición autorizada por Ángel", completed: false },
+            { id: "ch-5", label: "Montaje de inversor de reemplazo y pruebas", completed: false },
+            { id: "ch-6", label: "Firma de conformidad y cierre de garantía", completed: false }
+          ]
+        }
+      ];
+      defaultComps.forEach(addComplaint);
+    }
+  }, [complaints.length, addComplaint]);
 
   const [activeTab, setActiveTab] = useState<"lista" | "manual">("lista");
   const [selectedComplaintId, setSelectedComplaintId] = useState<string | null>(null);
@@ -117,10 +174,7 @@ export default function QuejasMain() {
   const [symptom, setSymptom] = useState("");
   const [errorMust, setErrorMust] = useState("");
 
-  const saveToStorage = (updated: Complaint[]) => {
-    setComplaints(updated);
-    localStorage.setItem("convoltaje_complaints", JSON.stringify(updated));
-  };
+  const [priorityCategory, setPriorityCategory] = useState<QuejaPriority>("mal_funcionamiento");
 
   // Helper: check if warranty is active and get expiration details
   const getWarrantyInfo = (instDateStr: string, months: number) => {
@@ -140,42 +194,8 @@ export default function QuejasMain() {
     }
   };
 
-  // Toggle checklist item
   const handleToggleCheck = (complaintId: string, checkId: string) => {
-    const updated = complaints.map(c => {
-      if (c.id === complaintId) {
-        const updatedChecklist = c.checklist.map(item => {
-          if (item.id === checkId) {
-            return { ...item, completed: !item.completed };
-          }
-          return item;
-        });
-
-        // Modificar estado automáticamente basado en qué tarea de control se ha marcado
-        let newStatus = c.status;
-        const index = updatedChecklist.findIndex(item => item.id === checkId);
-        
-        if (index === 1 && updatedChecklist[1].completed) { // Diagnóstico remoto hecho
-          newStatus = "visita";
-        } else if (index === 2 && updatedChecklist[2].completed) { // Visita hecha
-          newStatus = "dictamen";
-        } else if (index === 3 && updatedChecklist[3].completed) { // Dictamen aprobado
-          newStatus = "resolucion";
-        } else if (index === 5 && updatedChecklist[5].completed) { // Cierre de queja
-          newStatus = "resuelta";
-          toast.success(`¡Queja de ${c.clientName} Resuelta! Archivada con éxito.`);
-        }
-
-        return { 
-          ...c, 
-          status: newStatus,
-          checklist: updatedChecklist 
-        };
-      }
-      return c;
-    });
-
-    saveToStorage(updated);
+    toggleChecklistItem(complaintId, checkId);
   };
 
   // Create new complaint
@@ -207,6 +227,7 @@ export default function QuejasMain() {
       warrantyMonths,
       symptom,
       status: "diagnostico",
+      priority_category: priorityCategory,
       errorMust: errorMust || undefined,
       checklist: [
         { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: false },
@@ -218,8 +239,7 @@ export default function QuejasMain() {
       ]
     };
 
-    const updated = [newComplaint, ...complaints];
-    saveToStorage(updated);
+    addComplaint(newComplaint);
 
     // Reset Form
     setClientName("");
@@ -446,6 +466,20 @@ Mañana le contactaré nuevamente a esta hora con una nueva actualización, o an
               />
             </div>
 
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] text-white/50 uppercase font-bold tracking-wider">Categoría / Prioridad *</label>
+              <select 
+                value={priorityCategory}
+                onChange={e => setPriorityCategory(e.target.value as QuejaPriority)}
+                className="bg-black/35 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00D9FF]/40"
+              >
+                <option value="incendio">INCENDIO (*1)</option>
+                <option value="instalacion_incompleta">INSTALACIÓN INCOMPLETA (*2)</option>
+                <option value="mal_funcionamiento">MAL FUNCIONAMIENTO</option>
+                <option value="atencion_inadecuada">ATENCIÓN INADECUADA</option>
+              </select>
+            </div>
+
             <div className="flex flex-col gap-1 col-span-2">
               <label className="text-[10px] text-white/50 uppercase font-bold tracking-wider">Síntomas / Detalle del Fallo *</label>
               <textarea 
@@ -516,13 +550,29 @@ Mañana le contactaré nuevamente a esta hora con una nueva actualización, o an
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white mb-2 flex items-center justify-between">
-                    <span>{c.clientName}</span>
-                    {c.errorMust && (
-                      <span className="text-xs bg-[#FF6B35]/25 text-[#FF6B35] font-black px-2 py-0.5 rounded-md flex items-center gap-0.5">
-                        <AlertOctagon size={10} /> {c.errorMust}
+                  <h3 className="text-base font-bold text-white mb-2 flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between">
+                      <span>{c.clientName}</span>
+                      {c.errorMust && (
+                        <span className="text-xs bg-[#FF6B35]/25 text-[#FF6B35] font-black px-2 py-0.5 rounded-md flex items-center gap-0.5">
+                          <AlertOctagon size={10} /> {c.errorMust}
+                        </span>
+                      )}
+                    </div>
+                    {/* Priority Badge */}
+                    <div className="flex">
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider
+                        ${c.priority_category === 'incendio' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 
+                          c.priority_category === 'instalacion_incompleta' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 
+                          c.priority_category === 'mal_funcionamiento' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 
+                          'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}
+                      >
+                        {c.priority_category === 'incendio' ? 'INCENDIO (*1)' :
+                         c.priority_category === 'instalacion_incompleta' ? 'INSTALACIÓN INCOMPLETA (*2)' :
+                         c.priority_category === 'mal_funcionamiento' ? 'MAL FUNCIONAMIENTO' :
+                         'ATENCIÓN INADECUADA'}
                       </span>
-                    )}
+                    </div>
                   </h3>
 
                   <div className="flex flex-col gap-1.5 text-xs text-white/60">
@@ -621,8 +671,7 @@ Mañana le contactaré nuevamente a esta hora con una nueva actualización, o an
                       <button 
                         onClick={() => {
                           if (confirm(`¿Estás seguro de eliminar el reporte de ${c.clientName}?`)) {
-                            const updated = complaints.filter(i => i.id !== c.id);
-                            saveToStorage(updated);
+                            deleteComplaint(c.id);
                             setSelectedComplaintId(null);
                             toast.success("Reporte eliminado.");
                           }

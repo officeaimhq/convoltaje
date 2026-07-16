@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { useCrmStore, DealStage, ClientDeal } from '@/hooks/useCrmStore';
-import { MessageSquare, Phone, Search, ArrowRight, User, Calendar, DollarSign, Edit3, Clipboard } from 'lucide-react';
+import { MessageSquare, Phone, Search, ArrowRight, User, Calendar, DollarSign, Edit3, Clipboard, RefreshCw, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { useRefundsStore } from '@/hooks/useRefundsStore';
+import { useAuthStore } from '@/hooks/useAuthStore';
+import { generateOfferPdf } from '@/lib/pdf-offer-generator';
+import { products } from '@/lib/products';
+import { FileText } from 'lucide-react';
 
 const STAGES: DealStage[] = ['Contacto', 'En Producción', 'Terminado', 'Facturado', 'Feedback'];
 
@@ -15,9 +20,16 @@ const STAGE_COLORS: Record<DealStage, string> = {
 
 export default function OperationsPipeline() {
   const { deals, moveDeal } = useCrmStore();
+  const { addRefund } = useRefundsStore();
+  const { currentUser } = useAuthStore();
   const [activeStage, setActiveStage] = useState<DealStage>('Contacto');
   const [selectedDeal, setSelectedDeal] = useState<ClientDeal | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Estados para el Modal de Reintegro
+  const [showRefundModal, setShowRefundModal] = useState(false);
+  const [refundAmount, setRefundAmount] = useState('');
+  const [refundMaterialStatus, setRefundMaterialStatus] = useState<'disponible' | 'merma' | 'revision_tecnica'>('disponible');
 
   // Filtrar clientes por etapa activa y término de búsqueda
   const stageDeals = deals.filter(d => d.stage === activeStage);
@@ -35,6 +47,41 @@ export default function OperationsPipeline() {
       setSelectedDeal({ ...selectedDeal, stage: newStage });
     }
     toast.success(`Cliente movido a ${newStage}`);
+  };
+
+  const getFeedbackStatus = (dateString: string) => {
+    const installDate = new Date(dateString);
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - installDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const daysLeft = 7 - diffDays;
+    
+    if (daysLeft > 0) {
+      return { status: 'waiting', text: `⏳ En prueba (${daysLeft} días)` };
+    }
+    return { status: 'ready', text: '🟢 Pedir Reseña' };
+  };
+
+  const handleCreateRefund = () => {
+    if (!selectedDeal || !currentUser) return;
+    if (Number(refundAmount) <= 0) {
+      toast.error("El monto debe ser mayor a 0");
+      return;
+    }
+
+    addRefund({
+      payment_id: "pay-unknown", // En un sistema real esto vendría de un pago seleccionado
+      deal_id: selectedDeal.id,
+      requested_by: currentUser.name,
+      amount_to_refund: Number(refundAmount),
+      status: 'pendiente',
+      material_status_decision: refundMaterialStatus,
+      material_decided_by: null
+    });
+
+    toast.success("Solicitud de reintegro enviada a la dirección.");
+    setShowRefundModal(false);
+    setRefundAmount('');
   };
 
   return (
@@ -113,7 +160,18 @@ export default function OperationsPipeline() {
                     </div>
                     <div className="min-w-0">
                       <h4 className="text-sm font-bold truncate group-hover:text-[#00D9FF] transition-colors">{deal.name}</h4>
-                      <p className="text-xs text-white/55 truncate">{deal.company}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs text-white/55 truncate">{deal.company}</p>
+                        {deal.stage === 'Feedback' && (
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
+                            getFeedbackStatus(deal.expectedDate).status === 'ready' 
+                              ? 'bg-[#00FF66]/20 text-[#00FF66]' 
+                              : 'bg-yellow-500/20 text-yellow-500'
+                          }`}>
+                            {getFeedbackStatus(deal.expectedDate).text}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="text-right flex-shrink-0 pl-2">
@@ -189,6 +247,41 @@ export default function OperationsPipeline() {
               </p>
             </div>
 
+            {/* Acciones Adicionales */}
+            <div className="pt-3 border-t border-white/10 flex flex-wrap gap-2 justify-end">
+              <button
+                onClick={async () => {
+                  // Buscar el producto en base al deal.company o usar uno por defecto para la demo
+                  const product = products.find(p => p.name.includes(selectedDeal.company)) || products[0];
+                  const clientData = {
+                    name: selectedDeal.name,
+                    phone: selectedDeal.phone,
+                    date: new Date().toLocaleDateString('es-ES'),
+                    reference: `REF-${Math.floor(Math.random() * 10000)}`
+                  };
+                  
+                  try {
+                    await generateOfferPdf(product, clientData, selectedDeal.stage === 'Terminado' || selectedDeal.stage === 'Facturado');
+                    toast.success("Documento generado correctamente");
+                  } catch (error) {
+                    toast.error("Error al generar el documento");
+                  }
+                }}
+                className="px-3 py-2 text-[10px] font-bold rounded-xl border border-[#00D9FF]/30 bg-[#00D9FF]/10 hover:bg-[#00D9FF]/20 text-[#00D9FF] transition-all flex items-center gap-1.5 active:scale-[0.96]"
+              >
+                <FileText size={12} />
+                {selectedDeal.stage === 'Terminado' || selectedDeal.stage === 'Facturado' ? 'Generar Factura' : 'Generar Oferta'}
+              </button>
+
+              <button
+                onClick={() => setShowRefundModal(true)}
+                className="px-3 py-2 text-[10px] font-bold rounded-xl border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all flex items-center gap-1.5 active:scale-[0.96]"
+              >
+                <RefreshCw size={12} />
+                Iniciar Reintegro
+              </button>
+            </div>
+
             {/* Cambiar etapa (Acción rápida) */}
             <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
               <span className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Cambiar fase del cliente:</span>
@@ -210,6 +303,89 @@ export default function OperationsPipeline() {
         )}
 
       </div>
+
+      {/* MODAL DE REINTEGRO */}
+      {showRefundModal && selectedDeal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#0b1b33] border border-white/10 rounded-3xl w-full max-w-md flex flex-col shadow-2xl overflow-hidden">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between bg-red-500/10">
+              <h3 className="text-sm font-bold text-red-400 flex items-center gap-2">
+                <RefreshCw size={16} /> Solicitar Reintegro
+              </h3>
+              <button 
+                onClick={() => setShowRefundModal(false)}
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <div className="space-y-1">
+                <p className="text-xs text-white/60">Cliente:</p>
+                <p className="text-sm font-bold text-white">{selectedDeal.name}</p>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-white/60 uppercase tracking-wider block mb-1">Monto a Devolver (CUP/USD)</label>
+                <input 
+                  type="number" 
+                  value={refundAmount}
+                  onChange={(e) => setRefundAmount(e.target.value)}
+                  placeholder="Ej. 1500"
+                  className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-mono font-bold focus:outline-none focus:border-red-500 transition-colors"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-white/60 uppercase tracking-wider block mb-1">Estado del Material Involucrado</label>
+                <div className="grid grid-cols-1 gap-2">
+                  <button
+                    onClick={() => setRefundMaterialStatus('disponible')}
+                    className={`px-3 py-2.5 rounded-xl border text-xs font-bold text-left transition-all ${
+                      refundMaterialStatus === 'disponible' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' : 'bg-white/5 border-white/10 text-white/60'
+                    }`}
+                  >
+                    Disponible (Se puede revender inmediatamente)
+                  </button>
+                  <button
+                    onClick={() => setRefundMaterialStatus('merma')}
+                    className={`px-3 py-2.5 rounded-xl border text-xs font-bold text-left transition-all ${
+                      refundMaterialStatus === 'merma' ? 'bg-red-500/20 border-red-500/50 text-red-400' : 'bg-white/5 border-white/10 text-white/60'
+                    }`}
+                  >
+                    Merma (Daño irreparable, no revendible)
+                  </button>
+                  <button
+                    onClick={() => setRefundMaterialStatus('revision_tecnica')}
+                    className={`px-3 py-2.5 rounded-xl border text-xs font-bold text-left transition-all ${
+                      refundMaterialStatus === 'revision_tecnica' ? 'bg-amber-500/20 border-amber-500/50 text-amber-400' : 'bg-white/5 border-white/10 text-white/60'
+                    }`}
+                  >
+                    Revisión Técnica (Requiere diagnóstico antes de decidir)
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="p-4 border-t border-white/10 bg-black/20 flex justify-end gap-3">
+              <button 
+                onClick={() => setShowRefundModal(false)}
+                className="px-4 py-2.5 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-white/70"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={handleCreateRefund}
+                className="px-6 py-2.5 rounded-xl font-bold text-xs bg-red-500 hover:bg-red-400 text-white shadow-lg flex items-center gap-2"
+              >
+                <RefreshCw size={14} /> Enviar Solicitud
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

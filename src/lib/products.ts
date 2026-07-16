@@ -190,13 +190,14 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     description: "ConVoltaje: la solución definitiva. El tope de gama. 12 paneles solares, gran banco de baterías y un inversor MUST de 10kW lo convierten en una central energética para negocios, residencias grandes o propiedades autosuficientes. Ideal para quien quiere liberarse por completo de la red eléctrica y operar con total independencia, día y noche, aún en condiciones de alto consumo.",
     price: 9850,
     originalPrice: 11235,
-    image: "/images/logoconvoltaje.jpg",
+    image: "/images/kit-10kw-equipo.jpg",
     category: "Sistemas Solares Completos",
     popular: true,
     discount: 12,
     slug: "sistema-premium-10000w",
     images: [
-      "/images/logoconvoltaje.jpg",
+      "/images/kit-10kw-equipo.jpg",
+      "/images/Kit-10k-imagen-2.jpg",
       "/images/logoconvoltaje.jpg"
     ],
     specs: [

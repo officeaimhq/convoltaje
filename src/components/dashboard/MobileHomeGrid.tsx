@@ -92,6 +92,11 @@ export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
   const tileClass = TILE_STYLES[role] ?? 'aspect-square';
   const gridCols  = isTecnico ? 'grid-cols-3' : 'grid-cols-3';
 
+  // Group tiles
+  const seguimientoIds = ['clientes', 'instalaciones', 'quejas', 'calendario', 'validacion', 'asignaciones', 'historial'];
+  const seguimientoTiles = tiles.filter(t => seguimientoIds.includes(t.id));
+  const gestionTiles = tiles.filter(t => !seguimientoIds.includes(t.id));
+
   return (
     <div className="w-full min-h-screen bg-[#0b3c8f] text-white flex flex-col p-4 md:p-6 font-sans relative overflow-hidden">
 
@@ -119,22 +124,22 @@ export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h2 className="text-lg font-normal text-white">
-            Bienvenido/a <span className="font-bold">{currentUser.name}</span>
+          <h2 className="text-xl font-normal text-white tracking-tight">
+            Bienvenido/a, <span className="font-black text-white">{currentUser.name}</span>
           </h2>
-          <p className="text-[#00D9FF] text-xs font-semibold">
+          <p className="text-[#00D9FF] text-sm font-bold mt-0.5">
             {currentUser.title.replace(/^\(|\)$/g, '')}
           </p>
           <div className="flex flex-wrap gap-2 mt-2">
             {currentUser.clientsCount !== undefined && currentUser.clientsCount > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white/10 text-white text-xs rounded-full border border-white/5">
-                <Asterisk size={10} className="text-[#00D9FF]" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/10 text-white font-bold text-xs rounded-full border border-white/5">
+                <Asterisk size={12} className="text-[#00D9FF]" />
                 {currentUser.clientsCount} clientes
               </span>
             )}
             {currentUser.reviewsCount !== undefined && currentUser.reviewsCount > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white/10 text-white text-xs rounded-full border border-white/5">
-                <Star size={10} className="text-[#FFB800] fill-[#FFB800]" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/10 text-white font-bold text-xs rounded-full border border-white/5">
+                <Star size={12} className="text-[#FFB800] fill-[#FFB800]" />
                 {currentUser.reviewsCount} reseñas
               </span>
             )}
@@ -148,50 +153,86 @@ export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
         - Técnico: 3 tiles (layout simplificado sin scroll)
         - Resto: 8 tiles principales + 1 tile "Útiles" = siempre 9
       */}
-      <div className={`grid ${gridCols} gap-3 relative z-10`}>
-        {tiles.map((tile) => {
-          const Icon = tile.icon;
-          const isUtiles = tile.id === 'utiles';
-          return (
-            <button
-              key={tile.id}
-              onClick={() => onSelectView(tile.view)}
-              className={`
-                ${tileClass}
-                ${isUtiles
-                  ? 'bg-[#00D9FF]/10 hover:bg-[#00D9FF]/15 border-[#00D9FF]/25'
-                  : 'bg-white/5 hover:bg-white/10 border-white/10'}
-                border rounded-2xl flex flex-col items-center justify-center
-                text-center p-3 transition-all relative group active:scale-95
-              `}
-            >
-              {tile.badge !== undefined && (
-                <div className="absolute top-2 right-2 bg-[#00D9FF] text-[#0b1b33] text-[10px] font-black px-1.5 py-0.5 rounded-full">
-                  {tile.badge}
-                </div>
-              )}
-              <div className={`
-                w-10 h-10 rounded-xl flex items-center justify-center mb-2
-                group-hover:scale-110 transition-transform
-                ${isUtiles ? 'bg-[#00D9FF]/10' : 'bg-white/5'}
-              `}>
-                <Icon
-                  size={20}
-                  className={isUtiles ? 'text-[#00D9FF]' : 'text-[#00D9FF]'}
-                />
-              </div>
-              <span className={`text-[11px] font-medium truncate max-w-full ${isUtiles ? 'text-[#00D9FF] font-bold' : 'text-white'}`}>
-                {tile.label}
-              </span>
-              {isUtiles && (
-                <span className="text-[9px] text-[#00D9FF]/60 mt-0.5">
-                  +herramientas
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+      {/* ── Seguimiento y Operaciones ────────────────────────── */}
+      {seguimientoTiles.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-sm font-black text-white/50 uppercase tracking-widest mb-3 px-1">Seguimiento</h3>
+          <div className={`grid ${gridCols} gap-3 relative z-10`}>
+            {seguimientoTiles.map((tile) => {
+              const Icon = tile.icon;
+              return (
+                <button
+                  key={tile.id}
+                  onClick={() => onSelectView(tile.view)}
+                  className={`
+                    ${tileClass} bg-white/5 hover:bg-white/10 border-white/10
+                    border rounded-2xl flex flex-col items-center justify-center
+                    text-center p-3 transition-all relative group active:scale-95
+                  `}
+                >
+                  {tile.badge !== undefined && (
+                    <div className="absolute top-2 right-2 bg-[#00D9FF] text-[#0b1b33] text-[11px] font-black px-1.5 py-0.5 rounded-full">
+                      {tile.badge}
+                    </div>
+                  )}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform bg-white/5">
+                    <Icon size={24} className="text-[#00D9FF]" />
+                  </div>
+                  <span className="text-[13px] font-medium text-white truncate max-w-full">
+                    {tile.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Gestión y Administración ─────────────────────────── */}
+      {gestionTiles.length > 0 && (
+        <div>
+          <h3 className="text-sm font-black text-white/50 uppercase tracking-widest mb-3 px-1">Gestión</h3>
+          <div className={`grid ${gridCols} gap-3 relative z-10`}>
+            {gestionTiles.map((tile) => {
+              const Icon = tile.icon;
+              const isUtiles = tile.id === 'utiles';
+              return (
+                <button
+                  key={tile.id}
+                  onClick={() => onSelectView(tile.view)}
+                  className={`
+                    ${tileClass}
+                    ${isUtiles
+                      ? 'bg-[#00D9FF]/10 hover:bg-[#00D9FF]/15 border-[#00D9FF]/20'
+                      : 'bg-white/5 hover:bg-white/10 border-white/10'}
+                    border rounded-2xl flex flex-col items-center justify-center
+                    text-center p-3 transition-all relative group active:scale-95
+                  `}
+                >
+                  {tile.badge !== undefined && (
+                    <div className="absolute top-2 right-2 bg-[#00D9FF] text-[#0b1b33] text-[11px] font-black px-1.5 py-0.5 rounded-full">
+                      {tile.badge}
+                    </div>
+                  )}
+                  <div className={`
+                    w-12 h-12 rounded-xl flex items-center justify-center mb-2
+                    group-hover:scale-110 transition-transform
+                    ${isUtiles ? 'bg-[#00D9FF]/10' : 'bg-white/5'}
+                  `}>
+                    <Icon
+                      size={24}
+                      className={isUtiles ? 'text-[#00D9FF]' : 'text-[#00D9FF]'}
+                    />
+                  </div>
+                  <span className={`text-[13px] truncate max-w-full ${isUtiles ? 'text-[#00D9FF] font-bold' : 'text-white font-medium'}`}>
+                    {tile.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

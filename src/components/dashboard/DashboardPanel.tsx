@@ -108,22 +108,22 @@ export default function DashboardPanel() {
     <div className="h-screen w-full bg-[#0b3c8f] text-white flex flex-col font-sans overflow-hidden">
       
       {/* Cabecera Móvil/Escritorio unificada para el Dashboard de Botones */}
-      <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0b3c8f] relative z-20 shadow-lg">
+      <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0b3c8f] relative z-20 shadow-sm">
         {currentView !== 'inicio' ? (
           <button 
             onClick={() => setCurrentView('inicio')}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 text-white transition-colors"
           >
             <ChevronLeft size={16} />
             <span>Volver</span>
           </button>
         ) : (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-white/50">Sesión: <span className="text-[#00D9FF] font-semibold">{currentUser.name}</span></span>
+            <span className="text-xs text-white/70 font-medium">Sesión: <span className="text-[#00D9FF] font-bold">{currentUser.name}</span></span>
           </div>
         )}
         
-        <h3 className="text-sm font-bold capitalize text-white/80">
+        <h3 className="text-sm font-black capitalize text-white tracking-tight">
           {currentView === 'inicio' ? 'Convoltaje Workspace' : 
            currentView === 'pipeline' ? 'Clientes' : 
            currentView === 'almacen' ? 'Almacén' : 
@@ -140,7 +140,7 @@ export default function DashboardPanel() {
 
         <button 
           onClick={handleLogout}
-          className="text-xs text-white/50 hover:text-white transition-colors bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5"
+          className="text-xs text-white/70 hover:text-white font-bold transition-colors bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5"
         >
           Salir
         </button>

@@ -34,7 +34,7 @@ export interface CalendarEvent {
   newProposedDate?: string;
 }
 
-const STORAGE_KEY = "convoltaje_calendar_events_v2";
+const STORAGE_KEY = "convoltaje_calendar_events_v3";
 
 const defaultEvents: CalendarEvent[] = [
   // 6 de Julio

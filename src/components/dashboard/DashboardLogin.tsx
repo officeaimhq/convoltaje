@@ -89,7 +89,7 @@ export default function DashboardLogin() {
                     {user.name}
                   </h4>
                   <p className="text-white/40 text-[10px] uppercase font-bold tracking-wider mt-0.5 truncate">
-                    {user.title.replace(/^\(|\)$/g, '')}
+                    {user.title?.replace(/^\(|\)$/g, '') || user.role}
                   </p>
                 </div>
               </button>

@@ -39,8 +39,8 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
   const [signature, setSignature] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"efectivo" | "online" | "derivado">("efectivo");
   const [paymentAmount, setPaymentAmount] = useState<string>("");
-  const [isPartialPayment, setIsPartialPayment] = useState(false);
   const [paymentReference, setPaymentReference] = useState("");
+  const [receiptPhotos, setReceiptPhotos] = useState<string[]>([]);
   
   // Contadores de materiales extra
   const [materials, setMaterials] = useState<Record<string, number>>({
@@ -76,8 +76,8 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
     setSignature(null);
     setPaymentMethod("efectivo");
     setPaymentAmount("");
-    setIsPartialPayment(false);
     setPaymentReference("");
+    setReceiptPhotos([]);
     setMaterials({
       cableMeters: 0,
       breakersCount: 0,
@@ -96,7 +96,7 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
     }));
   };
 
-  const handleSubmitListo = () => {
+  const handleSubmitListo = (tecnicoStatus?: "cobrado" | "problema") => {
     if (!selectedJob) return;
 
     // Validación de firma para técnicos
@@ -111,6 +111,12 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
       return;
     }
 
+    // Validación de comprobante para comerciales
+    if (currentUser.role !== "tecnico" && paymentMethod === "online" && receiptPhotos.length === 0) {
+      toast.error("Por favor, suba el comprobante de la transferencia.");
+      return;
+    }
+
     const payload: Partial<CalendarEvent> = {
       validated: true,
       validatedBy: currentUser.name,
@@ -118,13 +124,13 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
       status: "completado" as const,
       photos,
       signature: signature || undefined,
-      paymentInfo: {
-        method: paymentMethod === "derivado" ? "online" : (paymentMethod as 'efectivo' | 'online'),
+      paymentInfo: currentUser.role === "tecnico" ? undefined : {
+        method: paymentMethod as 'efectivo' | 'online',
         amount: Number(paymentAmount) || 0,
-        isPartial: isPartialPayment,
+        isPartial: false,
         reference: paymentReference || undefined,
         validatedBy: currentUser.name,
-        needsOnlineValidation: paymentMethod === "derivado"
+        needsOnlineValidation: true
       },
       extraMaterials: {
         cableMeters: materials.cableMeters || undefined,
@@ -135,7 +141,7 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
     };
 
     updateEvent(selectedJob.id, payload);
-    toast.success("Trabajo validado y finalizado correctamente.");
+    toast.success(paymentMethod === "online" && currentUser.role !== "tecnico" ? "Pago enviado a revisión." : "Trabajo validado y finalizado correctamente.");
     onFinished();
   };
 
@@ -286,13 +292,13 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
                 </div>
               </div>
 
-              {/* Cobros y Validación de Pagos */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3">
-                <label className="text-xs font-bold text-white/70 uppercase">Información de Pago Recibido</label>
+              {/* Cobros y Validación de Pagos (Solo Comerciales o Admin) */}
+              {currentUser.role !== "tecnico" && (
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3">
+                  <label className="text-xs font-bold text-white/70 uppercase">Información de Pago Recibido</label>
 
-                {/* Métodos de Pago según rol */}
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  {currentUser.role !== "comercial" && (
+                  {/* Métodos de Pago según rol */}
+                  <div className="grid grid-cols-2 gap-2 text-center text-xs">
                     <button
                       type="button"
                       onClick={() => setPaymentMethod("efectivo")}
@@ -304,9 +310,7 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
                       <DollarSign size={14} />
                       <span>Efectivo</span>
                     </button>
-                  )}
 
-                  {currentUser.role !== "tecnico" && (
                     <button
                       type="button"
                       onClick={() => setPaymentMethod("online")}
@@ -318,28 +322,12 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
                       <Wallet size={14} />
                       <span>Pago Online</span>
                     </button>
-                  )}
+                  </div>
 
-                  {currentUser.role === "tecnico" && (
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod("derivado")}
-                      className={`py-2 border rounded-xl font-bold flex flex-col items-center gap-1.5 transition-all col-span-2
-                        ${paymentMethod === "derivado" 
-                          ? "bg-amber-500 text-white border-transparent" 
-                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"}`}
-                    >
-                      <CornerDownRight size={14} />
-                      <span>Derivar a Comercial (Pago Online)</span>
-                    </button>
-                  )}
-                </div>
-
-                {/* Inputs de Pago */}
-                {paymentMethod !== "derivado" && (
+                  {/* Inputs de Pago */}
                   <div className="flex flex-col gap-2 mt-1">
                     <div className="flex items-center gap-2 bg-white/5 rounded-xl border border-white/10 px-3 py-1 text-xs">
-                      <span className="text-white/40">Monto Cobrado (CUP):</span>
+                      <span className="text-white/40">Monto Cobrado (CUP/USD):</span>
                       <input
                         type="number"
                         placeholder="0.00"
@@ -350,54 +338,70 @@ export default function ValidationFlow({ selectedEventId, onFinished }: Validati
                     </div>
 
                     {paymentMethod === "online" && (
-                      <div className="flex items-center gap-2 bg-white/5 rounded-xl border border-white/10 px-3 py-2 text-xs">
-                        <span className="text-white/40">Ref. Transf:</span>
-                        <input
-                          type="text"
-                          placeholder="Número de Comprobante"
-                          value={paymentReference}
-                          onChange={(e) => setPaymentReference(e.target.value)}
-                          className="bg-transparent border-none text-white text-right focus:outline-none flex-1 font-semibold"
-                        />
-                      </div>
+                      <>
+                        <div className="flex items-center gap-2 bg-white/5 rounded-xl border border-white/10 px-3 py-2 text-xs">
+                          <span className="text-white/40">Ref. Transf:</span>
+                          <input
+                            type="text"
+                            placeholder="Número de Comprobante"
+                            value={paymentReference}
+                            onChange={(e) => setPaymentReference(e.target.value)}
+                            className="bg-transparent border-none text-white text-right focus:outline-none flex-1 font-semibold"
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <label className="text-xs font-bold text-white/70 uppercase mb-2 block">Comprobante de Transferencia *</label>
+                          <PhotoCapture onPhotosChange={setReceiptPhotos} maxPhotos={1} />
+                        </div>
+                      </>
                     )}
-
-                    <label className="flex items-center gap-2 text-xs text-white/60 cursor-pointer select-none mt-1">
-                      <input
-                        type="checkbox"
-                        checked={isPartialPayment}
-                        onChange={(e) => setIsPartialPayment(e.target.checked)}
-                        className="rounded bg-white/5 border-white/15 text-[#00D9FF] focus:ring-0"
-                      />
-                      <span>¿Es un Pago Parcial? (Abono)</span>
-                    </label>
                   </div>
-                )}
-
-                {paymentMethod === "derivado" && (
-                  <p className="text-[11px] text-amber-200/80 leading-normal italic px-1">
-                    ➔ Al cerrar, el trabajo quedará bloqueado de cierre técnico, y la comercial recibirá una alerta para verificar el cobro en pesos (CUP) online.
-                  </p>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Botones de Envío */}
-              <div className="grid grid-cols-3 gap-2.5 mt-2">
-                <button
-                  type="button"
-                  onClick={() => setValidationType(null)}
-                  className="py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold"
-                >
-                  Atrás
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSubmitListo}
-                  className="col-span-2 py-2.5 rounded-xl bg-[#00D9FF] hover:bg-[#00c5e6] text-[#0b1b33] text-xs font-bold shadow-lg"
-                >
-                  Confirmar y Validar
-                </button>
-              </div>
+              {currentUser.role === "tecnico" ? (
+                <div className="grid grid-cols-2 gap-2.5 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSubmitListo("cobrado")}
+                    className="py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0b1b33] text-xs font-bold shadow-lg"
+                  >
+                    Cobrado sin problemas
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSubmitListo("problema")}
+                    className="py-3 rounded-xl bg-[#FFB800] hover:bg-[#FFD147] text-[#0b1b33] text-xs font-bold shadow-lg"
+                  >
+                    Contactar Comercial (hubo un problema)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setValidationType(null)}
+                    className="col-span-2 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold"
+                  >
+                    Atrás
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-2.5 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setValidationType(null)}
+                    className="py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold"
+                  >
+                    Atrás
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSubmitListo()}
+                    className="col-span-2 py-2.5 rounded-xl bg-[#00D9FF] hover:bg-[#00c5e6] text-[#0b1b33] text-xs font-bold shadow-lg"
+                  >
+                    {paymentMethod === "online" ? "Poner en revisión" : "Confirmar y Validar"}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

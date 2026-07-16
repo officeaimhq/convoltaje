@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useSettingsStore } from "@/hooks/useSettingsStore";
+import { usePaymentsStore } from "@/hooks/usePaymentsStore";
+import { useRefundsStore } from "@/hooks/useRefundsStore";
 
 export interface Transaction {
   id: string;
@@ -150,8 +152,11 @@ export default function FinanzasMain() {
     return saved ? JSON.parse(saved) : defaultTransactions;
   });
 
+  const { payments, confirmPayment, rejectPayment } = usePaymentsStore();
+  const { refunds, processRefund } = useRefundsStore();
+
   const [fixedExpenses] = useState(defaultFixedExpenses);
-  const [activeTab, setActiveTab] = useState<"resumen" | "transacciones" | "comisiones">("resumen");
+  const [activeTab, setActiveTab] = useState<"resumen" | "transacciones" | "comisiones" | "revision" | "reintegros">("resumen");
   const [currencyMode, setCurrencyMode] = useState<"USD" | "CUP">("USD");
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -308,13 +313,13 @@ export default function FinanzasMain() {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-3 gap-1 bg-black/25 rounded-2xl p-1 border border-white/5 mb-6">
+      <div className="grid grid-cols-5 gap-1 bg-black/25 rounded-2xl p-1 border border-white/5 mb-6">
         <button
           onClick={() => {
             setActiveTab("resumen");
             setShowAddForm(false);
           }}
-          className={`rounded-xl py-2.5 text-xs font-bold transition-all text-center
+          className={`rounded-xl py-2.5 text-[10px] sm:text-xs font-bold transition-all text-center
             ${activeTab === "resumen" 
               ? 'bg-[#00D9FF] text-[#0b1b33] shadow-md' 
               : 'text-white/60 hover:text-white hover:bg-white/5'
@@ -326,7 +331,7 @@ export default function FinanzasMain() {
           onClick={() => {
             setActiveTab("transacciones");
           }}
-          className={`rounded-xl py-2.5 text-xs font-bold transition-all text-center
+          className={`rounded-xl py-2.5 text-[10px] sm:text-xs font-bold transition-all text-center
             ${activeTab === "transacciones" 
               ? 'bg-[#00D9FF] text-[#0b1b33] shadow-md' 
               : 'text-white/60 hover:text-white hover:bg-white/5'
@@ -339,13 +344,49 @@ export default function FinanzasMain() {
             setActiveTab("comisiones");
             setShowAddForm(false);
           }}
-          className={`rounded-xl py-2.5 text-xs font-bold transition-all text-center
+          className={`rounded-xl py-2.5 text-[10px] sm:text-xs font-bold transition-all text-center
             ${activeTab === "comisiones" 
               ? 'bg-[#00D9FF] text-[#0b1b33] shadow-md' 
               : 'text-white/60 hover:text-white hover:bg-white/5'
             }`}
         >
           Comisiones
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab("revision");
+            setShowAddForm(false);
+          }}
+          className={`rounded-xl py-2.5 text-[10px] sm:text-xs font-bold transition-all text-center relative
+            ${activeTab === "revision" 
+              ? 'bg-[#FF6B35] text-white shadow-md' 
+              : 'text-white/60 hover:text-white hover:bg-white/5'
+            }`}
+        >
+          Revisión Pagos
+          {payments.filter(p => p.status === 'en_revision').length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black animate-pulse">
+              {payments.filter(p => p.status === 'en_revision').length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab("reintegros");
+            setShowAddForm(false);
+          }}
+          className={`rounded-xl py-2.5 text-[10px] sm:text-xs font-bold transition-all text-center relative
+            ${activeTab === "reintegros" 
+              ? 'bg-red-500 text-white shadow-md' 
+              : 'text-white/60 hover:text-white hover:bg-white/5'
+            }`}
+        >
+          Reintegros
+          {refunds.filter(r => r.status === 'pendiente').length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black animate-pulse">
+              {refunds.filter(r => r.status === 'pendiente').length}
+            </span>
+          )}
         </button>
       </div>
 
@@ -702,6 +743,127 @@ export default function FinanzasMain() {
             ) : (
               <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-white/30 text-xs py-16">
                 No hay comisiones registradas en el sistema.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Pestaña 4: Pagos en Revisión (Designado de Dirección) */}
+      {activeTab === "revision" && (
+        <div className="space-y-4">
+          <div className="p-4 bg-[#FF6B35]/10 border border-[#FF6B35]/20 rounded-[20px] space-y-3">
+            <h3 className="text-xs font-bold text-[#FF6B35] uppercase tracking-wider">Auditoría de Pagos por Transferencia</h3>
+            <p className="text-xs text-white/60 leading-relaxed font-light">
+              Revisa los comprobantes de transferencias enviados por los comerciales. Valida si el saldo ya ingresó a la cuenta de Convoltaje.
+            </p>
+          </div>
+
+          <div className="space-y-3 animate-fade-in">
+            {payments.filter(p => p.status === 'en_revision').length > 0 ? (
+              payments.filter(p => p.status === 'en_revision').map(p => (
+                <div key={p.id} className="bg-[#0a1e3f]/40 border border-[#FF6B35]/30 rounded-[20px] p-5 shadow-md flex flex-col gap-4">
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-1">
+                      <span className="text-[10px] text-[#FF6B35] font-bold uppercase block tracking-wider">Pago en Revisión</span>
+                      <h4 className="text-sm font-bold text-white">Transferencia {p.currency}</h4>
+                      <p className="text-xs text-white/50">{p.notes}</p>
+                    </div>
+                    <span className="text-xl font-black font-mono text-[#00D9FF]">{p.amount.toLocaleString()} {p.currency}</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 items-center">
+                    <div className="border border-white/10 rounded-xl p-2 bg-black/20 flex flex-col items-center justify-center h-24">
+                      {p.screenshot_url ? (
+                        <span className="text-xs text-white/60 mb-2">Comprobante enviado</span>
+                      ) : (
+                        <span className="text-xs text-white/40 italic">Sin comprobante</span>
+                      )}
+                      <button className="text-[10px] bg-white/10 px-3 py-1 rounded-lg font-bold">Ver Imagen</button>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <button 
+                        onClick={() => {
+                          const conf = confirm("¿El pago se reflejó correctamente en la cuenta?");
+                          if (conf) {
+                            confirmPayment(p.id, "Dirección", "mock_confirmed_screenshot.jpg");
+                            toast.success("Pago confirmado y asentado.");
+                          }
+                        }}
+                        className="py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0b1b33] text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5"
+                      >
+                        <CheckCircle size={14} /> Confirmar Ingreso
+                      </button>
+                      <button 
+                        onClick={() => {
+                          const reason = prompt("Indique el motivo del rechazo:");
+                          if (reason) {
+                            rejectPayment(p.id, "Dirección", reason);
+                            toast.error("Pago rechazado y notificado al comercial.");
+                          }
+                        }}
+                        className="py-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 hover:text-red-400 border border-white/10 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <AlertTriangle size={14} /> Rechazar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-white/30 text-xs py-16">
+                No hay pagos pendientes de revisión.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Pestaña 5: Reintegros (Designado de Dirección) */}
+      {activeTab === "reintegros" && (
+        <div className="space-y-4">
+          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-[20px] space-y-3">
+            <h3 className="text-xs font-bold text-red-400 uppercase tracking-wider">Gestión de Reintegros</h3>
+            <p className="text-xs text-white/60 leading-relaxed font-light">
+              Revisa y procesa las devoluciones solicitadas por los comerciales. Valida el destino del material involucrado.
+            </p>
+          </div>
+
+          <div className="space-y-3 animate-fade-in">
+            {refunds.filter(r => r.status === 'pendiente').length > 0 ? (
+              refunds.filter(r => r.status === 'pendiente').map(r => (
+                <div key={r.id} className="bg-[#0a1e3f]/40 border border-red-500/30 rounded-[20px] p-5 shadow-md flex flex-col gap-4">
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-1">
+                      <span className="text-[10px] text-red-400 font-bold uppercase block tracking-wider">Solicitud de Reintegro</span>
+                      <h4 className="text-sm font-bold text-white">Solicitado por: {r.requested_by}</h4>
+                      <div className="text-[10px] bg-black/30 inline-block px-2 py-1 rounded text-white/70">
+                        Estado del material sugerido: <strong className="text-white capitalize">{r.material_status_decision.replace('_', ' ')}</strong>
+                      </div>
+                    </div>
+                    <span className="text-xl font-black font-mono text-red-400">-${r.amount_to_refund.toLocaleString()}</span>
+                  </div>
+
+                  <div className="flex flex-col gap-2 border-t border-white/5 pt-4">
+                    <button 
+                      onClick={() => {
+                        const conf = confirm("¿Confirmas que el reintegro fue procesado y el material contabilizado?");
+                        if (conf) {
+                          processRefund(r.id, "Dirección");
+                          toast.success("Reintegro procesado exitosamente.");
+                        }
+                      }}
+                      className="py-2.5 rounded-xl bg-red-500 hover:bg-red-400 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5"
+                    >
+                      <CheckCircle size={14} /> Marcar como Procesado
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-white/30 text-xs py-16">
+                No hay solicitudes de reintegro pendientes.
               </div>
             )}
           </div>

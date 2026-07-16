@@ -397,7 +397,7 @@ export async function generateProductSheet(product: Product): Promise<Blob> {
         </div>
 
         <div class="footer">
-          <p><strong>90 días de garantía en instalación. Pago solo al finalizar.</strong></p>
+          <p><strong>${product.specs?.find(s => s.startsWith("Garantía")) || "90 días de garantía en instalación"}. Pago solo al finalizar.</strong></p>
           <p style="margin-top: 10px;">Generado el ${new Date().toLocaleDateString("es-ES")}</p>
         </div>
       </div>
