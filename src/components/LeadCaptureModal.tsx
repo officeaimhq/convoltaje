@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { WHATSAPP_NUMBERS } from "@/lib/products";
 import { EcoPowerKit } from "@/lib/calculator";
 import { generatePDF } from "@/lib/pdf-generator";
+import { SalesRepsModal } from "./SalesRepsModal";
 
 interface LeadCaptureModalProps {
   kit: EcoPowerKit;
@@ -32,6 +33,7 @@ export default function LeadCaptureModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [pdfExtension, setPdfExtension] = useState<string>("pdf");
+  const [showReps, setShowReps] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -102,18 +104,8 @@ export default function LeadCaptureModal({
       // Don't revoke immediately so the user can click the "Abrir" button later
       // window.URL.revokeObjectURL(url);
 
-      // Send WhatsApp message
-      const message = `Hola, me interesa el sistema: *${kit.name}* - $${kit.price} USD. Mi consumo diario es de ${dailyConsumption.toFixed(2)} kWh. Nombre: ${formData.name}. Teléfono: ${formData.phone}`;
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBERS.convoltaje.replace(/\D/g, "")}?text=${encodedMessage}`;
-
       // Show confirmation
       setStep("confirmation");
-
-      // Open WhatsApp after a short delay
-      setTimeout(() => {
-        window.open(whatsappUrl, "_blank");
-      }, 1500);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Error al generar el PDF. Por favor intenta de nuevo.");
@@ -274,8 +266,7 @@ export default function LeadCaptureModal({
                 ¡Solicitud Enviada!
               </h3>
               <p className="text-muted-foreground">
-                Tu prefactura ha sido descargada y un asesor se pondrá en
-                contacto contigo por WhatsApp en los próximos minutos.
+                Tu oferta ha sido descargada. Por favor, selecciona una comercial para continuar con tu compra por WhatsApp.
               </p>
 
               <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 my-4">
@@ -283,8 +274,8 @@ export default function LeadCaptureModal({
                   Próximos pasos:
                 </p>
                 <ul className="text-sm text-muted-foreground space-y-1 text-left">
-                  <li>✓ Revisa tu PDF descargado</li>
-                  <li>✓ Espera contacto por WhatsApp</li>
+                  <li>✓ Revisa tu oferta descargada</li>
+                  <li>✓ Selecciona tu asesora comercial</li>
                   <li>✓ Confirma detalles con nuestro comercial</li>
                   <li>✓ Procede con tu compra</li>
                 </ul>
@@ -302,8 +293,16 @@ export default function LeadCaptureModal({
               )}
 
               <Button
+                onClick={() => setShowReps(true)}
+                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-accent py-3 mb-2"
+              >
+                Elegir Asesora Comercial
+              </Button>
+
+              <Button
                 onClick={onClose}
-                className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-accent py-3"
+                variant="outline"
+                className="w-full font-accent py-3"
               >
                 Cerrar
               </Button>
@@ -311,6 +310,15 @@ export default function LeadCaptureModal({
           )}
         </div>
       </Card>
+      
+      <SalesRepsModal 
+        isOpen={showReps} 
+        onClose={() => {
+          setShowReps(false);
+          onClose(); // Cerrar todo el modal
+        }} 
+        customMessage={`Hola {name}, he realizado el cálculo de mi sistema solar en su página web. Me interesa el sistema: *${kit.name}* - $${kit.price.toLocaleString()} USD. Mi consumo diario estimado es de ${dailyConsumption.toFixed(2)} kWh. Mi nombre es ${formData.name}. Ya descargué mi oferta, ¿me ayudas a concretar mi compra?`}
+      />
     </div>
   );
 }

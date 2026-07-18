@@ -141,8 +141,8 @@ export default function Step4Results({
           variant="outline"
           className="w-full font-accent text-lg py-6"
         >
-          <Download className="w-5 h-5 mr-2" />
-          Descargar Prefactura PDF
+          <Download className="w-5 h-5 text-primary" />
+          Descargar oferta generada por la calculadora
         </Button>
 
         <Button

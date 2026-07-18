@@ -42,15 +42,21 @@ interface SalesRepsModalProps {
   isOpen: boolean;
   onClose: () => void;
   productName?: string;
+  customMessage?: string;
 }
 
-export function SalesRepsModal({ isOpen, onClose, productName }: SalesRepsModalProps) {
+export function SalesRepsModal({ isOpen, onClose, productName, customMessage }: SalesRepsModalProps) {
   if (!isOpen) return null;
 
   const handleContact = (phone: string, name: string) => {
-    const text = productName 
-      ? `Hola ${name}, estoy interesado en el ${productName} que vi en la página web.`
-      : `Hola ${name}, me gustaría recibir asesoría sobre los sistemas solares de ConVoltaje.`;
+    let text = "";
+    if (customMessage) {
+      text = customMessage.replace("{name}", name);
+    } else if (productName) {
+      text = `Hola ${name}, estoy interesado en el ${productName} que vi en la página web.`;
+    } else {
+      text = `Hola ${name}, me gustaría recibir asesoría sobre los sistemas solares de ConVoltaje.`;
+    }
     
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
