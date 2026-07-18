@@ -1,35 +1,113 @@
 ---
 name: "stop"
-description: "Closes the development session: stops the local server, calculates total session duration, updates Control-Tiempo.md and Obsidian daily log, and performs a local git commit."
+description: "Closes the development session: stops the local server, updates the daily plan in Obsidian (checking off completed tasks), appends session summary to the Obsidian log, and performs a local git commit."
+triggers:
+  - "/stop"
+  - "close session"
+  - "cerrar sesión"
+  - "vamos a parar"
+  - "paramos por hoy"
 ---
 
 # Stop Skill
 
-This skill ensures that all development servers are terminated, the time spent during the session is computed and logged, and a local checkpoint is created securely.
+This skill ensures that all development servers are terminated, the Obsidian daily plan is updated with completed tasks, the session log is written, and a local checkpoint is saved.
 
 ## Execution Protocol
 
-Every time a session is concluded (the user says "close session", "stop", or similar):
+Every time a session is concluded (the user says "stop", "vamos a parar", "cerrar sesión", or similar):
 
-1. **Step 1: Terminate Servers**
-   Shutdown the local development server:
-   `pkill -f "vite" || true`
+---
 
-2. **Step 2: Calculate Duration**
-   - Check the current time.
-   - Look up the start time recorded in `/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje/Control-Tiempo.md`.
-   - Calculate the total hours/minutes elapsed for the session.
+### Step 1: Terminate Servers
+Shutdown the local development server:
+```
+pkill -f "vite" || true
+```
 
-3. **Step 3: Update Control-Tiempo.md**
-   - Locate the active session entry in `/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje/Control-Tiempo.md`.
-   - Update the status from "En progreso..." to the final duration (e.g., `Duración: 1h 45m`).
-   - Sum the new duration to the "Total de Horas Dedicadas" at the top of the file.
+---
 
-4. **Step 4: Append to Session Log**
-   - Append a summary of all changes made during the session to the daily log in `/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje/Sesiones/YYYY-MM-DD.md`.
-   - Include the specific duration of the session at the top of the log.
+### Step 2: Update the Daily Plan in Obsidian ⭐ (NEW — MANDATORY)
 
-5. **Step 5: Local Git Commit**
-   - Run a git commit to save all progress locally without pushing to GitHub (to preserve Netlify build credits):
-     `git add . && git commit -m "Checkpoint: session close YYYY-MM-DD"`
-   - Provide the commit hash to the user.
+This is the most important step. The daily plan lives at:
+`/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje/02-Plan-de-Trabajo/YYYY-MM-DD-Plan-Diario.md`
+
+**You MUST do the following:**
+1. Read the current daily plan file for today's date.
+2. For every task that was completed during this session, change `- [ ]` to `- [x]`.
+3. Add a new section **"Tareas emergentes completadas (no planificadas):"** with `- [x]` entries for anything done that was NOT in the original plan.
+4. Fill in the **"Estado al final del día:"** line with a brief status (e.g., "✅ Sesión completada. Todas las tareas resueltas." or "⚠️ Sesión parcial. Quedaron pendientes X y Y.").
+5. Add a **"Pendientes para la próxima sesión:"** section at the bottom with `- [ ]` entries for unfinished or newly discovered tasks.
+6. Save the updated file (overwrite).
+
+If there is no daily plan file for today, create one with the format:
+```markdown
+# Plan Diario: YYYY-MM-DD
+
+**Objetivo del día:** [Inferred from session work]
+
+**Tareas completadas en sesión:**
+- [x] [Task 1]
+- [x] [Task 2]
+
+**Estado al final del día:** ✅ Sesión completada.
+
+**Pendientes para la próxima sesión:**
+- [ ] [Pending task]
+```
+
+---
+
+### Step 3: Append to Session Log
+
+Append a full summary of all changes made during the session to:
+`/Users/rodyfigueroa/Movies/Viralist Obsidian/ReloNL/Convoltaje/Sesiones/YYYY-MM-DD.md`
+
+Include:
+- Estimated session start/end times and duration
+- List of all completed tasks with context
+- List of pending items for next session
+- Any important discoveries or decisions made
+
+---
+
+### Step 4: Save Session Summary to Engram (MANDATORY)
+
+Call `mem_session_summary` with:
+- **goal**: What the session was about
+- **accomplished**: Bullet list of completed tasks
+- **discoveries**: Non-obvious findings, gotchas, decisions made
+- **next_steps**: Clear list of what remains
+- **relevant_files**: Files changed with a brief description
+
+This ensures the next session can restore context from memory without re-reading the entire codebase.
+
+---
+
+### Step 5: Local Git Commit
+
+Run a git commit to save all progress:
+```
+git add . && git commit -m "chore: session close YYYY-MM-DD — [brief description]"
+```
+If the working tree is already clean (nothing to commit), report this to the user. Do NOT push to GitHub unless the user explicitly asks.
+
+---
+
+### Step 6: Confirm to User
+
+Report back with:
+```
+🛑 Sesión cerrada — [FECHA]
+
+✅ Servidor detenido
+✅ Plan diario actualizado (Obsidian)
+✅ Log de sesión guardado
+✅ Memoria Engram actualizada  
+✅ Git commit: [hash] / Árbol limpio
+
+📌 Top pendientes para la próxima sesión:
+1. [Pending 1]
+2. [Pending 2]
+3. [Pending 3]
+```
