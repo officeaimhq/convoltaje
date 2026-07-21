@@ -216,7 +216,7 @@ export default function CalendarCore() {
           
           <div className="flex gap-2">
             <button 
-              onClick={exportBackup}
+              // onClick={exportBackup}
               className="p-2.5 text-white/60 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all"
               title="Backup"
             >

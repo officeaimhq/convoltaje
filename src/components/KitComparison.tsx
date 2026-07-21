@@ -45,7 +45,7 @@ export default function KitComparison({
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 flex-1">
+      <main className="container mx-auto px-4 py-8 flex-1">
         <h1 className="font-display text-2xl text-primary mb-8 sm:hidden text-center">
           Comparando {products.length} kits
         </h1>

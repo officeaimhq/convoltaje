@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, DollarSign, Image as ImageIcon, FileText, CreditCard } from 'lucide-react';
 import { usePaymentsStore } from '@/hooks/usePaymentsStore';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface PaymentEntryModalProps {
   dealId: string;
@@ -13,8 +13,8 @@ interface PaymentEntryModalProps {
 export default function PaymentEntryModal({ dealId, dealName, dealValue, onClose }: PaymentEntryModalProps) {
   const { addPayment } = usePaymentsStore();
   const [amount, setAmount] = useState<string>(dealValue.toString());
-  const [currency, setCurrency] = useState<string>('MLC');
-  const [method, setMethod] = useState<string>('Transferencia');
+  const [currency, setCurrency] = useState<'USD' | 'CUP' | 'MLC' | 'EUR'>('MLC');
+  const [method, setMethod] = useState<'Transferencia' | 'Efectivo' | 'Zelle' | 'Saldo'>('Transferencia');
   const [notes, setNotes] = useState<string>('');
   
   // Para el mock del comprobante
@@ -37,7 +37,7 @@ export default function PaymentEntryModal({ dealId, dealName, dealValue, onClose
       deal_id: dealId,
       amount: Number(amount),
       currency: currency,
-      payment_method: method,
+      payment_method: method.toLowerCase() as 'transferencia' | 'efectivo' | 'zelle' | 'saldo',
       status: 'en_revision',
       screenshot_url: hasScreenshot ? 'mock_transfer_new.jpg' : null,
       reviewer_id: null,
@@ -89,7 +89,7 @@ export default function PaymentEntryModal({ dealId, dealName, dealValue, onClose
               <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">Moneda</label>
               <select
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                onChange={(e) => setCurrency(e.target.value as 'USD' | 'CUP' | 'MLC' | 'EUR')}
                 className="w-full bg-black/20 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white font-mono focus:outline-none focus:border-[#00D9FF]/50 appearance-none"
               >
                 <option value="MLC">MLC</option>
@@ -103,7 +103,7 @@ export default function PaymentEntryModal({ dealId, dealName, dealValue, onClose
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">Método de Pago</label>
             <div className="grid grid-cols-2 gap-2">
-              {['Transferencia', 'Efectivo', 'Zelle', 'Bizum'].map((m) => (
+              {(['Transferencia', 'Efectivo', 'Zelle', 'Saldo'] as const).map((m) => (
                 <button
                   type="button"
                   key={m}
