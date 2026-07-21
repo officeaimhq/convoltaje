@@ -10,9 +10,14 @@ const MOCK_DEALS: ClientDeal[] = [
   { id: "mock-d5", name: "Carlos Mendoza", company: "Mantenimiento 5kW", phone: "+5355556677", email: "carlos@email.com", value: 450, stage: "Facturado", expectedDate: "2026-07-22", source: "Cliente recurrente" },
   { id: "mock-d6", name: "Laura Torres", company: "Kit Solar 3kW", phone: "+5355667788", email: "laura@email.com", value: 2100, stage: "Contacto", expectedDate: "2026-07-26", source: "Instagram" },
   { id: "mock-d7", name: "Roberto Sánchez", company: "Bomba 1.5HP + Panel", phone: "+5355778899", email: "roberto@email.com", value: 1800, stage: "Feedback", expectedDate: "2026-07-21", source: "Referido Samuel" },
-  { id: "mock-d8", name: "Diana Rosa Alfonso", company: "Kit Solar 1kW", phone: "+5355889900", email: "diana.r@email.com", value: 950, stage: "Facturado", expectedDate: "2026-07-19", source: "Familiar" },
-  { id: "mock-d9", name: "Oscar Hernández", company: "Kit Solar 7kW", phone: "+5355990011", email: "oscar@email.com", value: 4900, stage: "En Producción", expectedDate: "2026-08-01", source: "Google" },
-  { id: "mock-d10", name: "Niurki Castillo", company: "Sistema Completo 5kW", phone: "+5355100112", email: "niurki.c@email.com", value: 3500, stage: "Terminado", expectedDate: "2026-07-20", source: "Interno" },
+  { id: "mock-d8", name: "Diana Rosa Alfonso", company: "Kit Solar 1kW", phone: "+5355889900", email: "diana.r@email.com", value: 950, stage: "Facturado", expectedDate: "2026-07-22", source: "Familiar" },
+  { id: "mock-d9", name: "Oscar Hernández", company: "Kit Solar 7kW", phone: "+5355990011", email: "oscar@email.com", value: 4900, stage: "En Producción", expectedDate: "2026-07-27", source: "Google" },
+  { id: "mock-d10", name: "Niurki Castillo", company: "Sistema Completo 5kW", phone: "+5355100112", email: "niurki.c@email.com", value: 3500, stage: "Terminado", expectedDate: "2026-07-25", source: "Interno" },
+  { id: "mock-d11", name: "Ernesto Guevara", company: "Inversor 5kW", phone: "+5355111222", email: "ernesto@email.com", value: 800, stage: "Contacto", expectedDate: "2026-07-21", source: "Web" },
+  { id: "mock-d12", name: "Celia Sánchez", company: "Kit Solar 3kW", phone: "+5355222333", email: "celia@email.com", value: 2500, stage: "Facturado", expectedDate: "2026-07-22", source: "WhatsApp" },
+  { id: "mock-d13", name: "Camilo Cienfuegos", company: "Mantenimiento Preventivo", phone: "+5355333444", email: "camilo@email.com", value: 300, stage: "Feedback", expectedDate: "2026-07-23", source: "Cliente recurrente" },
+  { id: "mock-d14", name: "Frank País", company: "Batería Litio 48V", phone: "+5355444555", email: "frank@email.com", value: 1500, stage: "En Producción", expectedDate: "2026-07-26", source: "Google" },
+  { id: "mock-d15", name: "Vilma Espín", company: "Kit Solar 5kW", phone: "+5355555666", email: "vilma@email.com", value: 3900, stage: "Terminado", expectedDate: "2026-07-27", source: "Facebook" }
 ];
 
 // Mapeo entre los estados de Supabase y los del CRM local
