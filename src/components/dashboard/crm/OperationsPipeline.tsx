@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCrmStore, DealStage, ClientDeal } from '@/hooks/useCrmStore';
-import { MessageSquare, Phone, Search, ArrowRight, User, Calendar, DollarSign, Edit3, Clipboard, RefreshCw, X } from 'lucide-react';
+import { MessageSquare, Phone, Search, ArrowRight, User, Calendar, DollarSign, Edit3, Clipboard, RefreshCw, X, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRefundsStore } from '@/hooks/useRefundsStore';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { generateOfferPdf } from '@/lib/pdf-offer-generator';
 import { CONVOLTAJE_PRODUCTS as products } from '@/lib/products';
-import { FileText } from 'lucide-react';
 
 const STAGES: DealStage[] = ['Contacto', 'En Producción', 'Terminado', 'Facturado', 'Feedback'];
 
@@ -19,7 +18,12 @@ const STAGE_COLORS: Record<DealStage, string> = {
 };
 
 export default function OperationsPipeline() {
-  const { deals, moveDeal } = useCrmStore();
+  const { deals, moveDeal, fetchDeals } = useCrmStore();
+
+  useEffect(() => {
+    fetchDeals();
+  }, [fetchDeals]);
+
   const { addRefund } = useRefundsStore();
   const { currentUser } = useAuthStore();
   const [activeStage, setActiveStage] = useState<DealStage>('Contacto');

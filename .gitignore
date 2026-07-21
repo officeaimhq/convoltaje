@@ -30,4 +30,7 @@ dist-ssr
 
 # Custom agents/manus
 manus-storage/
+
+# MCP config (contains API keys)
+.agents/mcp_config.json
 tsconfig.tsbuildinfo

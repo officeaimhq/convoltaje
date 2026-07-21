@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format, addMonths, subMonths, addDays, subDays, addWeeks, subWeeks, startOfWeek, isSameDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Plus, Download, Calendar as CalendarIcon, Clock, MapPin, User, FileText } from "lucide-react";
@@ -69,7 +69,11 @@ export default function CalendarCore() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | undefined>(undefined);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
-  const { events, addEvent, updateEvent, deleteEvent, exportBackup } = useCalendarStore();
+  const { events, addEvent, updateEvent, deleteEvent, fetchEvents } = useCalendarStore();
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handlePrevious = () => {
     if (viewMode === 'mes') {

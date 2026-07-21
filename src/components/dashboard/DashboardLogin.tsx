@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthStore, UserSession } from '@/hooks/useAuthStore';
 import { useLocation } from 'wouter';
 import { Settings, LogIn, ShieldAlert } from 'lucide-react';
 
 export default function DashboardLogin() {
-  const { availableUsers, login } = useAuthStore();
+  const { availableUsers, login, fetchUsers, isLoading, error: storeError } = useAuthStore();
   const [, setLocation] = useLocation();
+  
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
   
   // States
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -61,6 +65,8 @@ export default function DashboardLogin() {
             <p className="text-white/60 text-sm">
               Selecciona un perfil para ingresar al panel de Convoltaje.
             </p>
+            {isLoading && <p className="text-[#00D9FF] text-sm mt-4">Cargando perfiles...</p>}
+            {storeError && <p className="text-[#FF6B35] text-sm mt-4">{storeError}</p>}
           </div>
 
           <div className="space-y-3 relative z-10">

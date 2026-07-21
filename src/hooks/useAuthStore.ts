@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { authService } from '../lib/services/authService';
 
 export type UserRole = 'comercial' | 'tecnico' | 'contable' | 'admin';
 
@@ -19,116 +20,41 @@ export interface UserSession {
 interface AuthState {
   currentUser: UserSession | null;
   availableUsers: UserSession[];
+  isLoading: boolean;
+  error: string | null;
+  fetchUsers: () => Promise<void>;
   login: (userId: string) => void;
   logout: () => void;
 }
-
-const mockUsers: UserSession[] = [
-  {
-    id: "u1",
-    name: "Ángel Eduardo",
-    role: "admin",
-    title: "CEO / Dueño",
-    avatar: "/images/fotos-plantilla-convoltaje/logo-convoltaje.jpg",
-    avatarOrigin: "center",
-    avatarZoom: 1.0,
-    clientsCount: 2000,
-    reviewsCount: 350
-  },
-  {
-    id: "u2",
-    name: "Laura",
-    role: "admin",
-    title: "Vice Directora",
-    avatar: "", // En blanco (iniciales)
-    avatarOrigin: "center",
-    avatarZoom: 1.0,
-    clientsCount: 0,
-    reviewsCount: 0
-  },
-  {
-    id: "u3",
-    name: "José Luis",
-    role: "contable",
-    title: "Contador / Marketing",
-    avatar: "/images/fotos-plantilla-convoltaje/Jose\u0301 Medina (Contador : Marketing.jpeg",
-    avatarOrigin: "center 22%",
-    avatarZoom: 2.4,
-    clientsCount: 0,
-    reviewsCount: 0
-  },
-  {
-    id: "u4",
-    name: "Yasiel",
-    role: "tecnico",
-    title: "Director Técnico",
-    avatar: "", // En blanco (iniciales)
-    avatarOrigin: "center",
-    avatarZoom: 1.0,
-    clientsCount: 0,
-    reviewsCount: 0
-  },
-  {
-    id: "u5",
-    name: "Samuel",
-    role: "admin",
-    title: "Administrador",
-    avatar: "/images/fotos-plantilla-convoltaje/samuel-explain.jpg",
-    avatarOrigin: "center 20%",
-    avatarZoom: 2.3,
-    clientsCount: 1250,
-    reviewsCount: 180
-  },
-  {
-    id: "u6",
-    name: "Niurki",
-    role: "comercial",
-    title: "Comercial Principal",
-    avatar: "/images/fotos-plantilla-convoltaje/Niurki Comercial.jpg",
-    avatarOrigin: "center 22%",
-    avatarZoom: 2.2,
-    clientsCount: 580,
-    reviewsCount: 90,
-    phone: "+5353097058"
-  },
-  {
-    id: "u7",
-    name: "Diana Rosa",
-    role: "comercial",
-    title: "Comercial",
-    avatar: "/images/fotos-plantilla-convoltaje/Diana Rosa comercial.jpg",
-    avatarOrigin: "center 22%",
-    avatarZoom: 2.2,
-    clientsCount: 320,
-    reviewsCount: 45,
-    phone: "+5355507913"
-  },
-  {
-    id: "u8",
-    name: "Daniel",
-    role: "tecnico",
-    title: "Técnico - Pinar del Río",
-    avatar: "/images/fotos-plantilla-convoltaje/Daniel, Pinar del Rio Tecnico.jpg",
-    avatarOrigin: "center 20%",
-    avatarZoom: 2.3,
-    clientsCount: 0,
-    reviewsCount: 15
-  }
-];
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       currentUser: null,
-      availableUsers: mockUsers,
+      availableUsers: [],
+      isLoading: false,
+      error: null,
+      
+      fetchUsers: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const profiles = await authService.getProfiles();
+          set({ availableUsers: profiles, isLoading: false });
+        } catch (error: any) {
+          console.error("Error al cargar perfiles:", error);
+          set({ error: error.message, isLoading: false });
+        }
+      },
+
       login: (userId: string) => set((state) => {
         const user = state.availableUsers.find(u => u.id === userId);
         return { currentUser: user || null };
       }),
+      
       logout: () => set({ currentUser: null })
     }),
     {
-      name: 'convoltaje-auth-storage-v2',
+      name: 'convoltaje-auth-storage-v3',
       partialize: (state) => ({ currentUser: state.currentUser }),
     }
   )

@@ -1,0 +1,13 @@
+{
+    "plugins": {
+        "science": {
+            "enabled": false
+        },
+        "firebase": {
+            "enabled": false
+        },
+        "android-cli-plugin": {
+            "enabled": false
+        }
+    }
+}
