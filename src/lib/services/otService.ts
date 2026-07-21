@@ -3,21 +3,49 @@ import { offlineService } from './offlineService';
 import { CalendarEvent } from '../../hooks/useCalendarStore';
 import { makeService } from './makeService';
 
+const MOCK_EVENTS: CalendarEvent[] = [
+  { id: "mock-ot1", title: "Instalación Kit Solar 3kW", date: "2026-07-21", time: "09:00", description: "Instalación completa en casa de José Rodríguez", clientName: "José Rodríguez", location: "Centro Habana, La Habana", workType: "instalacion", status: "pendiente", assignedTecnico: "Carlos" },
+  { id: "mock-ot2", title: "Levantamiento para Kit 5kW", date: "2026-07-21", time: "14:00", description: "Medición y presupuesto para Ana María Pérez", clientName: "Ana María Pérez", location: "Vedado, La Habana", workType: "levantamiento", status: "pendiente", assignedTecnico: "Samuel el Panel" },
+  { id: "mock-ot3", title: "Mantenimiento preventivo", date: "2026-07-22", time: "10:00", description: "Revisión trimestral de sistema 5kW", clientName: "Carlos Mendoza", location: "Playa, La Habana", workType: "mantenimiento", status: "pendiente", assignedTecnico: "Carlos" },
+  { id: "mock-ot4", title: "Instalación Bomba 2HP", date: "2026-07-22", time: "09:00", description: "Instalación de bomba de agua con panel solar", clientName: "Pedro López", location: "Guanabacoa, La Habana", workType: "instalacion", status: "en_curso", assignedTecnico: "Carlos" },
+  { id: "mock-ot5", title: "Entrega Kit Solar 10kW", date: "2026-07-23", time: "08:00", description: "Instalación completa sistema 10kW", clientName: "Marta Díaz", location: "San Miguel del Padrón", workType: "instalacion", status: "completado", assignedTecnico: "Carlos" },
+  { id: "mock-ot6", title: "Revisión Kit 3kW", date: "2026-07-23", time: "14:00", description: "Cliente reporta baja producción", clientName: "Oscar Hernández", location: "Cerro, La Habana", workType: "mantenimiento", status: "pendiente", assignedTecnico: "Samuel el Panel" },
+  { id: "mock-ot7", title: "Levantamiento bomba 1.5HP", date: "2026-07-24", time: "10:00", description: "Evaluación para instalación de bomba", clientName: "Roberto Sánchez", location: "10 de Octubre, La Habana", workType: "levantamiento", status: "pendiente", assignedTecnico: "Carlos" },
+  { id: "mock-ot8", title: "Instalación Kit Solar 1kW", date: "2026-07-24", time: "09:00", description: "Sistema pequeño para residencia", clientName: "Diana Rosa Alfonso", location: "Plaza, La Habana", workType: "instalacion", status: "completado", assignedTecnico: "Carlos" },
+  { id: "mock-ot9", title: "Facturación mantenimiento", date: "2026-07-25", time: "11:00", description: "Cobro de mantenimiento trimestral", clientName: "Pedro López", location: "Guanabacoa, La Habana", workType: "instalacion", status: "pendiente", assignedTecnico: "María" },
+  { id: "mock-ot10", title: "Instalación Kit Solar 3kW", date: "2026-07-25", time: "09:00", description: "Nueva instalación residencial", clientName: "Laura Torres", location: "Marianao, La Habana", workType: "instalacion", status: "pendiente", assignedTecnico: "Carlos" },
+  { id: "mock-ot11", title: "Transporte de equipos", date: "2026-07-26", time: "07:00", description: "Carga y traslado de paneles y baterías", clientName: "Logística", location: "Almacén Central, La Habana", workType: "instalacion", status: "pendiente", assignedTecnico: "Pedro" },
+  { id: "mock-ot12", title: "Instalación Kit 5kW completo", date: "2026-07-26", time: "09:00", description: "Instalación completa con batería", clientName: "Ana María Pérez", location: "Vedado, La Habana", workType: "instalacion", status: "pendiente", assignedTecnico: "Carlos" },
+  { id: "mock-ot13", title: "Revisión final Kit 10kW", date: "2026-07-27", time: "10:00", description: "Verificación de producción y ajustes", clientName: "Marta Díaz", location: "San Miguel del Padrón", workType: "mantenimiento", status: "pendiente", assignedTecnico: "Samuel el Panel" },
+  { id: "mock-ot14", title: "Levantamiento Kit 7kW", date: "2026-07-27", time: "14:00", description: "Medición para sistema grande", clientName: "Oscar Hernández", location: "Cerro, La Habana", workType: "levantamiento", status: "pendiente", assignedTecnico: "Samuel el Panel" },
+  { id: "mock-ot15", title: "Aplazado: Instalación 3kW", date: "2026-07-21", time: "11:00", description: "Cliente pidió reprogramar", clientName: "José Rodríguez", location: "Centro Habana", workType: "instalacion", status: "aplazado", assignedTecnico: "Carlos" },
+];
+
 export const otService = {
   /**
    * Obtiene todas las órdenes de trabajo mapeadas a CalendarEvent
    */
   async getOTs(): Promise<CalendarEvent[]> {
-    const { data, error } = await supabase
-      .from('ordenes_trabajo')
-      .select('*');
+    try {
+      const { data, error } = await supabase
+        .from('ordenes_trabajo')
+        .select('*');
 
-    if (error) {
-      console.error('Error obteniendo OTs:', error);
-      throw error;
+      if (error) {
+        console.warn('Error obteniendo OTs, usando mocks:', error);
+        return MOCK_EVENTS;
+      }
+
+      if (!data || data.length === 0) {
+        console.warn('Supabase sin OTs, usando mocks.');
+        return MOCK_EVENTS;
+      }
+
+      return (data || []).map(mapOTtoEvent);
+    } catch (err) {
+      console.warn('Excepción al consultar Supabase en OTs, usando mocks:', err);
+      return MOCK_EVENTS;
     }
-
-    return (data || []).map(mapOTtoEvent);
   },
 
   async createOT(event: Omit<CalendarEvent, 'id'>) {

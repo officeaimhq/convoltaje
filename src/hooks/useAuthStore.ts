@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authService } from '../lib/services/authService';
 
-export type UserRole = 'comercial' | 'tecnico' | 'contable' | 'admin';
+export type UserRole = 'comercial' | 'tecnico' | 'contable' | 'admin' | 'transportista' | 'proyectista' | 'almacenero';
 
 export interface UserSession {
   id: string;

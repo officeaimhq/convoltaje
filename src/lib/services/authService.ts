@@ -3,8 +3,13 @@ import { UserSession, UserRole } from '../../hooks/useAuthStore';
 
 const MOCK_PROFILES: UserSession[] = [
   { id: "1", name: "Admin", role: "admin", title: "Administrador", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
-  { id: "2", name: "Niurki", role: "comercial", title: "Asesora Comercial", avatar: "https://i.pravatar.cc/150?u=niurki", phone: "+5355144097", clientsCount: 15, reviewsCount: 45 },
-  { id: "3", name: "Diana Rosa", role: "comercial", title: "Asesora Comercial", avatar: "https://i.pravatar.cc/150?u=diana", phone: "+5355144097", clientsCount: 12, reviewsCount: 38 }
+  { id: "2", name: "Niurki", role: "comercial", title: "Asesora Comercial", avatar: "", phone: "+5355144097", clientsCount: 15, reviewsCount: 45 },
+  { id: "3", name: "Diana Rosa", role: "comercial", title: "Asesora Comercial", avatar: "", phone: "+5355144097", clientsCount: 12, reviewsCount: 38 },
+  { id: "4", name: "Carlos", role: "tecnico", title: "Técnico Instalador", avatar: "", phone: "+5355144098", clientsCount: 8, reviewsCount: 22 },
+  { id: "5", name: "María", role: "contable", title: "Contable", avatar: "", phone: "+5355144099", clientsCount: 0, reviewsCount: 0 },
+  { id: "6", name: "Pedro", role: "transportista", title: "Transportista", avatar: "", phone: "+5355144100", clientsCount: 6, reviewsCount: 12 },
+  { id: "7", name: "Samuel el Panel", role: "proyectista", title: "Proyectista", avatar: "", phone: "+5355144101", clientsCount: 10, reviewsCount: 30 },
+  { id: "8", name: "Yosvany", role: "almacenero", title: "Almacenero", avatar: "", phone: "+5355144102", clientsCount: 0, reviewsCount: 0 }
 ];
 
 export const authService = {
