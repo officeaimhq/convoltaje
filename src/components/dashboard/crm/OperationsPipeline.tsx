@@ -6,6 +6,7 @@ import { useRefundsStore } from '@/hooks/useRefundsStore';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { generateOfferPdf } from '@/lib/pdf-offer-generator';
 import { CONVOLTAJE_PRODUCTS as products } from '@/lib/products';
+import PaymentEntryModal from './PaymentEntryModal';
 
 const STAGES: DealStage[] = ['Contacto', 'En Producción', 'Terminado', 'Facturado', 'Feedback'];
 
@@ -34,6 +35,9 @@ export default function OperationsPipeline() {
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [refundAmount, setRefundAmount] = useState('');
   const [refundMaterialStatus, setRefundMaterialStatus] = useState<'disponible' | 'merma' | 'revision_tecnica'>('disponible');
+
+  // Estado para Modal de Pago
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   // Filtrar clientes por etapa activa y término de búsqueda
   const stageDeals = deals.filter(d => d.stage === activeStage);
@@ -285,6 +289,14 @@ export default function OperationsPipeline() {
                 <RefreshCw size={12} />
                 Iniciar Reintegro
               </button>
+
+              <button
+                onClick={() => setShowPaymentModal(true)}
+                className="px-3 py-2 text-[10px] font-bold rounded-xl border border-[#00FF66]/30 bg-[#00FF66]/10 hover:bg-[#00FF66]/20 text-[#00FF66] transition-all flex items-center gap-1.5 active:scale-[0.96]"
+              >
+                <DollarSign size={12} />
+                Registrar Pago
+              </button>
             </div>
 
             {/* Cambiar etapa (Acción rápida) */}
@@ -392,6 +404,15 @@ export default function OperationsPipeline() {
         </div>
       )}
 
+      {/* Modal de Pago */}
+      {showPaymentModal && selectedDeal && (
+        <PaymentEntryModal
+          dealId={selectedDeal.id}
+          dealName={selectedDeal.name}
+          dealValue={selectedDeal.value}
+          onClose={() => setShowPaymentModal(false)}
+        />
+      )}
     </div>
   );
 }
