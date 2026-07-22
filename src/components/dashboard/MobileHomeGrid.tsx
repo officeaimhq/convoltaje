@@ -48,7 +48,6 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',  icon: LayoutGrid              },
   ],
   proyectista: [
-    { id: 'calculadora',  view: 'calculadora',    label: 'Calculadora Técnica', icon: Calculator       },
     { id: 'calendario',   view: 'calendario',     label: 'Planificación',      icon: Calendar, badge: 1 },
     { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',       icon: LayoutGrid        },
   ],
@@ -67,6 +66,7 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
 
 const TILE_STYLES: Record<string, string> = {
   tecnico: 'aspect-[4/5]',
+  proyectista: 'aspect-[4/5]',
 };
 
 export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
@@ -76,9 +76,10 @@ export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
 
   const role = currentUser.role;
   const isTecnico = role === 'tecnico';
+  const isSimplifiedRole = role === 'tecnico' || role === 'proyectista';
 
   const primaryTiles = TILES_BY_ROLE[role] ?? TILES_BY_ROLE['admin'];
-  const allTiles = [...primaryTiles, UTILES_TILE];
+  const allTiles = isSimplifiedRole ? primaryTiles : [...primaryTiles, UTILES_TILE];
   const tiles = allTiles.filter(t => canAccessView(role, t.view));
 
   const tileClass = TILE_STYLES[role] ?? 'aspect-square';
