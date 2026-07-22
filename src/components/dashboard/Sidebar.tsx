@@ -1,4 +1,6 @@
 import { Calendar, LayoutDashboard, Package, PieChart, Users } from "lucide-react";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { canAccessView } from "@/hooks/useRoleAccess";
 
 export type AdminView = 'inicio' | 'calendario' | 'pipeline' | 'almacen' | 'finanzas' | 'instalaciones' | 'quejas' | 'ajustes' | 'calculadora' | 'historial' | 'plantillas' | 'errores' | 'manuales' | 'asignaciones' | 'validacion' | 'herramientas' | 'utiles';
 
@@ -8,13 +10,17 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ currentView, onChangeView }: SidebarProps) {
-  const navItems = [
+  const { currentUser } = useAuthStore();
+  
+  const allNavItems: { id: AdminView; label: string; icon: React.ReactNode }[] = [
     { id: 'inicio', label: 'Inicio', icon: <LayoutDashboard size={20} /> },
     { id: 'pipeline', label: 'Pipeline CRM', icon: <Users size={20} /> },
     { id: 'calendario', label: 'Calendario', icon: <Calendar size={20} /> },
     { id: 'almacen', label: 'Almacén', icon: <Package size={20} /> },
     { id: 'finanzas', label: 'Finanzas', icon: <PieChart size={20} /> },
   ];
+
+  const navItems = allNavItems.filter(item => canAccessView(currentUser?.role, item.id));
 
   return (
     <div className="hidden lg:flex flex-col w-64 h-screen bg-[#0d233a]/90 backdrop-blur-xl border-r border-white/10 flex-shrink-0">

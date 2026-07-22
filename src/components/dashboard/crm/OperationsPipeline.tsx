@@ -4,6 +4,7 @@ import { MessageSquare, Phone, Search, ArrowRight, User, Calendar, DollarSign, E
 import { toast } from 'sonner';
 import { useRefundsStore } from '@/hooks/useRefundsStore';
 import { useAuthStore } from '@/hooks/useAuthStore';
+import { useSettingsStore, formatEmployeeName } from '@/hooks/useSettingsStore';
 import { generateOfferPdf } from '@/lib/pdf-offer-generator';
 import { CONVOLTAJE_PRODUCTS as products, type Product } from '@/lib/products';
 import PaymentEntryModal from './PaymentEntryModal';
@@ -68,6 +69,7 @@ const STAGE_COLORS: Record<DealStage, string> = {
 
 export default function OperationsPipeline() {
   const { deals, moveDeal, fetchDeals, updateDeal } = useCrmStore();
+  const { teamMembers } = useSettingsStore();
 
   useEffect(() => {
     fetchDeals();
@@ -227,7 +229,7 @@ export default function OperationsPipeline() {
                         <p className="text-xs text-white/55 truncate">{deal.company}</p>
                         {deal.salesAgent && (
                           <span className="text-[10px] text-[#FFB800] font-medium truncate">
-                            👤 {deal.salesAgent}
+                            👤 {formatEmployeeName(deal.salesAgent, teamMembers)}
                           </span>
                         )}
                         {deal.stage === 'Feedback' && (
@@ -290,7 +292,7 @@ export default function OperationsPipeline() {
               </div>
               <div>
                 <span className="text-white/40 block mb-0.5">Comercial Asignado</span>
-                <span className="font-semibold text-[#FFB800] block truncate">{selectedDeal.salesAgent || currentUser?.name || 'Agente Comercial'}</span>
+                <span className="font-semibold text-[#FFB800] block truncate">{formatEmployeeName(selectedDeal.salesAgent || currentUser?.name || 'Agente Comercial', teamMembers)}</span>
               </div>
               <div>
                 <span className="text-white/40 block mb-0.5">Proyecto / Equipo</span>

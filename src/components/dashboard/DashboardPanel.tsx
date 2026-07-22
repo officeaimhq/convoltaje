@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LogOut, ChevronLeft } from "lucide-react";
+import { LogOut, ChevronLeft, ShieldAlert } from "lucide-react";
 import { useLocation } from "wouter";
 import CalendarCore from "./calendar/CalendarCore";
 import OperationsPipeline from "./crm/OperationsPipeline";
@@ -18,6 +18,7 @@ import ValidationFlow from "./ValidationFlow";
 import HerramientasView from "./HerramientasView";
 import UtilesHub from "./UtilesHub";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { canAccessView } from "@/hooks/useRoleAccess";
 import { AdminView } from "./Sidebar";
 
 export default function DashboardPanel() {
@@ -49,6 +50,26 @@ export default function DashboardPanel() {
   };
 
   const renderContent = () => {
+    // Verificación de Permisos por Rol (RBAC)
+    if (currentView !== 'inicio' && !canAccessView(currentUser?.role, currentView)) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-center py-16 px-4 animate-in fade-in zoom-in-95">
+          <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mb-4">
+            <ShieldAlert size={32} />
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">Acceso Restringido</h2>
+          <p className="text-sm text-white/60 max-w-xs mb-6">
+            Tu rol de <span className="text-[#00D9FF] font-bold uppercase">{currentUser?.role}</span> no tiene permisos para acceder a la sección de <span className="text-white font-bold">{currentView}</span>.
+          </p>
+          <button
+            onClick={() => setCurrentView('inicio')}
+            className="px-5 py-2.5 rounded-xl bg-[#00D9FF] hover:bg-[#00c5e6] text-[#0b1b33] font-black text-xs transition-all shadow-lg"
+          >
+            Volver a Inicio
+          </button>
+        </div>
+      );
+    }
     switch (currentView) {
       case 'inicio':
         return <MobileHomeGrid onSelectView={setCurrentView} />;

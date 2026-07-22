@@ -45,10 +45,13 @@ function Section({
 
 // ─── Etiqueta de Rol ───────────────────────────────────────────────────
 const ROLE_COLORS: Record<string, string> = {
-  admin:     "bg-purple-500/20 text-purple-300 border-purple-500/30",
-  comercial: "bg-[#00D9FF]/15 text-[#00D9FF] border-[#00D9FF]/25",
-  tecnico:   "bg-emerald-500/15 text-emerald-300 border-emerald-500/25",
-  contable:  "bg-amber-500/15 text-amber-300 border-amber-500/25",
+  admin:         "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  comercial:     "bg-[#00D9FF]/15 text-[#00D9FF] border-[#00D9FF]/25",
+  tecnico:       "bg-emerald-500/15 text-emerald-300 border-emerald-500/25",
+  contable:      "bg-amber-500/15 text-amber-300 border-amber-500/25",
+  proyectista:   "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
+  almacenero:    "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+  transportista: "bg-blue-500/20 text-blue-300 border-blue-500/30",
 };
 function RoleBadge({ role }: { role: string }) {
   return (
@@ -294,9 +297,14 @@ export default function AjustesMain() {
                 /* — Vista Normal — */
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex flex-col gap-1 flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-bold text-white truncate">{member.name}</span>
                       <RoleBadge role={member.role} />
+                      {!member.isActive && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30">
+                          (ex-empleado / archivado)
+                        </span>
+                      )}
                     </div>
                     <span className="text-[11px] text-white/50 truncate">{member.title}</span>
                     <div className="flex items-center gap-3 text-[10px] text-white/40 mt-0.5">
@@ -317,9 +325,13 @@ export default function AjustesMain() {
                   {isAdmin && (
                     <div className="flex items-center gap-1.5 flex-shrink-0">
                       <button
-                        onClick={() => updateTeamMember(member.id, { isActive: !member.isActive })}
+                        onClick={() => {
+                          const nextActive = !member.isActive;
+                          updateTeamMember(member.id, { isActive: nextActive });
+                          toast.success(nextActive ? `${member.name} reactivado.` : `${member.name} archivado como ex-empleado.`);
+                        }}
                         className={`p-1.5 rounded-lg transition-colors border ${member.isActive ? "text-[#00D9FF] bg-[#00D9FF]/10 border-[#00D9FF]/20 hover:bg-[#00D9FF]/20" : "text-white/30 bg-white/5 border-white/10 hover:bg-white/10"}`}
-                        title={member.isActive ? "Desactivar" : "Activar"}
+                        title={member.isActive ? "Archivar (Dar de baja)" : "Reactivar"}
                       >
                         {member.isActive ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
                       </button>
@@ -331,12 +343,13 @@ export default function AjustesMain() {
                       </button>
                       <button
                         onClick={() => {
-                          if (confirm(`¿Eliminar a ${member.name} del equipo?`)) {
-                            removeTeamMember(member.id);
-                            toast.success(`${member.name} eliminado.`);
+                          if (confirm(`¿Archivar a ${member.name}? Sus registros históricos e historial de OTs se conservarán con la etiqueta (ex-empleado).`)) {
+                            updateTeamMember(member.id, { isActive: false });
+                            toast.success(`${member.name} archivado correctamente.`);
                           }
                         }}
                         className="p-1.5 rounded-lg text-red-400/60 hover:text-red-400 bg-white/5 hover:bg-red-400/10 border border-white/10 transition-colors"
+                        title="Archivar sin borrar historial"
                       >
                         <Trash2 size={13} />
                       </button>
@@ -351,10 +364,10 @@ export default function AjustesMain() {
           {isAdmin && (
             showAddMember ? (
               <div className="bg-black/20 border border-[#00D9FF]/20 rounded-xl p-4 flex flex-col gap-3 mt-1">
-                <h4 className="text-xs font-bold text-[#00D9FF]">Nuevo Integrante del Equipo</h4>
+                <h4 className="text-xs font-bold text-[#00D9FF]">Alta de Nuevo Personal (RRHH)</h4>
                 <div className="grid grid-cols-2 gap-2">
                   <input
-                    placeholder="Nombre *"
+                    placeholder="Nombre completo *"
                     value={newMember.name}
                     onChange={(e) => setNewMember((n) => ({ ...n, name: e.target.value }))}
                     className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none col-span-2"
@@ -372,8 +385,11 @@ export default function AjustesMain() {
                   >
                     <option value="comercial">Comercial</option>
                     <option value="tecnico">Técnico</option>
+                    <option value="proyectista">Proyectista</option>
                     <option value="contable">Contable</option>
-                    <option value="admin">Admin</option>
+                    <option value="almacenero">Almacenero</option>
+                    <option value="transportista">Transportista</option>
+                    <option value="admin">Administrador</option>
                   </select>
                   <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
                     <span className="text-white/40 text-[10px]">Comisión %</span>
@@ -388,7 +404,7 @@ export default function AjustesMain() {
                   </div>
                   <input
                     placeholder="Teléfono (+53...)"
-                    value={newMember.phone}
+                    value={newMember.phone || ''}
                     onChange={(e) => setNewMember((n) => ({ ...n, phone: e.target.value }))}
                     className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none col-span-2"
                   />

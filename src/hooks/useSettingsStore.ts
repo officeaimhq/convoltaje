@@ -4,11 +4,23 @@ import { persist } from 'zustand/middleware';
 export interface TeamMember {
   id: string;
   name: string;
-  role: 'admin' | 'comercial' | 'tecnico' | 'contable';
+  role: 'admin' | 'comercial' | 'tecnico' | 'contable' | 'proyectista' | 'almacenero' | 'transportista';
   title: string;
   commissionPct: number; // % de comisión sobre ventas (0 si no aplica)
   phone?: string;
+  email?: string;
+  avatar?: string;
   isActive: boolean;
+}
+
+export function formatEmployeeName(nameOrId: string | undefined, teamMembers: TeamMember[]): string {
+  if (!nameOrId) return 'Sin asignar';
+  const cleanName = nameOrId.replace(/\s*\(ex-empleado\)$/i, '').trim();
+  const member = teamMembers.find(m => m.name.toLowerCase() === cleanName.toLowerCase() || m.id === cleanName);
+  if (member && !member.isActive) {
+    return `${member.name} (ex-empleado)`;
+  }
+  return nameOrId;
 }
 
 export interface WhatsAppTemplate {

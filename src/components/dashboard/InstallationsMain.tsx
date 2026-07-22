@@ -5,6 +5,7 @@ import {
   Clock, CheckSquare, Square, Trash2, MessageSquare, AlertTriangle 
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSettingsStore, formatEmployeeName } from "@/hooks/useSettingsStore";
 
 export interface InstallationWorkOrder {
   id: string;
@@ -105,6 +106,7 @@ const defaultInstallations: InstallationWorkOrder[] = [
 ];
 
 export default function InstallationsMain() {
+  const { teamMembers } = useSettingsStore();
   const [installations, setInstallations] = useState<InstallationWorkOrder[]>(() => {
     const saved = localStorage.getItem("convoltaje_installations");
     return saved ? JSON.parse(saved) : defaultInstallations;
@@ -493,11 +495,11 @@ export default function InstallationsMain() {
                     <div className="grid grid-cols-2 gap-3 text-xs border-b border-white/5 pb-3">
                       <div>
                         <span className="text-[10px] text-white/40 block font-bold">COMERCIAL</span>
-                        <span className="text-white font-medium">{inst.comercial}</span>
+                        <span className="text-white font-medium">{formatEmployeeName(inst.comercial, teamMembers)}</span>
                       </div>
                       <div>
                         <span className="text-[10px] text-white/40 block font-bold">INGENIERO / TÉCNICO</span>
-                        <span className="text-white font-medium">{inst.tecnico || "Pendiente"}</span>
+                        <span className="text-white font-medium">{inst.tecnico ? formatEmployeeName(inst.tecnico, teamMembers) : "Pendiente"}</span>
                       </div>
                       <div className="col-span-2">
                         <span className="text-[10px] text-white/40 block font-bold">DESCRIPCIÓN TÉCNICA</span>

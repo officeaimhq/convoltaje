@@ -1,8 +1,9 @@
 import { useAuthStore } from '@/hooks/useAuthStore';
+import { canAccessView } from '@/hooks/useRoleAccess';
 import {
   UserPlus, Wrench, Flame, BarChart3,
   Package, Calendar, Sliders, CheckCircle2,
-  ClipboardList, Star, Asterisk, LayoutGrid
+  ClipboardList, Star, Asterisk, LayoutGrid, Calculator, FileText
 } from 'lucide-react';
 import { AdminView } from './Sidebar';
 
@@ -10,7 +11,7 @@ interface MobileHomeGridProps {
   onSelectView: (view: AdminView) => void;
 }
 
-// ─── Tile "Útiles" siempre en posición 9 (índice 8) ──────────────────
+// ─── Tile "Útiles" siempre al final ──────────────────
 const UTILES_TILE = {
   id: 'utiles',
   view: 'utiles' as AdminView,
@@ -19,12 +20,8 @@ const UTILES_TILE = {
   badge: undefined as number | undefined,
 };
 
-// ─── Grids por rol (siempre 8 tiles primarios + tile 9 = Útiles) ──────
-// Cada array tiene exactamente 8 items. El componente agrega Útiles como item 9.
-
+// ─── Grids por rol ──────────────────────────────────
 const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string; icon: React.ElementType; badge?: number }[]> = {
-
-  // ───── ADMIN (8 tiles principales) ─────────────────────────────────
   admin: [
     { id: 'clientes',      view: 'pipeline',      label: 'Clientes',      icon: UserPlus,      badge: 16 },
     { id: 'instalaciones', view: 'instalaciones',  label: 'Instalaciones', icon: Wrench,        badge: 1  },
@@ -35,45 +32,41 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'ajustes',       view: 'ajustes',        label: 'Ajustes',       icon: Sliders                 },
     { id: 'validacion',    view: 'validacion',     label: 'Validación',    icon: CheckCircle2            },
   ],
-  // Útiles → Calculadora, Plantillas, Errores MUST, Historial, Manuales
-
-  // ───── COMERCIAL (8 tiles principales) ─────────────────────────────
   comercial: [
     { id: 'clientes',      view: 'pipeline',      label: 'Clientes',      icon: UserPlus,      badge: 16 },
-    { id: 'instalaciones', view: 'instalaciones',  label: 'Instalaciones', icon: Wrench,        badge: 1  },
-    { id: 'quejas',        view: 'quejas',         label: 'Quejas',        icon: Flame,         badge: 1  },
-    { id: 'estadisticas',  view: 'finanzas',       label: 'Estadísticas',  icon: BarChart3               },
-    { id: 'inventario',    view: 'almacen',        label: 'Inventario',    icon: Package,       badge: 5  },
     { id: 'calendario',    view: 'calendario',     label: 'Calendario',    icon: Calendar,      badge: 1  },
-    { id: 'ajustes',       view: 'ajustes',        label: 'Ajustes',       icon: Sliders                 },
-    { id: 'validacion',    view: 'validacion',     label: 'Validación',    icon: CheckCircle2            },
+    { id: 'quejas',        view: 'quejas',         label: 'Quejas',        icon: Flame,         badge: 1  },
+    { id: 'calculadora',   view: 'calculadora',    label: 'Calculadora',   icon: Calculator              },
+    { id: 'plantillas',    view: 'plantillas',     label: 'Plantillas',    icon: FileText                },
   ],
-  // Útiles → Calculadora, Plantillas
-
-  // ───── CONTABLE / JOSÉ LUIS (8 tiles principales) ──────────────────
-  contable: [
-    { id: 'clientes',     view: 'pipeline',    label: 'Clientes',      icon: UserPlus,   badge: 16 },
-    { id: 'estadisticas', view: 'finanzas',    label: 'Estadísticas',  icon: BarChart3             },
-    { id: 'inventario',   view: 'almacen',     label: 'Inventario',    icon: Package,    badge: 5  },
-    { id: 'calendario',   view: 'calendario',  label: 'Calendario',    icon: Calendar,   badge: 1  },
-    { id: 'ajustes',      view: 'ajustes',     label: 'Ajustes',       icon: Sliders               },
-    { id: 'validacion',   view: 'validacion',  label: 'Validación',    icon: CheckCircle2          },
-    { id: 'historial',    view: 'historial',   label: 'Historial',     icon: ClipboardList         },
-    { id: 'instalaciones',view: 'instalaciones',label: 'Instalaciones',icon: Wrench,     badge: 1  },
-  ],
-  // Útiles → Calculadora, Manuales, Plantillas, Errores MUST
-
-  // ───── TÉCNICO (solo 3 tiles — layout simplificado) ─────────────────
   tecnico: [
-    { id: 'asignaciones', view: 'asignaciones', label: 'Asignaciones', icon: ClipboardList, badge: 2 },
-    { id: 'validacion',   view: 'validacion',   label: 'Validación',   icon: CheckCircle2            },
-    { id: 'herramientas', view: 'herramientas', label: 'Herramientas', icon: LayoutGrid              },
+    { id: 'asignaciones', view: 'asignaciones',   label: 'Asignaciones',  icon: ClipboardList, badge: 2 },
+    { id: 'instalaciones', view: 'instalaciones', label: 'Instalaciones', icon: Wrench,        badge: 1 },
+    { id: 'calendario',   view: 'calendario',     label: 'Calendario',    icon: Calendar                },
+    { id: 'inventario',   view: 'almacen',        label: 'Inventario',    icon: Package                 },
+    { id: 'validacion',   view: 'validacion',     label: 'Validación',    icon: CheckCircle2            },
+    { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',  icon: LayoutGrid              },
+  ],
+  proyectista: [
+    { id: 'calculadora', view: 'calculadora',     label: 'Calculadora Técnica', icon: Calculator       },
+    { id: 'calendario',  view: 'calendario',      label: 'Planificación',      icon: Calendar, badge: 1 },
+    { id: 'plantillas',  view: 'plantillas',      label: 'Plantillas',         icon: FileText           },
+  ],
+  transportista: [
+    { id: 'inventario',  view: 'almacen',         label: 'Carga / Almacén',    icon: Package, badge: 3  },
+  ],
+  almacenero: [
+    { id: 'inventario',  view: 'almacen',         label: 'Gestión Almacén',    icon: Package, badge: 5  },
+  ],
+  contable: [
+    { id: 'estadisticas', view: 'finanzas',       label: 'Finanzas & Stats',   icon: BarChart3          },
+    { id: 'inventario',   view: 'almacen',        label: 'Inventario',         icon: Package            },
+    { id: 'plantillas',   view: 'plantillas',     label: 'Plantillas',         icon: FileText           },
   ],
 };
 
-// ─── Estilos del tile según rol ─────────────────────────────────────
 const TILE_STYLES: Record<string, string> = {
-  tecnico: 'aspect-[4/5]', // tiles más grandes para técnicos (solo 3)
+  tecnico: 'aspect-[4/5]',
 };
 
 export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
@@ -85,9 +78,8 @@ export default function MobileHomeGrid({ onSelectView }: MobileHomeGridProps) {
   const isTecnico = role === 'tecnico';
 
   const primaryTiles = TILES_BY_ROLE[role] ?? TILES_BY_ROLE['admin'];
-
-  // Para todos los roles que NO son técnico, siempre agregamos el tile Útiles como 9.º
-  const tiles = isTecnico ? primaryTiles : [...primaryTiles, UTILES_TILE];
+  const allTiles = [...primaryTiles, UTILES_TILE];
+  const tiles = allTiles.filter(t => canAccessView(role, t.view));
 
   const tileClass = TILE_STYLES[role] ?? 'aspect-square';
   const gridCols  = isTecnico ? 'grid-cols-3' : 'grid-cols-3';
