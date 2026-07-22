@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type QuejaPriority = 'incendio' | 'instalacion_incompleta' | 'mal_funcionamiento' | 'atencion_inadecuada';
+export type ComplaintCategory = 'producto' | 'instalacion' | 'facturacion' | 'otro';
+export type ComplaintPriority = 'baja' | 'media' | 'alta' | 'critica';
 
 export interface Complaint {
   id: string;
@@ -16,7 +18,9 @@ export interface Complaint {
   status: "diagnostico" | "visita" | "dictamen" | "resolucion" | "resuelta" | "rechazada";
   assignedTech?: string;
   errorMust?: string;
-  priority_category: QuejaPriority;
+  priority_category?: QuejaPriority;
+  category: ComplaintCategory;
+  priority: ComplaintPriority;
   checklist: {
     id: string;
     label: string;

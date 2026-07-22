@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Flame, Calendar, MapPin, User, Plus, Phone, 
   CheckCircle2, ClipboardList, Clock, CheckSquare, 
   Square, Trash2, MessageSquare, AlertTriangle, ShieldCheck, 
-  ShieldAlert, Copy, RefreshCw, BookOpen, AlertOctagon
+  ShieldAlert, Copy, RefreshCw, BookOpen, AlertOctagon,
+  Package, Wrench, CreditCard, HelpCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { differenceInDays, parseISO, format, addDays, addMonths } from "date-fns";
 import { es } from "date-fns/locale";
-import { useQuejasStore, Complaint, QuejaPriority } from "@/hooks/useQuejasStore";
-import { useEffect } from "react";
+import { useQuejasStore, Complaint, QuejaPriority, ComplaintCategory, ComplaintPriority } from "@/hooks/useQuejasStore";
 
 const defaultComplaints: Complaint[] = [
   {
@@ -19,12 +19,14 @@ const defaultComplaints: Complaint[] = [
     location: "Calle 10 #1405, Vedado, La Habana",
     provincia: "La Habana",
     systemType: "Sistema 6K PLUS",
-    installationDate: "2026-06-15", // Hace menos de un mes
-    warrantyMonths: 3, // Sistemas de hasta 6kW = 3 meses de garantía
+    installationDate: "2026-06-15",
+    warrantyMonths: 3,
     symptom: "El inversor MUST se apaga constantemente y muestra el Error 08 (Sobretensión del bus de CC) en la pantalla. Pitido continuo molesto.",
     status: "visita",
     assignedTech: "Yasiel (Director Técnico)",
     errorMust: "Error 08 (Sobretensión de Bus)",
+    category: "producto",
+    priority: "alta",
     priority_category: "mal_funcionamiento",
     checklist: [
       { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
@@ -42,11 +44,13 @@ const defaultComplaints: Complaint[] = [
     location: "Cárdenas, Matanzas",
     provincia: "Matanzas",
     systemType: "Sistema Básico - 1500W",
-    installationDate: "2026-03-10", // Hace 4 meses (Garantía expiró el 10 de junio)
+    installationDate: "2026-03-10",
     warrantyMonths: 3,
     symptom: "El inversor no enciende después de una tormenta eléctrica con descargas el fin de semana. Los breakers de paneles estaban abajo.",
     status: "dictamen",
     assignedTech: "Carlos (Técnico Matanzas)",
+    category: "instalacion",
+    priority: "media",
     priority_category: "instalacion_incompleta",
     checklist: [
       { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
@@ -64,11 +68,13 @@ const defaultComplaints: Complaint[] = [
     location: "San Antonio de los Baños, Artemisa",
     provincia: "Artemisa",
     systemType: "EcoFlow DELTA 2 Max (integrado)",
-    installationDate: "2026-07-02", // Hace unos días (Garantía activa de 1 mes)
-    warrantyMonths: 1, // Powerstation integrada a sistema = 1 mes de garantía
+    installationDate: "2026-07-02",
+    warrantyMonths: 1,
     symptom: "La EcoFlow se apaga repentinamente al encender la olla arrocera de noche, a pesar de estar al 80% de carga.",
     status: "diagnostico",
     isEcoFlow: true,
+    category: "producto",
+    priority: "critica",
     priority_category: "incendio",
     checklist: [
       { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
@@ -87,82 +93,17 @@ export default function QuejasMain() {
   // Initialize default complaints if empty
   useEffect(() => {
     if (complaints.length === 0) {
-      const defaultComps: Complaint[] = [
-        {
-          id: "queja-1",
-          clientName: "Marta Valdés",
-          phone: "+5353829104",
-          location: "Calle 10 #1405, Vedado, La Habana",
-          provincia: "La Habana",
-          systemType: "Sistema 6K PLUS",
-          installationDate: "2026-06-15",
-          warrantyMonths: 3,
-          symptom: "El inversor MUST se apaga constantemente y muestra el Error 08 (Sobretensión del bus de CC) en la pantalla. Pitido continuo molesto.",
-          status: "visita",
-          assignedTech: "Yasiel (Director Técnico)",
-          errorMust: "Error 08 (Sobretensión de Bus)",
-          priority_category: "mal_funcionamiento",
-          checklist: [
-            { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
-            { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Error 08)", completed: true },
-            { id: "ch-3", label: "Inspección técnica provincial en sitio", completed: false },
-            { id: "ch-4", label: "Dictamen: Reposición autorizada por Ángel", completed: false },
-            { id: "ch-5", label: "Montaje de inversor de reemplazo y pruebas", completed: false },
-            { id: "ch-6", label: "Firma de conformidad y cierre de garantía", completed: false }
-          ]
-        },
-        {
-          id: "queja-2",
-          clientName: "Pedro Martínez",
-          phone: "+5354928172",
-          location: "Cárdenas, Matanzas",
-          provincia: "Matanzas",
-          systemType: "Sistema Básico - 1500W",
-          installationDate: "2026-03-10",
-          warrantyMonths: 3,
-          symptom: "El inversor no enciende después de una tormenta eléctrica con descargas el fin de semana. Los breakers de paneles estaban abajo.",
-          status: "dictamen",
-          assignedTech: "Carlos (Técnico Matanzas)",
-          priority_category: "instalacion_incompleta",
-          checklist: [
-            { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
-            { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Fallo de encendido)", completed: true },
-            { id: "ch-3", label: "Inspección técnica provincial en sitio", completed: true },
-            { id: "ch-4", label: "Dictamen: Expiró garantía. Presupuesto reparación enviado.", completed: false },
-            { id: "ch-5", label: "Reparación/Sustitución con costo completada", completed: false },
-            { id: "ch-6", label: "Firma de conformidad y cobro del servicio", completed: false }
-          ]
-        },
-        {
-          id: "queja-3",
-          clientName: "Roberto Blanco",
-          phone: "+5352819304",
-          location: "San Antonio de los Baños, Artemisa",
-          provincia: "Artemisa",
-          systemType: "EcoFlow DELTA 2 Max (integrado)",
-          installationDate: "2026-07-02",
-          warrantyMonths: 1,
-          symptom: "La EcoFlow se apaga repentinamente al encender la olla arrocera de noche, a pesar de estar al 80% de carga.",
-          status: "diagnostico",
-          isEcoFlow: true,
-          priority_category: "incendio",
-          checklist: [
-            { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: true },
-            { id: "ch-2", label: "Diagnóstico remoto por Yasiel (Sobrecarga de potencia)", completed: false },
-            { id: "ch-3", label: "Inspección técnica provincial en sitio", completed: false },
-            { id: "ch-4", label: "Dictamen: Reposición autorizada por Ángel", completed: false },
-            { id: "ch-5", label: "Montaje de inversor de reemplazo y pruebas", completed: false },
-            { id: "ch-6", label: "Firma de conformidad y cierre de garantía", completed: false }
-          ]
-        }
-      ];
-      defaultComps.forEach(addComplaint);
+      defaultComplaints.forEach(addComplaint);
     }
   }, [complaints.length, addComplaint]);
 
   const [activeTab, setActiveTab] = useState<"lista" | "manual">("lista");
   const [selectedComplaintId, setSelectedComplaintId] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+
+  // Estados de Filtros de Categoría y Prioridad
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<'todas' | ComplaintCategory>('todas');
+  const [selectedPriorityFilter, setSelectedPriorityFilter] = useState<'todas' | ComplaintPriority>('todas');
 
   // Form states
   const [clientName, setClientName] = useState("");
@@ -173,8 +114,8 @@ export default function QuejasMain() {
   const [installationDate, setInstallationDate] = useState("");
   const [symptom, setSymptom] = useState("");
   const [errorMust, setErrorMust] = useState("");
-
-  const [priorityCategory, setPriorityCategory] = useState<QuejaPriority>("mal_funcionamiento");
+  const [categoryInput, setCategoryInput] = useState<ComplaintCategory>("producto");
+  const [priorityInput, setPriorityInput] = useState<ComplaintPriority>("alta");
 
   // Helper: check if warranty is active and get expiration details
   const getWarrantyInfo = (instDateStr: string, months: number) => {
@@ -227,7 +168,9 @@ export default function QuejasMain() {
       warrantyMonths,
       symptom,
       status: "diagnostico",
-      priority_category: priorityCategory,
+      category: categoryInput,
+      priority: priorityInput,
+      priority_category: priorityInput === 'critica' ? 'incendio' : categoryInput === 'instalacion' ? 'instalacion_incompleta' : 'mal_funcionamiento',
       errorMust: errorMust || undefined,
       checklist: [
         { id: "ch-1", label: "Evidencia visual recibida (foto/video de pantalla)", completed: false },
@@ -467,16 +410,30 @@ Mañana le contactaré nuevamente a esta hora con una nueva actualización, o an
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-white/50 uppercase font-bold tracking-wider">Categoría / Prioridad *</label>
+              <label className="text-[10px] text-white/50 uppercase font-bold tracking-wider">Categoría *</label>
               <select 
-                value={priorityCategory}
-                onChange={e => setPriorityCategory(e.target.value as QuejaPriority)}
-                className="bg-black/35 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00D9FF]/40"
+                value={categoryInput}
+                onChange={e => setCategoryInput(e.target.value as ComplaintCategory)}
+                className="bg-black/35 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00D9FF]/40 capitalize"
               >
-                <option value="incendio">INCENDIO (*1)</option>
-                <option value="instalacion_incompleta">INSTALACIÓN INCOMPLETA (*2)</option>
-                <option value="mal_funcionamiento">MAL FUNCIONAMIENTO</option>
-                <option value="atencion_inadecuada">ATENCIÓN INADECUADA</option>
+                <option value="producto">📦 Producto (Fallo de equipo / hardware)</option>
+                <option value="instalacion">🔧 Instalación (Montaje / cableado / obra)</option>
+                <option value="facturacion">💳 Facturación (Pagos / cobros / garantía)</option>
+                <option value="otro">📝 Otro (Atención comercial / varios)</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] text-white/50 uppercase font-bold tracking-wider">Nivel de Prioridad *</label>
+              <select 
+                value={priorityInput}
+                onChange={e => setPriorityInput(e.target.value as ComplaintPriority)}
+                className="bg-black/35 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00D9FF]/40 capitalize font-bold"
+              >
+                <option value="critica">🚨 Crítica (Incendio / Peligro eléctrico)</option>
+                <option value="alta">⚡ Alta (Inversor / Batería inoperativo)</option>
+                <option value="media">🟡 Media (Fallo parcial / rendimiento)</option>
+                <option value="baja">🔵 Baja (Consulta / ajuste menor)</option>
               </select>
             </div>
 
@@ -502,53 +459,140 @@ Mañana le contactaré nuevamente a esta hora con una nueva actualización, o an
         </form>
       )}
 
+      {/* Barra de Filtros por Categoría y Prioridad */}
+      {activeTab === "lista" && (
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 space-y-3 backdrop-blur-md">
+          {/* Filtro por Categoría */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Filtrar por Categoría:</span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              {(['todas', 'producto', 'instalacion', 'facturacion', 'otro'] as const).map(cat => {
+                const isActive = selectedCategoryFilter === cat;
+                const count = cat === 'todas' ? complaints.length : complaints.filter(c => (c.category || 'producto') === cat).length;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setSelectedCategoryFilter(cat)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all flex items-center gap-1.5 active:scale-[0.97] ${
+                      isActive 
+                        ? 'bg-[#00D9FF] text-[#0b1b33] font-black shadow-md' 
+                        : 'bg-black/30 hover:bg-white/10 text-white/60 border border-white/10'
+                    }`}
+                  >
+                    <span>{cat === 'todas' ? 'Todas' : cat}</span>
+                    <span className="px-1.5 py-0.5 rounded-md text-[10px] bg-black/20 font-mono">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Filtro por Prioridad */}
+          <div className="flex flex-col gap-1.5 border-t border-white/5 pt-3">
+            <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Filtrar por Prioridad:</span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              {(['todas', 'critica', 'alta', 'media', 'baja'] as const).map(prio => {
+                const isActive = selectedPriorityFilter === prio;
+                const count = prio === 'todas' ? complaints.length : complaints.filter(c => (c.priority || 'alta') === prio).length;
+                
+                const badgeColor = prio === 'critica' ? 'border-red-500/50 text-red-300' :
+                                   prio === 'alta' ? 'border-orange-500/40 text-orange-300' :
+                                   prio === 'media' ? 'border-amber-500/30 text-amber-300' :
+                                   prio === 'baja' ? 'border-blue-500/30 text-blue-300' : 'text-white/60';
+
+                return (
+                  <button
+                    key={prio}
+                    type="button"
+                    onClick={() => setSelectedPriorityFilter(prio)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all flex items-center gap-1.5 active:scale-[0.97] ${
+                      isActive 
+                        ? 'bg-white text-[#0b1b33] font-black shadow-md' 
+                        : `bg-black/30 hover:bg-white/10 border border-white/10 ${badgeColor}`
+                    }`}
+                  >
+                    <span>{prio === 'todas' ? 'Todas' : prio === 'critica' ? '🚨 Crítica' : prio === 'alta' ? '⚡ Alta' : prio === 'media' ? '🟡 Media' : '🔵 Baja'}</span>
+                    <span className="px-1.5 py-0.5 rounded-md text-[10px] bg-black/20 font-mono">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Pestaña 1: Pipeline de Quejas */}
       {activeTab === "lista" && (
         <div className="space-y-4">
-          {complaints.map(c => {
-            const isExpanded = selectedComplaintId === c.id;
-            const wInfo = getWarrantyInfo(c.installationDate, c.warrantyMonths);
-            
-            // Calculate progress percentage
-            const totalChecks = c.checklist.length;
-            const completedChecks = c.checklist.filter(item => item.completed).length;
-            const progressPercent = totalChecks > 0 ? Math.round((completedChecks / totalChecks) * 100) : 0;
+          {complaints
+            .filter(c => selectedCategoryFilter === 'todas' || (c.category || 'producto') === selectedCategoryFilter)
+            .filter(c => selectedPriorityFilter === 'todas' || (c.priority || 'alta') === selectedPriorityFilter)
+            .map(c => {
+              const isExpanded = selectedComplaintId === c.id;
+              const wInfo = getWarrantyInfo(c.installationDate, c.warrantyMonths);
+              const categoryKey = c.category || 'producto';
+              const priorityKey = c.priority || 'alta';
+              
+              // Calculate progress percentage
+              const totalChecks = c.checklist.length;
+              const completedChecks = c.checklist.filter(item => item.completed).length;
+              const progressPercent = totalChecks > 0 ? Math.round((completedChecks / totalChecks) * 100) : 0;
 
-            // Border based on warranty status
-            const borderClass = wInfo.isActive 
-              ? "border-red-500/25 shadow-[inset_0_1px_4px_rgba(239,68,68,0.1)]" 
-              : "border-white/10";
+              // Border based on priority and warranty status
+              const borderClass = priorityKey === 'critica'
+                ? "border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
+                : wInfo.isActive 
+                ? "border-amber-500/30" 
+                : "border-white/10";
 
-            return (
-              <div 
-                key={c.id}
-                className={`w-full bg-[#0a1e3f]/40 border ${borderClass} rounded-[24px] overflow-hidden shadow-lg transition-all duration-300`}
-              >
-                {/* Header */}
+              return (
                 <div 
-                  onClick={() => setSelectedComplaintId(isExpanded ? null : c.id)}
-                  className="p-4 cursor-pointer hover:bg-white/[0.02] transition-colors"
+                  key={c.id}
+                  className={`w-full bg-[#0a1e3f]/40 border ${borderClass} rounded-[24px] overflow-hidden shadow-lg transition-all duration-300`}
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] uppercase font-bold text-white/40 tracking-wider">
-                        {c.systemType}
+                  {/* Header */}
+                  <div 
+                    onClick={() => setSelectedComplaintId(isExpanded ? null : c.id)}
+                    className="p-4 cursor-pointer hover:bg-white/[0.02] transition-colors"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {/* Priority Badge */}
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wide border ${
+                          priorityKey === 'critica' ? 'bg-red-500/25 text-red-300 border-red-500/50 animate-pulse' :
+                          priorityKey === 'alta' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' :
+                          priorityKey === 'media' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :
+                          'bg-blue-500/20 text-blue-300 border-blue-500/30'
+                        }`}>
+                          {priorityKey === 'critica' ? <Flame size={10} /> : <AlertTriangle size={10} />}
+                          Prioridad: {priorityKey}
+                        </span>
+
+                        {/* Category Badge */}
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70 text-[9px] font-bold uppercase tracking-wide">
+                          {categoryKey === 'producto' ? <Package size={10} className="text-[#00D9FF]" /> :
+                           categoryKey === 'instalacion' ? <Wrench size={10} className="text-[#FFB800]" /> :
+                           categoryKey === 'facturacion' ? <CreditCard size={10} className="text-emerald-400" /> :
+                           <HelpCircle size={10} className="text-purple-400" />}
+                          Categoría: {categoryKey}
+                        </span>
+
+                        {wInfo.isActive ? (
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 text-[8px] font-bold uppercase tracking-wide border border-red-500/30">
+                            <ShieldCheck size={8} /> Garantía Activa
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-white/10 text-white/40 text-[8px] font-bold uppercase tracking-wide">
+                            <ShieldAlert size={8} /> Sin Garantía
+                          </span>
+                        )}
+                      </div>
+                      
+                      <span className="text-[10px] font-mono font-bold text-white/40 uppercase bg-black/20 px-2 py-0.5 rounded-md">
+                        Fase: {c.status}
                       </span>
-                      {wInfo.isActive ? (
-                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-red-500/25 text-red-400 text-[8px] font-bold uppercase tracking-wide">
-                          <ShieldCheck size={8} /> Garantía Activa
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-white/10 text-white/40 text-[8px] font-bold uppercase tracking-wide">
-                          <ShieldAlert size={8} /> Sin Garantía
-                        </span>
-                      )}
                     </div>
-                    
-                    <span className="text-[10px] font-mono font-bold text-white/30 capitalize">
-                      {c.status}
-                    </span>
-                  </div>
 
                   <h3 className="text-base font-bold text-white mb-2 flex flex-col gap-1.5">
                     <div className="flex items-center justify-between">
