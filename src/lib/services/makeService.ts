@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 export type MakeEventType = 
   | 'OT_CREATED'
   | 'OT_UPDATED'
