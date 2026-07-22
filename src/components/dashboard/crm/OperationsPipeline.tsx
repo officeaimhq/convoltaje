@@ -67,7 +67,7 @@ const STAGE_COLORS: Record<DealStage, string> = {
 };
 
 export default function OperationsPipeline() {
-  const { deals, moveDeal, fetchDeals } = useCrmStore();
+  const { deals, moveDeal, fetchDeals, updateDeal } = useCrmStore();
 
   useEffect(() => {
     fetchDeals();
@@ -215,11 +215,23 @@ export default function OperationsPipeline() {
                       {deal.name.charAt(0)}
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-sm font-bold truncate group-hover:text-[#00D9FF] transition-colors">{deal.name}</h4>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="text-sm font-bold truncate group-hover:text-[#00D9FF] transition-colors">{deal.name}</h4>
+                        {deal.otRef && (
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#00D9FF]/15 text-[#00D9FF] font-semibold">
+                            {deal.otRef}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-0.5">
                         <p className="text-xs text-white/55 truncate">{deal.company}</p>
+                        {deal.salesAgent && (
+                          <span className="text-[10px] text-[#FFB800] font-medium truncate">
+                            👤 {deal.salesAgent}
+                          </span>
+                        )}
                         {deal.stage === 'Feedback' && (
-                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold self-start ${
                             getFeedbackStatus(deal.expectedDate).status === 'ready' 
                               ? 'bg-[#00FF66]/20 text-[#00FF66]' 
                               : 'bg-yellow-500/20 text-yellow-500'
@@ -273,6 +285,14 @@ export default function OperationsPipeline() {
             {/* Detalles rápidos */}
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div>
+                <span className="text-white/40 block mb-0.5">Orden de Trabajo (OT)</span>
+                <span className="font-mono font-bold text-[#00D9FF] block truncate">{selectedDeal.otRef || 'Generando al emitir'}</span>
+              </div>
+              <div>
+                <span className="text-white/40 block mb-0.5">Comercial Asignado</span>
+                <span className="font-semibold text-[#FFB800] block truncate">{selectedDeal.salesAgent || currentUser?.name || 'Agente Comercial'}</span>
+              </div>
+              <div>
                 <span className="text-white/40 block mb-0.5">Proyecto / Equipo</span>
                 <span className="font-semibold text-white/90 block truncate">{selectedDeal.company}</span>
               </div>
@@ -308,11 +328,19 @@ export default function OperationsPipeline() {
               <button
                 onClick={async () => {
                   const product = findMatchingProduct(selectedDeal.company);
+                  let otRef = selectedDeal.otRef;
+                  if (!otRef) {
+                    const seq = Math.floor(1000 + Math.random() * 9000);
+                    otRef = `OT-${seq}`;
+                    updateDeal(selectedDeal.id, { otRef });
+                  }
+                  const chosenAgent = selectedDeal.salesAgent || currentUser?.name || 'Agente Comercial';
                   const clientData = {
                     name: selectedDeal.name,
                     phone: selectedDeal.phone,
+                    address: selectedDeal.address,
                     date: new Date().toLocaleDateString('es-ES'),
-                    reference: `REF-${Math.floor(Math.random() * 10000)}`
+                    reference: otRef,
                   };
                   
                   try {
@@ -321,8 +349,8 @@ export default function OperationsPipeline() {
                       clientData,
                       selectedDeal.stage === 'Terminado' || selectedDeal.stage === 'Facturado',
                       selectedDeal.value,
-                      currentUser?.name,
-                      currentUser?.phone,
+                      chosenAgent,
+                      currentUser?.phone || '+5355144097',
                     );
                     toast.success("Documento generado correctamente");
                   } catch (error) {

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { X, CheckCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { WHATSAPP_NUMBERS } from "@/lib/products";
+import { WHATSAPP_NUMBERS, CONVOLTAJE_PRODUCTS, type Product } from "@/lib/products";
 import { EcoPowerKit } from "@/lib/calculator";
-import { generatePDF } from "@/lib/pdf-generator";
+import { generateOfferPdf } from "@/lib/pdf-offer-generator";
+import { useCrmStore } from "@/hooks/useCrmStore";
 import { SalesRepsModal } from "./SalesRepsModal";
 
 interface LeadCaptureModalProps {
@@ -75,40 +76,59 @@ export default function LeadCaptureModal({
     setIsSubmitting(true);
 
     try {
-      // Generate PDF
-      const pdfBlob = await generatePDF({
-        clientName: formData.name,
-        clientPhone: formData.phone,
-        clientEmail: formData.email,
-        kit: kit,
-        dailyConsumption: dailyConsumption,
-        purchaseType: formData.purchaseType,
-        installationAddress: formData.installationAddress,
-        installationDate: formData.installationDate,
-        salesAgent: formData.salesAgent,
+      // 1. Generar OT persistente única
+      const otRef = `OT-${Math.floor(1000 + Math.random() * 9000)}`;
+      const chosenAgent = formData.salesAgent || "Diana (Comercial Matanzas)";
+
+      // 2. Persistir Lead en el CRM Pipeline (useCrmStore + localStorage)
+      useCrmStore.getState().addDeal({
+        name: formData.name,
+        company: kit.name,
+        phone: formData.phone,
+        email: formData.email,
+        value: kit.price,
+        stage: 'Contacto',
+        expectedDate: formData.installationDate || new Date().toISOString().split("T")[0],
+        source: `${chosenAgent} — ${formData.installationAddress}`,
+        otRef: otRef,
+        salesAgent: chosenAgent,
+        address: formData.installationAddress
       });
 
-      // Download PDF
-      const isHtml = pdfBlob.type.includes("text/html");
-      const extension = isHtml ? "html" : "pdf";
-      const url = window.URL.createObjectURL(pdfBlob);
-      setPdfUrl(url);
-      setPdfExtension(extension);
-      
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `Prefactura_${formData.name}_${new Date().toISOString().split("T")[0]}.${extension}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      // Don't revoke immediately so the user can click the "Abrir" button later
-      // window.URL.revokeObjectURL(url);
+      // 3. Matchear o construir objeto Product
+      const catalogProduct: Product = CONVOLTAJE_PRODUCTS.find(p => p.name.toLowerCase().includes(kit.name.toLowerCase())) || {
+        id: kit.id || 'kit-custom',
+        name: kit.name,
+        description: kit.description,
+        price: kit.price,
+        category: 'Sistemas Solares',
+        slug: 'kit-custom',
+        image: '/images/solucionapagon.jpg',
+        images: ['/images/solucionapagon.jpg'],
+        specs: kit.features
+      };
 
-      // Show confirmation
+      // 4. Generar PDF unificado institucional
+      await generateOfferPdf(
+        catalogProduct,
+        {
+          name: formData.name,
+          phone: formData.phone,
+          address: formData.installationAddress,
+          date: new Date().toLocaleDateString('es-ES'),
+          reference: otRef,
+        },
+        false,
+        kit.price,
+        chosenAgent,
+        '+5355144097'
+      );
+
+      // 5. Mostrar confirmación
       setStep("confirmation");
     } catch (error) {
-      console.error("Error generating PDF:", error);
-      alert("Error al generar el PDF. Por favor intenta de nuevo.");
+      console.error("Error al procesar la solicitud:", error);
+      alert("Error al generar la prefactura. Por favor intenta de nuevo.");
     } finally {
       setIsSubmitting(false);
     }

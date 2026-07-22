@@ -14,6 +14,9 @@ export interface ClientDeal {
   stage: DealStage;
   expectedDate: string; // Fecha de inicio
   source: string; // Notas adicionales
+  otRef?: string; // Número de OT/Referencia que vincula oferta y factura
+  salesAgent?: string; // Comercial asignado o elegido por el cliente
+  address?: string; // Dirección de instalación
 }
 
 interface CrmState {
@@ -32,15 +35,18 @@ export const useCrmStore = create<CrmState>()(
       
       fetchDeals: async () => {
         try {
-          const deals = await crmService.fetchDeals();
-          set({ deals });
+          const fetchedDeals = await crmService.fetchDeals();
+          const currentDeals = get().deals;
+          // Preservar los deals locales que no estén en fetchedDeals
+          const localDeals = currentDeals.filter(d => !fetchedDeals.some(fd => fd.id === d.id));
+          set({ deals: [...localDeals, ...fetchedDeals] });
         } catch (error) {
           console.error("Error al cargar deals desde Supabase", error);
         }
       },
 
       addDeal: (deal) => set((state) => ({
-        deals: [...state.deals, { ...deal, id: Date.now().toString() }] // TODO: Implementar addDeal en backend si se requiere
+        deals: [{ ...deal, id: `deal-${Date.now()}` }, ...state.deals]
       })),
       
       updateDeal: (id, updates) => set((state) => ({

@@ -18,7 +18,6 @@ export const generateOfferPdf = async (
   salesPhone?: string,
 ) => {
   const valuedAmount = dealValue ?? product.price;
-  const refId = `OT-${Math.floor(1000 + Math.random() * 9000)}`;
 
   const warrantyInfo = product.specs?.find(s => s.toLowerCase().includes('garantía') || s.toLowerCase().includes('garantia')) || 'Garantía real que cubre equipos e instalación según la capacidad del sistema.';
 
