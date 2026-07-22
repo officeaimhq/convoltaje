@@ -6,7 +6,7 @@ const PERMISSIONS_MATRIX: Record<UserRole, AdminView[]> = {
   admin: [
     'inicio', 'pipeline', 'calendario', 'almacen', 'finanzas', 'instalaciones',
     'quejas', 'ajustes', 'calculadora', 'historial', 'plantillas', 'errores',
-    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles'
+    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas'
   ],
   comercial: [
     'inicio', 'pipeline', 'calendario', 'quejas', 'calculadora',
@@ -21,7 +21,7 @@ const PERMISSIONS_MATRIX: Record<UserRole, AdminView[]> = {
     'herramientas', 'errores'
   ],
   transportista: [
-    'inicio', 'almacen', 'utiles', 'manuales'
+    'inicio', 'entregas', 'almacen', 'utiles', 'manuales'
   ],
   almacenero: [
     'inicio', 'almacen', 'utiles', 'manuales'

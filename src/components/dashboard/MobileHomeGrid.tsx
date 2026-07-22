@@ -3,7 +3,7 @@ import { canAccessView } from '@/hooks/useRoleAccess';
 import {
   UserPlus, Wrench, Flame, BarChart3,
   Package, Calendar, Sliders, CheckCircle2,
-  ClipboardList, Star, Asterisk, LayoutGrid, Calculator, FileText
+  ClipboardList, Star, Asterisk, LayoutGrid, Calculator, FileText, Truck
 } from 'lucide-react';
 import { AdminView } from './Sidebar';
 
@@ -31,6 +31,7 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'calendario',    view: 'calendario',     label: 'Calendario',    icon: Calendar,      badge: 1  },
     { id: 'ajustes',       view: 'ajustes',        label: 'Ajustes',       icon: Sliders                 },
     { id: 'validacion',    view: 'validacion',     label: 'Validación',    icon: CheckCircle2            },
+    { id: 'entregas',      view: 'entregas',       label: 'Entregas',      icon: Truck                   },
   ],
   comercial: [
     { id: 'clientes',      view: 'pipeline',      label: 'Clientes',      icon: UserPlus,      badge: 16 },
@@ -52,7 +53,8 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',       icon: LayoutGrid        },
   ],
   transportista: [
-    { id: 'inventario',  view: 'almacen',         label: 'Carga / Almacén',    icon: Package, badge: 3  },
+    { id: 'entregas',    view: 'entregas',        label: 'Entregas / Rutas',   icon: Truck, badge: 2   },
+    { id: 'inventario',  view: 'almacen',         label: 'Carga / Almacén',    icon: Package            },
   ],
   almacenero: [
     { id: 'inventario',  view: 'almacen',         label: 'Gestión Almacén',    icon: Package, badge: 5  },

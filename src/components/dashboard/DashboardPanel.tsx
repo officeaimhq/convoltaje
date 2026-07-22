@@ -17,6 +17,7 @@ import AsignacionesView from "./AsignacionesView";
 import ValidationFlow from "./ValidationFlow";
 import HerramientasView from "./HerramientasView";
 import UtilesHub from "./UtilesHub";
+import EntregasView from "./EntregasView";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { canAccessView } from "@/hooks/useRoleAccess";
 import { AdminView } from "./Sidebar";
@@ -113,6 +114,8 @@ export default function DashboardPanel() {
         return <AjustesMain />;
       case 'utiles':
         return <UtilesHub onSelectView={setCurrentView} />;
+      case 'entregas':
+        return <EntregasView onSelectView={setCurrentView} />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full text-white/50 py-12">

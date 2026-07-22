@@ -34,6 +34,9 @@ export interface ClientDeal {
   otRef?: string; // Número de OT/Referencia que vincula oferta y factura
   salesAgent?: string; // Comercial asignado o elegido por el cliente
   address?: string; // Dirección de instalación
+  deliveryAddress?: string; // Dirección exacta de entrega (a veces distinta a la de instalación)
+  deliveryProof?: string[]; // Array de capturas de pantalla en WebP (data URLs)
+  deliveryKm?: number; // Km reportados en la captura (opcional, lo escribe el transportista)
   technicalSurvey?: TechnicalSurvey; // Levantamiento Técnico en Terreno por Samuel
 }
 
