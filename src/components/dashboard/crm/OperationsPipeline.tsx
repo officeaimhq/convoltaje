@@ -5,8 +5,56 @@ import { toast } from 'sonner';
 import { useRefundsStore } from '@/hooks/useRefundsStore';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { generateOfferPdf } from '@/lib/pdf-offer-generator';
-import { CONVOLTAJE_PRODUCTS as products } from '@/lib/products';
+import { CONVOLTAJE_PRODUCTS as products, type Product } from '@/lib/products';
 import PaymentEntryModal from './PaymentEntryModal';
+
+function findMatchingProduct(dealCompany: string): Product {
+  const company = dealCompany.toLowerCase().trim();
+
+  const clean = (s: string) => s.toLowerCase().replace(/sistema\s*/g, '').replace(/solar\s*/g, '').trim();
+
+  const directMatch = products.find(p => {
+    const productName = clean(p.name);
+    return company.includes(productName) || productName.includes(company);
+  });
+  if (directMatch) return directMatch;
+
+  const kw = company.match(/(\d+)\s*k/i);
+  if (kw) {
+    const num = parseInt(kw[1]);
+    const kwProduct = products.find(p => {
+      const n = clean(p.name);
+      return n.includes(`${num}k`) || n.includes(`${num}000`);
+    });
+    if (kwProduct) return kwProduct;
+  }
+
+  const kwExplicit = company.match(/(\d{3,5})\s*w/i);
+  if (kwExplicit) {
+    const num = parseInt(kwExplicit[1]);
+    const numProduct = products.find(p => {
+      const n = clean(p.name);
+      return n.includes(num.toString());
+    });
+    if (numProduct) return numProduct;
+  }
+
+  const keywords: [string, string][] = [
+    ['básico', 'básico'], ['basico', 'básico'],
+    ['híbrido', 'híbrido'], ['hibrido', 'híbrido'],
+    ['avanzado', 'avanzado'], ['premium', 'premium'],
+    ['ecoflow', 'ecoflow'], ['bluetti', 'bluetti'], ['anker', 'anker'],
+    ['plus', 'plus'],
+  ];
+  for (const [key, target] of keywords) {
+    if (company.includes(key)) {
+      const match = products.find(p => p.name.toLowerCase().includes(target));
+      if (match) return match;
+    }
+  }
+
+  return products[0];
+}
 
 const STAGES: DealStage[] = ['Contacto', 'En Producción', 'Terminado', 'Facturado', 'Feedback'];
 
@@ -259,8 +307,7 @@ export default function OperationsPipeline() {
             <div className="pt-3 border-t border-white/10 flex flex-wrap gap-2 justify-end">
               <button
                 onClick={async () => {
-                  // Buscar el producto en base al deal.company o usar uno por defecto para la demo
-                  const product = products.find(p => p.name.includes(selectedDeal.company)) || products[0];
+                  const product = findMatchingProduct(selectedDeal.company);
                   const clientData = {
                     name: selectedDeal.name,
                     phone: selectedDeal.phone,
@@ -269,7 +316,14 @@ export default function OperationsPipeline() {
                   };
                   
                   try {
-                    await generateOfferPdf(product, clientData, selectedDeal.stage === 'Terminado' || selectedDeal.stage === 'Facturado');
+                    await generateOfferPdf(
+                      product,
+                      clientData,
+                      selectedDeal.stage === 'Terminado' || selectedDeal.stage === 'Facturado',
+                      selectedDeal.value,
+                      currentUser?.name,
+                      currentUser?.phone,
+                    );
                     toast.success("Documento generado correctamente");
                   } catch (error) {
                     console.error("Failed to generate PDF:", error);

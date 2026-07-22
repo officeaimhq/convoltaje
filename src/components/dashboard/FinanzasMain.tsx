@@ -9,7 +9,8 @@ import {
 import { toast } from "sonner";
 import { useSettingsStore } from "@/hooks/useSettingsStore";
 import { usePaymentsStore } from "@/hooks/usePaymentsStore";
-import { useRefundsStore } from "@/hooks/useRefundsStore";
+import { useRefundsStore, Refund } from "@/hooks/useRefundsStore";
+import RefundsManagementPanel from "./crm/RefundsManagementPanel";
 
 export interface Transaction {
   id: string;
@@ -175,6 +176,23 @@ export default function FinanzasMain() {
   const saveToStorage = (updated: Transaction[]) => {
     setTransactions(updated);
     localStorage.setItem("convoltaje_transactions", JSON.stringify(updated));
+  };
+
+  const handleRefundApproved = (refund: Refund) => {
+    const newTx: Transaction = {
+      id: `tx-ref-${refund.id}`,
+      concept: `Reintegro Aprobado (${refund.material_status_decision}) - ${refund.client_name || 'Cliente'}`,
+      type: "gasto_obra",
+      amount: refund.amount_to_refund,
+      originalAmount: refund.amount_to_refund,
+      originalCurrency: "USD",
+      date: new Date().toISOString().split("T")[0],
+      paymentMethod: "Efectivo",
+      associatedCommercial: refund.requested_by,
+      status: "completado"
+    };
+    saveToStorage([newTx, ...transactions]);
+    toast.success("Egreso financiero asentado automáticamente en transacciones.");
   };
 
   // Convert USD values to CUP if toggle is active
@@ -822,52 +840,7 @@ export default function FinanzasMain() {
 
       {/* Pestaña 5: Reintegros (Designado de Dirección) */}
       {activeTab === "reintegros" && (
-        <div className="space-y-4">
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-[20px] space-y-3">
-            <h3 className="text-xs font-bold text-red-400 uppercase tracking-wider">Gestión de Reintegros</h3>
-            <p className="text-xs text-white/60 leading-relaxed font-light">
-              Revisa y procesa las devoluciones solicitadas por los comerciales. Valida el destino del material involucrado.
-            </p>
-          </div>
-
-          <div className="space-y-3 animate-fade-in">
-            {refunds.filter(r => r.status === 'pendiente').length > 0 ? (
-              refunds.filter(r => r.status === 'pendiente').map(r => (
-                <div key={r.id} className="bg-[#0a1e3f]/40 border border-red-500/30 rounded-[20px] p-5 shadow-md flex flex-col gap-4">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-1">
-                      <span className="text-[10px] text-red-400 font-bold uppercase block tracking-wider">Solicitud de Reintegro</span>
-                      <h4 className="text-sm font-bold text-white">Solicitado por: {r.requested_by}</h4>
-                      <div className="text-[10px] bg-black/30 inline-block px-2 py-1 rounded text-white/70">
-                        Estado del material sugerido: <strong className="text-white capitalize">{r.material_status_decision.replace('_', ' ')}</strong>
-                      </div>
-                    </div>
-                    <span className="text-xl font-black font-mono text-red-400">-${r.amount_to_refund.toLocaleString()}</span>
-                  </div>
-
-                  <div className="flex flex-col gap-2 border-t border-white/5 pt-4">
-                    <button 
-                      onClick={() => {
-                        const conf = confirm("¿Confirmas que el reintegro fue procesado y el material contabilizado?");
-                        if (conf) {
-                          processRefund(r.id, "Dirección");
-                          toast.success("Reintegro procesado exitosamente.");
-                        }
-                      }}
-                      className="py-2.5 rounded-xl bg-red-500 hover:bg-red-400 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5"
-                    >
-                      <CheckCircle size={14} /> Marcar como Procesado
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-white/30 text-xs py-16">
-                No hay solicitudes de reintegro pendientes.
-              </div>
-            )}
-          </div>
-        </div>
+        <RefundsManagementPanel onRefundApproved={handleRefundApproved} />
       )}
 
     </div>

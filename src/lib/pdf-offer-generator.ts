@@ -12,8 +12,12 @@ interface ClientData {
 export const generateOfferPdf = async (
   product: Product, 
   client: ClientData,
-  isInvoice: boolean = false
+  isInvoice: boolean = false,
+  dealValue?: number,
+  salesAgent?: string,
+  salesPhone?: string,
 ) => {
+  const valuedAmount = dealValue ?? product.price;
   const refId = `OT-${Math.floor(1000 + Math.random() * 9000)}`;
 
   const warrantyInfo = product.specs?.find(s => s.toLowerCase().includes('garantía') || s.toLowerCase().includes('garantia')) || 'Garantía real que cubre equipos e instalación según la capacidad del sistema.';
@@ -195,9 +199,9 @@ export const generateOfferPdf = async (
             
             <div class="commercial-section">
               <h3>Datos del Comercial</h3>
-              <p><strong>Atendido por:</strong> Agente Comercial</p>
+              <p><strong>Atendido por:</strong> ${salesAgent || 'Agente Comercial'}</p>
               <p><strong>Canal:</strong> Venta Asistida / CRM</p>
-              <p><strong>Contacto Info:</strong> +5355144097</p>
+              <p><strong>Contacto Info:</strong> ${salesPhone || '+5355144097'}</p>
             </div>
           </div>
 
@@ -217,8 +221,8 @@ export const generateOfferPdf = async (
                   <span style="color: #666; font-size: 12px;">Suministro de equipos según catálogo técnico.</span>
                 </td>
                 <td>1</td>
-                <td class="price-col">$${product.price.toLocaleString()}</td>
-                <td class="price-col">$${product.price.toLocaleString()}</td>
+                <td class="price-col">$${valuedAmount.toLocaleString()}</td>
+                <td class="price-col">$${valuedAmount.toLocaleString()}</td>
               </tr>
               <tr>
                 <td>
@@ -231,7 +235,7 @@ export const generateOfferPdf = async (
               </tr>
               <tr class="total-row">
                 <td colspan="3" style="text-align: right;">Total (USD)</td>
-                <td class="price-col">$${product.price.toLocaleString()}</td>
+                <td class="price-col">$${valuedAmount.toLocaleString()}</td>
               </tr>
             </tbody>
           </table>
