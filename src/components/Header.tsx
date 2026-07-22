@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  onResetBrand?: () => void;
+}
+
+export default function Header({ onResetBrand }: HeaderProps) {
   const [activeTab, setActiveTab] = useState<string>("inicio");
 
   const scrollTo = (id: string) => {
@@ -96,6 +100,14 @@ export default function Header() {
             >
               Contáctanos
             </button>
+            {onResetBrand && (
+              <button
+                onClick={onResetBrand}
+                className="text-xs text-muted-foreground hover:text-cyan-500 transition-colors font-medium flex items-center gap-1 border-r border-border pr-3"
+              >
+                <span>← Cambiar Marca</span>
+              </button>
+            )}
             <a
               href="/admin/login"
               className="px-4 py-2 rounded-xl bg-[#0b3c8f] hover:bg-[#092d6e] text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5"

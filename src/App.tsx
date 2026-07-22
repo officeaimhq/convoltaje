@@ -96,7 +96,7 @@ function App() {
             />
           ) : (
             <>
-              <Header />
+              <Header onResetBrand={() => setSelectedBrand("none")} />
               <HeroSection onExploreClick={handleExploreClick} onCalculatorClick={handleCalculatorClick} />
               <AboutUsPlaceholder />
               <ConvoltajeSection 
