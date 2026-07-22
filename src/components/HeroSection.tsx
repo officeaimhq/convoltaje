@@ -35,20 +35,27 @@ export default function HeroSection({ onExploreClick, onCalculatorClick }: HeroS
               Sistemas solares completos, instalación profesional y pago solo cuando tu hogar tenga luz. Sin adelantos. Sin sorpresas.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-3 items-center justify-center lg:justify-start flex-wrap">
               <Button
                 onClick={onExploreClick}
-                className="w-full sm:w-auto font-accent text-base md:text-lg px-8 py-6 neon-btn"
+                className="w-full sm:w-auto font-accent text-base md:text-lg px-6 py-6 neon-btn"
               >
-                Explorar Catálogos
+                Explorar Catálogo
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
               <Button
                 onClick={onCalculatorClick}
-                className="w-full sm:w-auto bg-[#ff4500] hover:bg-[#ff4500]/90 text-white border-none shadow-lg shadow-[#ff4500]/30 font-semibold font-accent text-base md:text-lg px-8 py-6 transition-all hover:scale-105"
+                className="w-full sm:w-auto bg-[#ff4500] hover:bg-[#ff4500]/90 text-white border-none shadow-lg shadow-[#ff4500]/30 font-semibold font-accent text-base md:text-lg px-6 py-6 transition-all hover:scale-105"
               >
                 Calculadora Solar
               </Button>
+              <a
+                href="/admin/login"
+                className="w-full sm:w-auto bg-[#0b3c8f] hover:bg-[#092d6e] text-white border border-white/20 font-bold font-sans text-sm px-5 py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+              >
+                <span>Acceso Equipo / CRM</span>
+                <span>🔒</span>
+              </a>
             </div>
 
             {/* Trust Badges */}
