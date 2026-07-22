@@ -18,7 +18,7 @@ const PERMISSIONS_MATRIX: Record<UserRole, AdminView[]> = {
   ],
   proyectista: [
     'inicio', 'calendario', 'calculadora', 'utiles', 'manuales',
-    'plantillas', 'errores'
+    'herramientas', 'errores'
   ],
   transportista: [
     'inicio', 'almacen', 'utiles', 'manuales'

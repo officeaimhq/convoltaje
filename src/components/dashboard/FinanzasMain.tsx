@@ -10,130 +10,8 @@ import { toast } from "sonner";
 import { useSettingsStore } from "@/hooks/useSettingsStore";
 import { usePaymentsStore } from "@/hooks/usePaymentsStore";
 import { useRefundsStore, Refund } from "@/hooks/useRefundsStore";
+import { useAccountingStore, JournalEntry } from "@/hooks/useAccountingStore";
 import RefundsManagementPanel from "./crm/RefundsManagementPanel";
-
-export interface Transaction {
-  id: string;
-  concept: string;
-  type: "ingreso" | "gasto_fijo" | "gasto_obra" | "comision";
-  amount: number; // Siempre guardado en USD internamente
-  originalAmount: number;
-  originalCurrency: "USD" | "MLC" | "CUP";
-  date: string; // YYYY-MM-DD
-  paymentMethod: string; // "Efectivo", "Zelle", "Bizum", "Transferencia MLC", "CUP Efectivo"
-  associatedCommercial?: string;
-  status: "completado" | "pendiente";
-}
-
-// La tasa de cambio ahora se lee del useSettingsStore (Ajustes) en tiempo real
-
-const defaultTransactions: Transaction[] = [
-  {
-    id: "tx-1",
-    concept: "Ingreso - Venta de Sistema 6K PLUS (María Gómez)",
-    type: "ingreso",
-    amount: 9200,
-    originalAmount: 9200,
-    originalCurrency: "USD",
-    date: "2026-07-05",
-    paymentMethod: "Zelle",
-    associatedCommercial: "Laura Vice",
-    status: "completado"
-  },
-  {
-    id: "tx-2",
-    concept: "Ingreso - Venta de Sistema Premium 10kW (Héctor Valdés)",
-    type: "ingreso",
-    amount: 9850,
-    originalAmount: 9850,
-    originalCurrency: "USD",
-    date: "2026-07-08",
-    paymentMethod: "Zelle",
-    associatedCommercial: "Laura Vice",
-    status: "completado"
-  },
-  {
-    id: "tx-3",
-    concept: "Ingreso - Venta de Sistema Solar Medio 3000W (Carlos López)",
-    type: "ingreso",
-    amount: 3200,
-    originalAmount: 2160000,
-    originalCurrency: "CUP",
-    date: "2026-07-09",
-    paymentMethod: "CUP Efectivo",
-    associatedCommercial: "Angel CEO",
-    status: "completado"
-  },
-  {
-    id: "tx-4",
-    concept: "Gasto de Obra - Combustible para camión de técnicos (Mayabeque)",
-    type: "gasto_obra",
-    amount: 50,
-    originalAmount: 33750,
-    originalCurrency: "CUP",
-    date: "2026-07-06",
-    paymentMethod: "CUP Efectivo",
-    status: "completado"
-  },
-  {
-    id: "tx-5",
-    concept: "Gasto de Obra - Viáticos alimentación taller en Playa",
-    type: "gasto_obra",
-    amount: 30,
-    originalAmount: 20250,
-    originalCurrency: "CUP",
-    date: "2026-07-07",
-    paymentMethod: "CUP Efectivo",
-    status: "completado"
-  },
-  {
-    id: "tx-6",
-    concept: "Gasto de Obra - Tornillería y herrajes adicionales comprados en La Habana",
-    type: "gasto_obra",
-    amount: 75,
-    originalAmount: 75,
-    originalCurrency: "USD",
-    date: "2026-07-08",
-    paymentMethod: "Efectivo",
-    status: "completado"
-  },
-  {
-    id: "tx-7",
-    concept: "Comisión - Laura Vice por venta de Sistema 6K PLUS",
-    type: "comision",
-    amount: 120,
-    originalAmount: 120,
-    originalCurrency: "USD",
-    date: "2026-07-05",
-    paymentMethod: "Zelle",
-    associatedCommercial: "Laura Vice",
-    status: "pendiente"
-  },
-  {
-    id: "tx-8",
-    concept: "Comisión - Laura Vice por venta de Premium 10kW",
-    type: "comision",
-    amount: 250,
-    originalAmount: 250,
-    originalCurrency: "USD",
-    date: "2026-07-08",
-    paymentMethod: "Zelle",
-    associatedCommercial: "Laura Vice",
-    status: "completado"
-  },
-  {
-    id: "tx-9",
-    concept: "Comisión - Diana (Matanzas) por venta de Sistema Básico a Pedro Martínez",
-    type: "comision",
-    amount: 50,
-    originalAmount: 50,
-    originalCurrency: "USD",
-    date: "2026-07-10",
-    paymentMethod: "Bizum",
-    associatedCommercial: "⚡ Diana",
-    status: "pendiente"
-  }
-];
 
 // Gastos Fijos Corporativos de la empresa (Mensuales)
 const defaultFixedExpenses = [
@@ -147,14 +25,19 @@ const defaultFixedExpenses = [
 
 export default function FinanzasMain() {
   const { tasaCambioUSD: TASA_EL_TOQUE_MOCK } = useSettingsStore();
-
-  const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    const saved = localStorage.getItem("convoltaje_transactions");
-    return saved ? JSON.parse(saved) : defaultTransactions;
-  });
-
   const { payments, confirmPayment, rejectPayment } = usePaymentsStore();
   const { refunds, processRefund } = useRefundsStore();
+
+  const journalEntries = useAccountingStore(s => s.journalEntries);
+  const addJournalEntry = useAccountingStore(s => s.addJournalEntry);
+  const deleteJournalEntry = useAccountingStore(s => s.deleteJournalEntry);
+  const toggleJournalEntryStatus = useAccountingStore(s => s.toggleJournalEntryStatus);
+  const getTotalRevenue = useAccountingStore(s => s.getTotalRevenue);
+  const getTotalExpenses = useAccountingStore(s => s.getTotalExpenses);
+  const getTotalCommissions = useAccountingStore(s => s.getTotalCommissions);
+  const getTotalCommissionsPaid = useAccountingStore(s => s.getTotalCommissionsPaid);
+  const getTotalCommissionsPending = useAccountingStore(s => s.getTotalCommissionsPending);
+  const getNetProfit = useAccountingStore(s => s.getNetProfit);
 
   const [fixedExpenses] = useState(defaultFixedExpenses);
   const [activeTab, setActiveTab] = useState<"resumen" | "transacciones" | "comisiones" | "revision" | "reintegros">("resumen");
@@ -171,27 +54,26 @@ export default function FinanzasMain() {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
   // Plan de Ventas Mensual de Convoltaje
-  const SALES_PLAN_GOAL = 35000; // $35,000 USD de meta
-
-  const saveToStorage = (updated: Transaction[]) => {
-    setTransactions(updated);
-    localStorage.setItem("convoltaje_transactions", JSON.stringify(updated));
-  };
+  const SALES_PLAN_GOAL = 35000;
 
   const handleRefundApproved = (refund: Refund) => {
-    const newTx: Transaction = {
-      id: `tx-ref-${refund.id}`,
-      concept: `Reintegro Aprobado (${refund.material_status_decision}) - ${refund.client_name || 'Cliente'}`,
-      type: "gasto_obra",
-      amount: refund.amount_to_refund,
-      originalAmount: refund.amount_to_refund,
-      originalCurrency: "USD",
-      date: new Date().toISOString().split("T")[0],
-      paymentMethod: "Efectivo",
-      associatedCommercial: refund.requested_by,
-      status: "completado"
-    };
-    saveToStorage([newTx, ...transactions]);
+    const cashAccount = 'acc-cash-usd';
+    addJournalEntry(
+      {
+        date: new Date().toISOString().split("T")[0],
+        concept: `Reintegro Aprobado (${refund.material_status_decision}) - ${refund.client_name || 'Cliente'}`,
+        type: 'gasto_obra',
+        paymentMethod: 'Efectivo',
+        originalAmount: refund.amount_to_refund,
+        originalCurrency: 'USD',
+        associatedCommercial: refund.requested_by,
+        status: 'completado',
+      },
+      [
+        { id: `jl-${Date.now()}-1`, accountId: 'acc-exp-materials', debit: refund.amount_to_refund, credit: 0, description: 'Reintegro aprobado' },
+        { id: `jl-${Date.now()}-2`, accountId: cashAccount, debit: 0, credit: refund.amount_to_refund, description: 'Pago reintegro' },
+      ]
+    );
     toast.success("Egreso financiero asentado automáticamente en transacciones.");
   };
 
@@ -204,34 +86,19 @@ export default function FinanzasMain() {
     return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(usdVal);
   };
 
-  // Totals calculations
-  const totalSalesIncome = transactions
-    .filter(t => t.type === "ingreso" && t.status === "completado")
-    .reduce((acc, curr) => acc + curr.amount, 0);
+  // Totals from store
+  const totalSalesIncome = getTotalRevenue();
+  const totalCommissions = getTotalCommissions();
+  const totalCommissionsPaid = getTotalCommissionsPaid();
+  const totalCommissionsPending = getTotalCommissionsPending();
+  const netProfit = getNetProfit();
 
   const totalFixedExpenses = fixedExpenses.reduce((acc, curr) => acc + curr.amount, 0);
-  
-  const totalWorksExpenses = transactions
-    .filter(t => t.type === "gasto_obra")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const totalCommissions = transactions
-    .filter(t => t.type === "comision")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const totalCommissionsPaid = transactions
-    .filter(t => t.type === "comision" && t.status === "completado")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const totalCommissionsPending = transactions
-    .filter(t => t.type === "comision" && t.status === "pendiente")
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
+  const totalWorksExpenses = journalEntries
+    .filter(t => t.type === "gasto_obra" && t.status === "completado")
+    .reduce((acc, curr) => acc + curr.totalDebit, 0);
   const totalExpensesCombined = totalFixedExpenses + totalWorksExpenses + totalCommissions;
-  const netProfit = totalSalesIncome - totalExpensesCombined;
   const profitMarginPercent = totalSalesIncome > 0 ? Math.round((netProfit / totalSalesIncome) * 100) : 0;
-
-  // Plan de Ventas Progress
   const salesPlanPercent = Math.min(Math.round((totalSalesIncome / SALES_PLAN_GOAL) * 100), 100);
 
   // Form submit handler
@@ -248,58 +115,65 @@ export default function FinanzasMain() {
       return;
     }
 
-    // Convert amount to USD internally
     let amountInUsd = numericAmount;
     if (currency === "CUP") {
       amountInUsd = numericAmount / TASA_EL_TOQUE_MOCK;
     }
 
-    const newTx: Transaction = {
-      id: `tx-${Date.now()}`,
-      concept,
-      type,
-      amount: amountInUsd,
-      originalAmount: numericAmount,
-      originalCurrency: currency,
-      date,
-      paymentMethod,
-      associatedCommercial: type === "comision" || type === "ingreso" ? commercial : undefined,
-      status: "completado" as "completado" | "pendiente"
-    };
+    const cashAccount = currency === 'CUP' ? 'acc-cash-cup' : 'acc-cash-usd';
+    const isIncome = type === 'ingreso';
+    const status = type === 'comision' ? 'pendiente' : 'completado';
 
-    const updated = [newTx, ...transactions];
-    saveToStorage(updated);
+    if (isIncome) {
+      addJournalEntry(
+        { date, concept, type, paymentMethod, originalAmount: numericAmount, originalCurrency: currency, associatedCommercial: commercial, status },
+        [
+          { id: `jl-${Date.now()}-1`, accountId: cashAccount, debit: amountInUsd, credit: 0, description: `Ingreso: ${concept}` },
+          { id: `jl-${Date.now()}-2`, accountId: 'acc-rev-systems', debit: 0, credit: amountInUsd, description: `Venta: ${concept}` },
+        ]
+      );
+    } else if (type === 'comision') {
+      addJournalEntry(
+        { date, concept, type, paymentMethod, originalAmount: numericAmount, originalCurrency: currency, associatedCommercial: commercial, status: 'pendiente' },
+        [
+          { id: `jl-${Date.now()}-1`, accountId: 'acc-exp-commissions', debit: amountInUsd, credit: 0, description: `Comisión: ${concept}` },
+          { id: `jl-${Date.now()}-2`, accountId: 'acc-cxp-commissions', debit: 0, credit: amountInUsd, description: `Pendiente pago: ${concept}` },
+        ]
+      );
+    } else {
+      addJournalEntry(
+        { date, concept, type, paymentMethod, originalAmount: numericAmount, originalCurrency: currency, associatedCommercial: undefined, status },
+        [
+          { id: `jl-${Date.now()}-1`, accountId: 'acc-exp-materials', debit: amountInUsd, credit: 0, description: `Gasto: ${concept}` },
+          { id: `jl-${Date.now()}-2`, accountId: cashAccount, debit: 0, credit: amountInUsd, description: `Pago: ${concept}` },
+        ]
+      );
+    }
 
     setConcept("");
     setAmountInput("");
     setShowAddForm(false);
-    toast.success("Transacción registrada correctamente.");
+    toast.success("Transacción registrada correctamente en libro contable.");
   };
 
   // Toggle commission state
-  const handleToggleCommission = (txId: string) => {
-    const updated = transactions.map((t): Transaction => {
-      if (t.id === txId) {
-        const newStatus = t.status === "completado" ? "pendiente" : "completado";
-        toast.success(newStatus === "completado" ? "Comisión pagada y asentada." : "Comisión marcada como pendiente.");
-        return { ...t, status: newStatus as "completado" | "pendiente" };
-      }
-      return t;
-    });
-    saveToStorage(updated);
+  const handleToggleCommission = (jeId: string) => {
+    toggleJournalEntryStatus(jeId);
+    const entry = journalEntries.find(je => je.id === jeId);
+    const newStatus = entry?.status === 'completado' ? 'pendiente' : 'completado';
+    toast.success(newStatus === "completado" ? "Comisión pagada y asentada." : "Comisión marcada como pendiente.");
   };
 
-  // Delete transaction
-  const handleDeleteTx = (id: string, concept: string) => {
-    if (confirm(`¿Estás seguro de eliminar el registro financiero: "${concept}"?`)) {
-      const updated = transactions.filter(t => t.id !== id);
-      saveToStorage(updated);
+  // Delete entry
+  const handleDeleteTx = (id: string, conceptName: string) => {
+    if (confirm(`¿Estás seguro de eliminar el registro financiero: "${conceptName}"?`)) {
+      deleteJournalEntry(id);
       toast.success("Transacción eliminada del libro contable.");
     }
   };
 
   // Filter commissions for view
-  const commissionsList = transactions.filter(t => t.type === "comision");
+  const commissionsList = journalEntries.filter(t => t.type === "comision");
 
   return (
     <div className="w-full flex flex-col font-sans text-white pb-12">
@@ -524,7 +398,7 @@ export default function FinanzasMain() {
         <div className="space-y-4">
           
           <div className="flex justify-between items-center">
-            <span className="text-xs text-white/50">{transactions.length} registros en total.</span>
+            <span className="text-xs text-white/50">{journalEntries.length} registros en total.</span>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
               className="flex items-center gap-1 px-3 py-1.5 bg-[#FF6B35] hover:bg-[#e05a2b] rounded-xl text-[11px] font-bold transition-all"
@@ -649,25 +523,25 @@ export default function FinanzasMain() {
 
           {/* List of Ledger Entries */}
           <div className="space-y-3 animate-fade-in">
-            {transactions.map(t => {
-              const amountFormatted = formatCurrency(t.amount);
+            {journalEntries.map(je => {
+              const amountFormatted = formatCurrency(je.totalDebit > 0 ? je.totalDebit : je.totalCredit);
               
               let typeLabel = "Ingreso";
               let typeClass = "border-emerald-500/20 text-emerald-400 bg-emerald-500/5";
-              if (t.type === "gasto_obra") {
+              if (je.type === "gasto_obra") {
                 typeLabel = "Gasto Obra";
                 typeClass = "border-red-500/20 text-red-400 bg-red-500/5";
-              } else if (t.type === "gasto_fijo") {
+              } else if (je.type === "gasto_fijo") {
                 typeLabel = "Gasto Fijo";
                 typeClass = "border-red-400/20 text-red-300 bg-red-400/5";
-              } else if (t.type === "comision") {
+              } else if (je.type === "comision") {
                 typeLabel = "Comisión";
                 typeClass = "border-[#00D9FF]/20 text-[#00D9FF] bg-[#00D9FF]/5";
               }
 
               return (
                 <div 
-                  key={t.id}
+                  key={je.id}
                   className={`border ${typeClass.split(" ")[0]} bg-[#0a1e3f]/40 p-4 rounded-[20px] flex justify-between items-center shadow-md`}
                 >
                   <div className="space-y-1 max-w-[70%]">
@@ -675,31 +549,31 @@ export default function FinanzasMain() {
                       <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-bold uppercase ${typeClass.split(" ").slice(1).join(" ")}`}>
                         {typeLabel}
                       </span>
-                      <span className="text-[10px] text-white/30 font-mono">{t.date}</span>
+                      <span className="text-[10px] text-white/30 font-mono">{je.date}</span>
                     </div>
-                    <h4 className="text-xs font-bold text-white leading-tight truncate">{t.concept}</h4>
+                    <h4 className="text-xs font-bold text-white leading-tight truncate">{je.concept}</h4>
                     <p className="text-[10px] text-white/50">
-                      Monto original: <span className="font-mono">{t.originalAmount} {t.originalCurrency}</span> · {t.paymentMethod}
+                      Monto original: <span className="font-mono">{je.originalAmount} {je.originalCurrency}</span> · {je.paymentMethod}
                     </p>
                   </div>
 
                   <div className="text-right space-y-1.5">
                     <span className="text-sm font-black block font-mono">{amountFormatted}</span>
                     <div className="flex gap-1.5 justify-end">
-                      {t.type === "comision" && (
+                      {je.type === "comision" && (
                         <button
-                          onClick={() => handleToggleCommission(t.id)}
+                          onClick={() => handleToggleCommission(je.id)}
                           className={`text-[8px] px-2 py-0.5 rounded-md font-bold uppercase transition-all
-                            ${t.status === "completado" 
+                            ${je.status === "completado" 
                               ? "bg-emerald-500/20 text-emerald-400" 
                               : "bg-amber-500/20 text-amber-400"
                             }`}
                         >
-                          {t.status === "completado" ? "Pagado" : "Pendiente"}
+                          {je.status === "completado" ? "Pagado" : "Pendiente"}
                         </button>
                       )}
                       <button
-                        onClick={() => handleDeleteTx(t.id, t.concept)}
+                        onClick={() => handleDeleteTx(je.id, je.concept)}
                         className="p-1 hover:bg-red-500/10 text-white/30 hover:text-red-400 rounded-md transition-colors"
                       >
                         <Trash2 size={10} />
@@ -743,7 +617,7 @@ export default function FinanzasMain() {
                     </div>
 
                     <div className="text-right space-y-2">
-                      <span className="text-sm font-black block font-mono">{formatCurrency(comm.amount)}</span>
+                      <span className="text-sm font-black block font-mono">{formatCurrency(comm.totalDebit > 0 ? comm.totalDebit : comm.totalCredit)}</span>
                       <button
                         onClick={() => handleToggleCommission(comm.id)}
                         className={`text-[9px] font-bold uppercase px-2.5 py-1 rounded-xl transition-all active:scale-[0.98]

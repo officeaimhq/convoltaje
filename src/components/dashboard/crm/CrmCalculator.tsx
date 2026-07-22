@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Calculator, Package, AlertTriangle, Cpu, BatteryCharging, Zap, Info, Plus, Minus, Trash2 } from 'lucide-react';
+import { Calculator, Package, AlertTriangle, Cpu, BatteryCharging, Zap, Info, Plus, Minus, Trash2, Save, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useCrmStore } from '@/hooks/useCrmStore';
+import { toast } from 'sonner';
 
 // Definición ampliada de electrodomésticos para uso interno basados en Obsidian
 interface InternalApplianceConfig {
@@ -61,8 +63,10 @@ interface SelectedAppliance {
 }
 
 export default function CrmCalculator() {
+  const { deals, updateDeal } = useCrmStore();
   const [selectedCategory, setSelectedCategory] = useState<string>("Tecnología");
   const [appliances, setAppliances] = useState<SelectedAppliance[]>([]);
+  const [selectedDealId, setSelectedDealId] = useState<string>("");
 
   // Categorías de electrodomésticos
   const categories = Array.from(new Set(Object.values(APPLIANCE_CATALOG).map(a => a.category)));
@@ -354,17 +358,62 @@ export default function CrmCalculator() {
 
           {/* Recomendación del Kit Comercial */}
           {recommendedKit && (
-            <div className="bg-gradient-to-r from-[#00D9FF]/20 to-transparent border border-[#00D9FF]/30 rounded-2xl p-4 flex items-start gap-3">
-              <Zap size={18} className="text-[#00D9FF] flex-shrink-0 mt-0.5" />
-              <div>
-                <span className="text-[9px] text-[#00D9FF] font-bold uppercase tracking-wider">Sistema Recomendado</span>
-                <h4 className="text-sm font-bold text-white mt-0.5 leading-tight">{recommendedKit.name}</h4>
-                <p className="text-[10px] text-white/60 mt-0.5">{recommendedKit.details}</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-xs font-mono font-bold text-[#00FF66] bg-[#00FF66]/10 px-2 py-0.5 rounded-lg border border-[#00FF66]/15">
-                    Ref: ${recommendedKit.price} USD
-                  </span>
-                  <span className="text-[9px] text-white/40">FOB Cuba</span>
+            <div className="bg-gradient-to-r from-[#00D9FF]/20 to-transparent border border-[#00D9FF]/30 rounded-2xl p-4 space-y-3">
+              <div className="flex items-start gap-3">
+                <Zap size={18} className="text-[#00D9FF] flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[9px] text-[#00D9FF] font-bold uppercase tracking-wider">Sistema Recomendado</span>
+                  <h4 className="text-sm font-bold text-white mt-0.5 leading-tight">{recommendedKit.name}</h4>
+                  <p className="text-[10px] text-white/60 mt-0.5">{recommendedKit.details}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-xs font-mono font-bold text-[#00FF66] bg-[#00FF66]/10 px-2 py-0.5 rounded-lg border border-[#00FF66]/15">
+                      Ref: ${recommendedKit.price} USD
+                    </span>
+                    <span className="text-[9px] text-white/40">FOB Cuba</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vincular Levantamiento a OT */}
+              <div className="pt-3 border-t border-white/10 space-y-2">
+                <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">Vincular Levantamiento a Cliente / OT</span>
+                <div className="flex items-center gap-2">
+                  <select
+                    value={selectedDealId}
+                    onChange={(e) => setSelectedDealId(e.target.value)}
+                    className="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00D9FF]"
+                  >
+                    <option value="">-- Seleccionar Cliente u Orden de Trabajo --</option>
+                    {deals.map(d => (
+                      <option key={d.id} value={d.id}>
+                        {d.otRef ? `[${d.otRef}] ` : ''}{d.name} — {d.company}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => {
+                      if (!selectedDealId) {
+                        toast.error("Selecciona un cliente u OT para vincular.");
+                        return;
+                      }
+                      const deal = deals.find(d => d.id === selectedDealId);
+                      if (!deal) return;
+
+                      const notes = `📋 Levantamiento Técnico en Terreno:\n• Kit Sugerido: ${recommendedKit.name}\n• Consumo Diario (+30% Seg): ${totalKwhWithSafety.toFixed(2)} kWh/día\n• Pico Estimado: ${(peakConcurrentPowerWatts / 1000).toFixed(2)} kW\n• Equipos: ${appliances.map(a => `${a.quantity}x ${a.name} (${a.hoursPerDay}h/día)`).join(', ')}`;
+
+                      updateDeal(deal.id, {
+                        company: recommendedKit.name,
+                        value: recommendedKit.price,
+                        source: deal.source ? `${deal.source}\n\n${notes}` : notes
+                      });
+
+                      toast.success(`Levantamiento vinculado correctamente a ${deal.name} (${deal.otRef || 'OT'}).`);
+                    }}
+                    className="px-3 py-2 rounded-xl bg-[#00D9FF] hover:bg-[#00c5e6] text-[#0b1b33] text-xs font-black transition-all flex items-center gap-1.5 flex-shrink-0"
+                  >
+                    <Save size={13} />
+                    <span>Guardar en OT</span>
+                  </button>
                 </div>
               </div>
             </div>

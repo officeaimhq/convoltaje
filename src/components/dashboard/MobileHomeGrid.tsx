@@ -48,9 +48,9 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',  icon: LayoutGrid              },
   ],
   proyectista: [
-    { id: 'calculadora', view: 'calculadora',     label: 'Calculadora Técnica', icon: Calculator       },
-    { id: 'calendario',  view: 'calendario',      label: 'Planificación',      icon: Calendar, badge: 1 },
-    { id: 'plantillas',  view: 'plantillas',      label: 'Plantillas',         icon: FileText           },
+    { id: 'calculadora',  view: 'calculadora',    label: 'Calculadora Técnica', icon: Calculator       },
+    { id: 'calendario',   view: 'calendario',     label: 'Planificación',      icon: Calendar, badge: 1 },
+    { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',       icon: LayoutGrid        },
   ],
   transportista: [
     { id: 'inventario',  view: 'almacen',         label: 'Carga / Almacén',    icon: Package, badge: 3  },
