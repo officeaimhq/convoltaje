@@ -232,6 +232,11 @@ export default function OperationsPipeline() {
                             👤 {formatEmployeeName(deal.salesAgent, teamMembers)}
                           </span>
                         )}
+                        {deal.technicalSurvey && (
+                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#00FF66]/20 text-[#00FF66] font-bold self-start mt-0.5 flex items-center gap-1">
+                            📋 Levantamiento Completado
+                          </span>
+                        )}
                         {deal.stage === 'Feedback' && (
                           <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold self-start ${
                             getFeedbackStatus(deal.expectedDate).status === 'ready' 
@@ -296,7 +301,7 @@ export default function OperationsPipeline() {
               </div>
               <div>
                 <span className="text-white/40 block mb-0.5">Proyecto / Equipo</span>
-                <span className="font-semibold text-white/90 block truncate">{selectedDeal.company}</span>
+                <span className="font-semibold text-white block truncate">{selectedDeal.company}</span>
               </div>
               <div>
                 <span className="text-white/40 block mb-0.5">Valor Estimado</span>
@@ -316,6 +321,46 @@ export default function OperationsPipeline() {
                 </div>
               </div>
             </div>
+
+            {/* Ficha Técnica de Levantamiento (Si Samuel completó el levantamiento en terreno) */}
+            {selectedDeal.technicalSurvey && (
+              <div className="bg-[#00D9FF]/10 border border-[#00D9FF]/30 rounded-2xl p-4 space-y-3">
+                <div className="flex items-center justify-between border-b border-[#00D9FF]/20 pb-2">
+                  <span className="text-[10px] font-black text-[#00D9FF] uppercase tracking-wider flex items-center gap-1.5">
+                    📋 Ficha Técnica de Levantamiento
+                  </span>
+                  <span className="text-[9px] text-white/50 font-mono">
+                    Por {selectedDeal.technicalSurvey.proyectistaName}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-[9px] text-white/40 block">Techo / Cubierta</span>
+                    <span className="font-bold text-white">{selectedDeal.technicalSurvey.roofType} ({selectedDeal.technicalSurvey.availableAreaM2}m²)</span>
+                  </div>
+                  <div>
+                    <span className="text-[9px] text-white/40 block">Red Eléctrica</span>
+                    <span className="font-bold text-white">{selectedDeal.technicalSurvey.electricalGrid}</span>
+                  </div>
+                  <div>
+                    <span className="text-[9px] text-white/40 block">Aterramiento</span>
+                    <span className="font-bold text-white">{selectedDeal.technicalSurvey.groundingStatus}</span>
+                  </div>
+                  <div>
+                    <span className="text-[9px] text-white/40 block">Consumo Diario (+30% Seg)</span>
+                    <span className="font-mono font-bold text-[#00FF66]">{selectedDeal.technicalSurvey.safetyKwhPerDay} kWh/día</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-[#00D9FF]/20 text-xs">
+                  <span className="text-[9px] text-[#00D9FF] font-bold block mb-0.5">Notas Técnicas del Proyectista:</span>
+                  <p className="text-white/80 text-[11px] leading-relaxed bg-black/20 p-2 rounded-xl border border-white/5">
+                    {selectedDeal.technicalSurvey.technicalNotes}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Notas del proyecto */}
             <div>

@@ -4,6 +4,23 @@ import { crmService } from '@/lib/services/crmService';
 
 export type DealStage = 'Contacto' | 'En Producción' | 'Terminado' | 'Facturado' | 'Feedback';
 
+export interface TechnicalSurvey {
+  completedAt: string; // ISO timestamp
+  proyectistaName: string;
+  roofType: 'Placa de Hormigón' | 'Teja' | 'Zinc/Cinc' | 'Fibrocemento' | 'Estructura Elevada Requerida';
+  availableAreaM2: number;
+  electricalGrid: '110V Monofásico' | '220V Bifásico' | '220V Trifásico';
+  groundingStatus: 'OK - Varilla Existente' | 'Requiere Kit Aterramiento ($350 USD)';
+  cableDistanceMeters: number;
+  grossKwhPerDay: number;
+  safetyKwhPerDay: number;
+  peakPowerKw: number;
+  recommendedKit: string;
+  suggestedFinalPrice: number;
+  technicalNotes: string;
+  appliancesSummary?: string;
+}
+
 export interface ClientDeal {
   id: string;
   name: string;
@@ -17,6 +34,7 @@ export interface ClientDeal {
   otRef?: string; // Número de OT/Referencia que vincula oferta y factura
   salesAgent?: string; // Comercial asignado o elegido por el cliente
   address?: string; // Dirección de instalación
+  technicalSurvey?: TechnicalSurvey; // Levantamiento Técnico en Terreno por Samuel
 }
 
 interface CrmState {
