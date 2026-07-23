@@ -1,8 +1,8 @@
-import { Calendar, LayoutDashboard, Package, PieChart, Users, Truck } from "lucide-react";
+import { Calendar, LayoutDashboard, Package, PieChart, Users, Truck, ClipboardList, ClipboardCheck } from "lucide-react";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { canAccessView } from "@/hooks/useRoleAccess";
 
-export type AdminView = 'inicio' | 'calendario' | 'pipeline' | 'almacen' | 'finanzas' | 'instalaciones' | 'quejas' | 'ajustes' | 'calculadora' | 'historial' | 'plantillas' | 'errores' | 'manuales' | 'asignaciones' | 'validacion' | 'herramientas' | 'utiles' | 'entregas';
+export type AdminView = 'inicio' | 'calendario' | 'pipeline' | 'almacen' | 'finanzas' | 'instalaciones' | 'quejas' | 'ajustes' | 'calculadora' | 'historial' | 'plantillas' | 'errores' | 'manuales' | 'asignaciones' | 'validacion' | 'herramientas' | 'utiles' | 'entregas' | 'pedidos' | 'levantamiento';
 
 interface SidebarProps {
   currentView: AdminView;
@@ -15,7 +15,9 @@ export default function Sidebar({ currentView, onChangeView }: SidebarProps) {
   const allNavItems: { id: AdminView; label: string; icon: React.ReactNode }[] = [
     { id: 'inicio', label: 'Inicio', icon: <LayoutDashboard size={20} /> },
     { id: 'pipeline', label: 'Pipeline CRM', icon: <Users size={20} /> },
+    { id: 'levantamiento', label: 'Levantamiento Técnico', icon: <ClipboardCheck size={20} /> },
     { id: 'calendario', label: 'Calendario', icon: <Calendar size={20} /> },
+    { id: 'pedidos', label: 'Pedidos', icon: <ClipboardList size={20} /> },
     { id: 'entregas', label: 'Entregas / Rutas', icon: <Truck size={20} /> },
     { id: 'almacen', label: 'Almacén', icon: <Package size={20} /> },
     { id: 'finanzas', label: 'Finanzas', icon: <PieChart size={20} /> },

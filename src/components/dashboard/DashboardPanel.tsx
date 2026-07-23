@@ -18,6 +18,8 @@ import ValidationFlow from "./ValidationFlow";
 import HerramientasView from "./HerramientasView";
 import UtilesHub from "./UtilesHub";
 import EntregasView from "./EntregasView";
+import PedidosPendientes from "./inventory/PedidosPendientes";
+import LevantamientoForm from "./tech/LevantamientoForm";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { canAccessView } from "@/hooks/useRoleAccess";
 import { AdminView } from "./Sidebar";
@@ -116,6 +118,10 @@ export default function DashboardPanel() {
         return <UtilesHub onSelectView={setCurrentView} />;
       case 'entregas':
         return <EntregasView onSelectView={setCurrentView} />;
+      case 'pedidos':
+        return <PedidosPendientes onSelectView={setCurrentView} />;
+      case 'levantamiento':
+        return <LevantamientoForm />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full text-white/50 py-12">
@@ -159,7 +165,9 @@ export default function DashboardPanel() {
            currentView === ('validacion' as AdminView) ? 'Validación del Trabajo' :
            currentView === ('herramientas' as AdminView) ? 'Herramientas' :
            currentView === 'ajustes' ? 'Configuración' :
-           currentView === 'utiles' ? 'Útiles y Herramientas' : currentView}
+            currentView === 'utiles' ? 'Útiles y Herramientas' :
+            currentView === 'entregas' ? 'Rutas y Entregas' :
+            currentView === 'pedidos' ? 'Pedidos Pendientes' : currentView}
         </h3>
 
         <button 

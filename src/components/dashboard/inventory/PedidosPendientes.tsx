@@ -8,8 +8,13 @@ import { useInventoryStore } from "@/hooks/useInventoryStore";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { makeService } from "@/lib/services/makeService";
 import { toast } from "sonner";
+import { AdminView } from "../Sidebar";
 
-export default function PedidosPendientes() {
+interface PedidosPendientesProps {
+  onSelectView?: (view: AdminView) => void;
+}
+
+export default function PedidosPendientes({ onSelectView }: PedidosPendientesProps) {
   const { deals, updateDeal, logOtActivity } = useCrmStore();
   const { items, reserveStock } = useInventoryStore();
   const { currentUser } = useAuthStore();

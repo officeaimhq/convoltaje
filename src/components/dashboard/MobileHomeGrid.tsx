@@ -3,7 +3,7 @@ import { canAccessView } from '@/hooks/useRoleAccess';
 import {
   UserPlus, Wrench, Flame, BarChart3,
   Package, Calendar, Sliders, CheckCircle2,
-  ClipboardList, Star, Asterisk, LayoutGrid, Calculator, FileText, Truck
+  ClipboardList, Star, Asterisk, LayoutGrid, Calculator, FileText, Truck, ClipboardCheck
 } from 'lucide-react';
 import { AdminView } from './Sidebar';
 
@@ -24,6 +24,7 @@ const UTILES_TILE = {
 const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string; icon: React.ElementType; badge?: number }[]> = {
   admin: [
     { id: 'clientes',      view: 'pipeline',      label: 'Clientes',      icon: UserPlus,      badge: 16 },
+    { id: 'levantamiento', view: 'levantamiento', label: 'Levantamiento', icon: ClipboardCheck, badge: 1 },
     { id: 'instalaciones', view: 'instalaciones',  label: 'Instalaciones', icon: Wrench,        badge: 1  },
     { id: 'quejas',        view: 'quejas',         label: 'Quejas',        icon: Flame,         badge: 1  },
     { id: 'estadisticas',  view: 'finanzas',       label: 'Estadísticas',  icon: BarChart3               },
@@ -39,6 +40,7 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'quejas',        view: 'quejas',         label: 'Quejas',        icon: Flame,         badge: 1  },
     { id: 'calculadora',   view: 'calculadora',    label: 'Calculadora',   icon: Calculator              },
     { id: 'plantillas',    view: 'plantillas',     label: 'Plantillas',    icon: FileText                },
+    { id: 'levantamiento', view: 'levantamiento', label: 'Levantamientos',icon: ClipboardCheck           },
   ],
   tecnico: [
     { id: 'asignaciones', view: 'asignaciones',   label: 'Asignaciones',  icon: ClipboardList, badge: 2 },
@@ -49,6 +51,7 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',  icon: LayoutGrid              },
   ],
   proyectista: [
+    { id: 'levantamiento', view: 'levantamiento', label: 'Levantamiento Técnico', icon: ClipboardCheck, badge: 1 },
     { id: 'calendario',   view: 'calendario',     label: 'Planificación',      icon: Calendar, badge: 1 },
     { id: 'herramientas', view: 'herramientas',   label: 'Herramientas',       icon: LayoutGrid        },
   ],
@@ -57,6 +60,7 @@ const TILES_BY_ROLE: Record<string, { id: string; view: AdminView; label: string
     { id: 'inventario',  view: 'almacen',         label: 'Carga / Almacén',    icon: Package            },
   ],
   almacenero: [
+    { id: 'pedidos',     view: 'pedidos',         label: 'Pedidos Pendientes', icon: ClipboardList, badge: 2 },
     { id: 'inventario',  view: 'almacen',         label: 'Gestión Almacén',    icon: Package, badge: 5  },
   ],
   contable: [

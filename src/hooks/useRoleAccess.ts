@@ -6,25 +6,25 @@ const PERMISSIONS_MATRIX: Record<UserRole, AdminView[]> = {
   admin: [
     'inicio', 'pipeline', 'calendario', 'almacen', 'finanzas', 'instalaciones',
     'quejas', 'ajustes', 'calculadora', 'historial', 'plantillas', 'errores',
-    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas'
+    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas', 'levantamiento'
   ],
   comercial: [
     'inicio', 'pipeline', 'calendario', 'quejas', 'calculadora',
-    'plantillas', 'utiles', 'manuales'
+    'plantillas', 'utiles', 'manuales', 'levantamiento'
   ],
   tecnico: [
     'inicio', 'calendario', 'instalaciones', 'almacen', 'asignaciones',
-    'validacion', 'herramientas', 'utiles', 'manuales', 'errores'
+    'validacion', 'herramientas', 'utiles', 'manuales', 'errores', 'levantamiento'
   ],
   proyectista: [
-    'inicio', 'calendario', 'calculadora', 'utiles', 'manuales',
+    'inicio', 'levantamiento', 'calendario', 'calculadora', 'utiles', 'manuales',
     'herramientas', 'errores'
   ],
   transportista: [
     'inicio', 'entregas', 'almacen', 'utiles', 'manuales'
   ],
   almacenero: [
-    'inicio', 'almacen', 'utiles', 'manuales'
+    'inicio', 'pedidos', 'almacen', 'utiles', 'manuales'
   ],
   contable: [
     'inicio', 'finanzas', 'almacen', 'utiles', 'manuales', 'plantillas'
