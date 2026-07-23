@@ -186,9 +186,28 @@ export default function CalendarCore() {
   const weekDays = getWeekDays();
 
   // Filtrar eventos para una fecha específica (formato YYYY-MM-DD)
-  const getEventsForDate = (date: Date) => {
+  const getEventsForDate = (date: Date): CalendarEvent[] => {
     const formatted = format(date, "yyyy-MM-dd");
-    return events.filter(e => e.date === formatted);
+    const calendarEvents = events.filter(e => e.date === formatted);
+
+    // Sincronizar OTs del CRM que tengan esta fecha de inicio
+    const crmEvents: CalendarEvent[] = deals
+      .filter(
+        d =>
+          d.expectedDate === formatted &&
+          !calendarEvents.some(ce => ce.clientName === d.name || ce.title.includes(d.name))
+      )
+      .map(d => ({
+        id: `crm-${d.id}`,
+        title: `${d.otRef ? `[${d.otRef}] ` : ''}${d.company || 'Obra Solar'}`,
+        date: d.expectedDate,
+        time: "09:00",
+        clientName: d.name,
+        location: d.address || "Dirección de cliente",
+        description: `OT del CRM (${d.substage || d.stage}). Presupuesto: $${d.value} USD.`
+      }));
+
+    return [...calendarEvents, ...crmEvents];
   };
 
   // Renderizar la lista de eventos del día seleccionado

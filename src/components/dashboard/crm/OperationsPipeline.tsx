@@ -546,17 +546,46 @@ export default function OperationsPipeline() {
                 ⚡ Acciones Directas de la OT (Asignación y Notificación):
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button
-                  onClick={() => handleSubstageChange(
-                    'pendiente_levantamiento',
-                    'Solicitó levantamiento técnico a Samuel (Proyectista)',
-                    'Notificado Samuel para evaluación de terreno, techo y red eléctrica'
-                  )}
-                  className="px-3 py-2 text-xs font-bold rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-all flex items-center justify-between group active:scale-[0.96]"
-                >
-                  <span>📋 Solicitar Levantamiento a Samuel</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </button>
+                {(() => {
+                  const isSurveyPending = selectedDeal.substage === 'pendiente_levantamiento';
+                  const isSurveyDone = selectedDeal.substage === 'levantamiento_completado' || Boolean(selectedDeal.technicalSurvey);
+                  const isScheduled = Boolean(selectedDeal.expectedDate);
+
+                  return (
+                    <button
+                      disabled={isSurveyPending || isSurveyDone}
+                      onClick={() => {
+                        if (!isScheduled) {
+                          toast.error("⚠️ Para solicitar levantamiento a Samuel, primero debes fijar la fecha en el Calendario.");
+                          return;
+                        }
+                        handleSubstageChange(
+                          'pendiente_levantamiento',
+                          'Solicitó levantamiento técnico a Samuel (Proyectista)',
+                          'Notificado Samuel para evaluación de terreno, techo y red eléctrica'
+                        );
+                      }}
+                      className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all flex items-center justify-between group active:scale-[0.96] ${
+                        isSurveyDone
+                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 cursor-not-allowed opacity-80"
+                          : isSurveyPending
+                          ? "border-amber-500/40 bg-amber-500/20 text-amber-200 cursor-not-allowed"
+                          : "border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300"
+                      }`}
+                    >
+                      <span>
+                        {isSurveyDone
+                          ? "✓ Levantamiento Completado (por Samuel)"
+                          : isSurveyPending
+                          ? "⏳ Levantamiento Solicitado a Samuel"
+                          : "📋 Solicitar Levantamiento a Samuel"}
+                      </span>
+                      {!isSurveyDone && !isSurveyPending && (
+                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                      )}
+                    </button>
+                  );
+                })()}
 
                 <button
                   onClick={() => handleSubstageChange(
