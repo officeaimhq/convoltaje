@@ -39,8 +39,8 @@ export default function EntregasView({ onSelectView }: EntregasViewProps) {
       toast.error("Este cliente no tiene una dirección registrada.");
       return;
     }
-    // Enlace universal compatible con Maps.me y aplicaciones de navegación
-    const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(address)}`;
+    // Enlace directo compatible con Maps.me u Organic Maps para Cuba
+    const mapsUrl = `https://maps.me/search?query=${encodeURIComponent(address)}`;
     window.open(mapsUrl, "_blank", "noopener,noreferrer");
   };
 

@@ -181,7 +181,7 @@ export default function PedidosPendientes({ onSelectView }: PedidosPendientesPro
                   <div className="flex items-start gap-1.5">
                     <MapPin size={14} className="text-[#00D9FF] shrink-0 mt-0.5" />
                     <span className="break-words font-medium">
-                      {deal.deliveryAddress || deal.address || "Dirección de instalación no especificada"}
+                      {deal.deliveryAddress || deal.address || deal.source || "Dirección de instalación no especificada"}
                     </span>
                   </div>
 
