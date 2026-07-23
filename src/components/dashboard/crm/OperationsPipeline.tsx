@@ -7,6 +7,7 @@ import { useAuthStore } from '@/hooks/useAuthStore';
 import { useSettingsStore, formatEmployeeName } from '@/hooks/useSettingsStore';
 import { generateOfferPdf } from '@/lib/pdf-offer-generator';
 import { CONVOLTAJE_PRODUCTS as products, type Product } from '@/lib/products';
+import { makeService } from '@/lib/services/makeService';
 import PaymentEntryModal from './PaymentEntryModal';
 
 function findMatchingProduct(dealCompany: string): Product {
@@ -126,6 +127,42 @@ export default function OperationsPipeline() {
       setSelectedDeal({ ...selectedDeal, stage: newStage });
     }
     toast.success(`Cliente movido a ${newStage}`);
+  };
+
+  const handleSubstageChange = (newSubstage: any, actionLabel: string, details?: string, newStage?: DealStage) => {
+    if (!selectedDeal) return;
+    const fromSubstage = selectedDeal.substage || 'lead_nuevo';
+    const actorName = currentUser?.name || 'Comercial';
+    const targetStage = newStage || selectedDeal.stage;
+
+    updateDeal(selectedDeal.id, {
+      stage: targetStage,
+      substage: newSubstage,
+    });
+
+    logOtActivity(
+      selectedDeal.id,
+      actionLabel,
+      details || `Acción iniciada por ${actorName}`,
+      newSubstage,
+      actorName,
+      "comercial"
+    );
+
+    makeService.dispatchOtSubstageEvent(
+      selectedDeal.otRef || selectedDeal.id,
+      fromSubstage,
+      newSubstage,
+      actorName
+    );
+
+    setSelectedDeal({
+      ...selectedDeal,
+      stage: targetStage,
+      substage: newSubstage,
+    });
+
+    toast.success(`OT actualizada: ${actionLabel}`);
   };
 
   const getFeedbackStatus = (dateString: string) => {
@@ -501,6 +538,52 @@ export default function OperationsPipeline() {
                 <DollarSign size={12} />
                 Registrar Pago
               </button>
+            </div>
+
+            {/* Sub-etapas y Acciones Directas de la OT */}
+            <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
+              <span className="text-[10px] text-[#00D9FF] uppercase tracking-wider font-bold">
+                ⚡ Acciones Directas de la OT (Asignación y Notificación):
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  onClick={() => handleSubstageChange(
+                    'pendiente_levantamiento',
+                    'Solicitó levantamiento técnico a Samuel (Proyectista)',
+                    'Notificado Samuel para evaluación de terreno, techo y red eléctrica'
+                  )}
+                  className="px-3 py-2 text-xs font-bold rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-all flex items-center justify-between group active:scale-[0.96]"
+                >
+                  <span>📋 Solicitar Levantamiento a Samuel</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <button
+                  onClick={() => handleSubstageChange(
+                    'pendiente_almacen',
+                    'Envió pedido a Almacén para preparación',
+                    'Materiales enviados al Almacenero para reserva y empaque',
+                    'En Producción'
+                  )}
+                  className="px-3 py-2 text-xs font-bold rounded-xl border border-orange-500/30 bg-orange-500/10 hover:bg-orange-500/20 text-orange-300 transition-all flex items-center justify-between group active:scale-[0.96]"
+                >
+                  <span>📦 Enviar Pedido a Almacén</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <button
+                  onClick={() => handleSubstageChange(
+                    'pendiente_pago',
+                    'Envió OT a Contabilidad para verificar pago',
+                    'Factura u oferta lista para cobro',
+                    'Facturado'
+                  )}
+                  className="px-3 py-2 text-xs font-bold rounded-xl border border-[#FFB800]/30 bg-[#FFB800]/10 hover:bg-[#FFB800]/20 text-[#FFB800] transition-all flex items-center justify-between group active:scale-[0.96]"
+                >
+                  <span>💰 Pasar a Pendiente de Pago</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
 
             {/* Cambiar etapa (Acción rápida) */}
