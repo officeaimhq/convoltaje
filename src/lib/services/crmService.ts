@@ -95,8 +95,6 @@ export const crmService = {
 
     if (error) {
       console.error("Error updating deal stage:", error);
-      // Aquí registraríamos en salvas_offline en caso de fallo,
-      // para que cuando vuelva la conexión se sincronice.
       const { error: offlineError } = await supabase
         .from('salvas_offline')
         .insert([{
@@ -122,6 +120,45 @@ export const crmService = {
     });
   },
 
-  // Operaciones completas de CRM (crear, actualizar info) podrían implementarse aquí 
-  // insertando tanto el perfil como la OT. Por ahora lo mantenemos alineado a la OT.
+  createDeal: async (deal: ClientDeal): Promise<ClientDeal> => {
+    try {
+      // 1. Intentar registrar el perfil/cliente en Supabase
+      const { data: perfilData } = await supabase
+        .from('perfiles')
+        .insert([{
+          nombre: deal.name,
+          telefono: deal.phone,
+          email: deal.email,
+          direccion: deal.address,
+          rol: 'cliente'
+        }])
+        .select()
+        .single();
+
+      const clienteId = perfilData?.id || null;
+
+      // 2. Insertar la OT en ordenes_trabajo
+      const { error } = await supabase
+        .from('ordenes_trabajo')
+        .insert([{
+          cliente_id: clienteId,
+          kit_id: deal.company,
+          monto_estimado: deal.value,
+          estado: deal.stage,
+          substage: deal.substage || 'lead_nuevo',
+          fecha_instalacion: deal.expectedDate,
+          descripcion_trabajo: deal.source,
+          ot_ref: deal.otRef,
+          agente_comercial: deal.salesAgent,
+          direccion_entrega: deal.deliveryAddress || deal.address
+        }]);
+
+      if (error) {
+        console.warn("Supabase no pudo guardar la OT directamente, manteniendo en almacenamiento local:", error);
+      }
+    } catch (err) {
+      console.warn("Excepción al intentar guardar OT en Supabase:", err);
+    }
+    return deal;
+  }
 };

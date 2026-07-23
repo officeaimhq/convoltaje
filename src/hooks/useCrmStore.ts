@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { crmService } from '@/lib/services/crmService';
+import { makeService } from '@/lib/services/makeService';
 
 export type DealStage = 'Contacto' | 'En Producción' | 'Terminado' | 'Facturado' | 'Feedback';
 
@@ -96,15 +97,17 @@ export const useCrmStore = create<CrmState>()(
         try {
           const fetchedDeals = await crmService.fetchDeals();
           const currentDeals = get().deals;
-          // Preservar los deals locales que no estén en fetchedDeals
-          const localDeals = currentDeals.filter(d => !fetchedDeals.some(fd => fd.id === d.id));
+          // Preservar los deals locales creados que aún no estén en fetchedDeals
+          const localDeals = currentDeals.filter(
+            d => !fetchedDeals.some(fd => fd.id === d.id || (fd.otRef && d.otRef && fd.otRef === d.otRef))
+          );
           set({ deals: [...localDeals, ...fetchedDeals] });
         } catch (error) {
           console.error("Error al cargar deals desde Supabase", error);
         }
       },
 
-      addDeal: (deal) => set((state) => {
+      addDeal: (deal) => {
         const newDeal: ClientDeal = {
           ...deal,
           id: `deal-${Date.now()}`,
@@ -121,8 +124,14 @@ export const useCrmStore = create<CrmState>()(
             }
           ]
         };
-        return { deals: [newDeal, ...state.deals] };
-      }),
+
+        set((state) => ({ deals: [newDeal, ...state.deals] }));
+
+        // Notificar / persistir en crmService
+        crmService.createDeal(newDeal).catch((err) => {
+          console.warn("Error guardando deal en crmService:", err);
+        });
+      },
       
       updateDeal: (id, updates) => set((state) => ({
         deals: state.deals.map(d => d.id === id ? { ...d, ...updates } : d)
@@ -133,11 +142,22 @@ export const useCrmStore = create<CrmState>()(
       })),
       
       moveDeal: async (id, newStage, newSubstage) => {
+        const STAGE_DEFAULT_SUBSTAGE: Partial<Record<DealStage, DealSubstage>> = {
+          'En Producción': 'pendiente_almacen',
+          'Terminado': 'pendiente_pago',
+          'Facturado': 'factura_emitida',
+          'Feedback': 'feedback_pendiente',
+        };
+
+        const currentDeal = get().deals.find(d => d.id === id);
+        const fromSubstage = currentDeal?.substage || 'unknown';
+        const otRef = currentDeal?.otRef || id;
+
         // Optimistic update
         set((state) => ({
           deals: state.deals.map(d => {
             if (d.id !== id) return d;
-            const updatedSubstage = newSubstage || d.substage;
+            const updatedSubstage = newSubstage || STAGE_DEFAULT_SUBSTAGE[newStage] || d.substage;
             const newLogEntry: ActivityEntry = {
               id: `log-${Date.now()}`,
               timestamp: new Date().toISOString(),
@@ -158,6 +178,13 @@ export const useCrmStore = create<CrmState>()(
             };
           })
         }));
+
+        makeService.dispatchOtSubstageEvent(
+          otRef,
+          fromSubstage,
+          newSubstage || fromSubstage,
+          'Usuario'
+        );
 
         try {
           await crmService.updateDealStage(id, newStage);
