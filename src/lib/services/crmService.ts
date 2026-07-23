@@ -3,6 +3,32 @@ import { ClientDeal, DealStage } from '@/hooks/useCrmStore';
 import { makeService } from './makeService';
 
 const MOCK_DEALS: ClientDeal[] = [
+  { 
+    id: "deal-ot-3141", 
+    name: "Juan Pérez 2", 
+    company: "Sistema 6K PLUS", 
+    phone: "+5352849102", 
+    email: "juanperez2@gmail.com", 
+    value: 6950, 
+    stage: "Contacto", 
+    substage: "lead_nuevo",
+    expectedDate: "2026-07-31", 
+    source: "Niurki — Calle 23 #456, Vedado, La Habana",
+    otRef: "OT-3141",
+    salesAgent: "Niurki",
+    address: "Calle 23 #456, Vedado, La Habana",
+    activityLog: [
+      {
+        id: "log-3141-1",
+        timestamp: "2026-07-23T09:00:00.000Z",
+        actorName: "Sistema / Cliente",
+        actorRole: "comercial",
+        action: "Creó la Orden de Trabajo (OT-3141) desde la web",
+        details: "Sistema 6K PLUS ($6,950 USD) — Dirección: Calle 23 #456, Vedado",
+        toSubstage: "lead_nuevo"
+      }
+    ]
+  },
   { id: "mock-d1", name: "Heidy", company: "6K Plus Oferta", phone: "", email: "", value: 3200, stage: "En Producción", expectedDate: "2026-07-21", source: "Niurki — Santiago de las Vegas" },
   { id: "mock-d2", name: "Reinier", company: "10K + Alarma", phone: "", email: "", value: 7200, stage: "En Producción", expectedDate: "2026-07-21", source: "Railyn — Lawton. Pte levantamiento" },
   { id: "mock-d3", name: "Madeline", company: "3K 110v", phone: "", email: "", value: 1800, stage: "Contacto", expectedDate: "2026-07-21", source: "Niurki — Arroyo Naranjo" },
