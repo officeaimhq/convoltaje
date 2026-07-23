@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { useCrmStore, ClientDeal, TechnicalSurvey } from "@/hooks/useCrmStore";
 import { useAuthStore } from "@/hooks/useAuthStore";
 
+import { makeService } from "@/lib/services/makeService";
+
 // Catalog for Smart Load Calculator inside the survey
 interface SurveyAppliance {
   id: string;
@@ -30,7 +32,7 @@ const COMMON_APPLIANCES = [
 ];
 
 export default function LevantamientoForm() {
-  const { deals, updateDeal } = useCrmStore();
+  const { deals, updateDeal, logOtActivity } = useCrmStore();
   const { currentUser } = useAuthStore();
 
   const [selectedDealId, setSelectedDealId] = useState<string>("");
@@ -97,9 +99,13 @@ export default function LevantamientoForm() {
       return;
     }
 
+    const proyectista = currentUser?.name || "Samuel (Proyectista)";
+    const fromSubstage = selectedDeal.substage || "pendiente_levantamiento";
+    const toSubstage = "levantamiento_completado";
+
     const survey: TechnicalSurvey = {
       completedAt: new Date().toISOString(),
-      proyectistaName: currentUser?.name || "Samuel (Proyectista)",
+      proyectistaName: proyectista,
       roofType,
       availableAreaM2,
       electricalGrid,
@@ -115,14 +121,31 @@ export default function LevantamientoForm() {
     };
 
     // Actualizar el Deal en useCrmStore:
-    // 1. Guardar technicalSurvey completo.
-    // 2. Auto-actualizar company (kit) y value (precio final) para que la asesora comercial emita la oferta/factura ajustada.
     updateDeal(selectedDeal.id, {
       technicalSurvey: survey,
       company: autoKit.name,
       value: finalPrice,
+      substage: toSubstage,
       source: `${selectedDeal.source ? selectedDeal.source + '\n\n' : ''}📋 LEVANTAMIENTO COMPLETADO (${survey.proyectistaName}):\n• Techo: ${roofType} (${availableAreaM2}m²)\n• Red: ${electricalGrid} | Aterramiento: ${groundingStatus}\n• Kit Ajustado: ${autoKit.name} ($${finalPrice} USD)\n• Notas: ${survey.technicalNotes}`
     });
+
+    // Registrar en Activity Log
+    logOtActivity(
+      selectedDeal.id,
+      "Completó el levantamiento técnico en terreno",
+      `Techo: ${roofType}, Kit sugerido: ${autoKit.name} ($${finalPrice} USD)`,
+      toSubstage,
+      proyectista,
+      "proyectista"
+    );
+
+    // Disparar Webhook / Make Dispatch Event
+    makeService.dispatchOtSubstageEvent(
+      selectedDeal.otRef || selectedDeal.id,
+      fromSubstage,
+      toSubstage,
+      proyectista
+    );
 
     toast.success(`Levantamiento de terreno guardado en OT (${selectedDeal.otRef || selectedDeal.name}). ¡Notificado a Comercial!`);
   };

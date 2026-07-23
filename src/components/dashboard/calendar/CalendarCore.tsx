@@ -5,6 +5,9 @@ import { ChevronLeft, ChevronRight, Plus, Download, Calendar as CalendarIcon, Cl
 import MonthView from "./MonthView";
 import EventModal from "./EventModal";
 import { useCalendarStore, CalendarEvent } from "@/hooks/useCalendarStore";
+import { useCrmStore } from "@/hooks/useCrmStore";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { makeService } from "@/lib/services/makeService";
 
 type CalendarViewMode = 'semana' | 'mes' | 'hoy' | 'manana';
 
@@ -125,12 +128,52 @@ export default function CalendarCore() {
     setIsModalOpen(true);
   };
 
+  const { deals, updateDeal, logOtActivity } = useCrmStore();
+  const { currentUser } = useAuthStore();
+
   const handleSaveEvent = (eventData: any) => {
     if (selectedEvent) {
       updateEvent(selectedEvent.id, eventData);
     } else {
       addEvent(eventData);
     }
+
+    // Sincronizar fecha y sub-etapa con la OT del cliente si coincide
+    if (eventData.clientName || eventData.title) {
+      const targetDeal = deals.find(
+        (d) =>
+          (eventData.clientName && d.name.toLowerCase().includes(eventData.clientName.toLowerCase())) ||
+          (eventData.title && d.company.toLowerCase().includes(eventData.title.toLowerCase()))
+      );
+
+      if (targetDeal) {
+        const fromSubstage = targetDeal.substage || 'lead_nuevo';
+        const toSubstage = 'fecha_agendada';
+        const actorName = currentUser?.name || 'Comercial';
+
+        updateDeal(targetDeal.id, {
+          expectedDate: eventData.date,
+          substage: toSubstage,
+        });
+
+        logOtActivity(
+          targetDeal.id,
+          "Agendó/reprogramó fecha de instalación en Calendario",
+          `Fecha de obra fijada para ${eventData.date} (${eventData.time || 'Horario laboral'})`,
+          toSubstage,
+          actorName,
+          "comercial"
+        );
+
+        makeService.dispatchOtSubstageEvent(
+          targetDeal.otRef || targetDeal.id,
+          fromSubstage,
+          toSubstage,
+          actorName
+        );
+      }
+    }
+
     setIsModalOpen(false);
   };
 

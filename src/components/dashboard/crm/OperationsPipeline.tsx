@@ -67,8 +67,26 @@ const STAGE_COLORS: Record<DealStage, string> = {
   'Feedback': 'bg-white/20 text-white'
 };
 
+const SUBSTAGE_LABELS: Record<string, { label: string; color: string }> = {
+  lead_nuevo: { label: '🆕 Lead Nuevo', color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
+  comercial_asignado: { label: '👤 Comercial Asignado', color: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' },
+  fecha_agendada: { label: '📅 Fecha Agendada', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
+  pendiente_levantamiento: { label: '📋 Pendiente Levantamiento', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+  levantamiento_completado: { label: '📋 Levantamiento Completado', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+  pendiente_almacen: { label: '📦 Pendiente Almacén', color: 'bg-orange-500/20 text-orange-300 border-orange-500/30' },
+  almacen_preparado: { label: '📦 Pedido Preparado (Stock Reservado)', color: 'bg-teal-500/20 text-teal-300 border-teal-500/30' },
+  en_transporte: { label: '🚚 En Transporte / Ruta', color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
+  en_instalacion: { label: '🔧 En Instalación', color: 'bg-sky-500/20 text-sky-300 border-sky-500/30' },
+  instalacion_completada: { label: '✅ Instalación Completada', color: 'bg-green-500/20 text-green-300 border-green-500/30' },
+  pendiente_pago: { label: '💰 Pendiente de Pago', color: 'bg-[#FFB800]/20 text-[#FFB800] border-[#FFB800]/30' },
+  pago_verificado: { label: '💳 Pago Verificado', color: 'bg-[#00FF66]/20 text-[#00FF66] border-[#00FF66]/30' },
+  factura_emitida: { label: '📄 Factura Emitida', color: 'bg-[#FF6B35]/20 text-[#FF6B35] border-[#FF6B35]/30' },
+  feedback_pendiente: { label: '⭐ Feedback Pendiente', color: 'bg-pink-500/20 text-pink-300 border-pink-500/30' },
+  completado: { label: '🎉 OT Completada', color: 'bg-emerald-500/30 text-emerald-200 border-emerald-500/40' },
+};
+
 export default function OperationsPipeline() {
-  const { deals, moveDeal, fetchDeals, updateDeal } = useCrmStore();
+  const { deals, moveDeal, fetchDeals, updateDeal, logOtActivity } = useCrmStore();
   const { teamMembers } = useSettingsStore();
 
   useEffect(() => {
@@ -99,6 +117,9 @@ export default function OperationsPipeline() {
 
   const handleStageChange = (dealId: string, newStage: DealStage) => {
     moveDeal(dealId, newStage);
+    if (currentUser) {
+      logOtActivity(dealId, `Movido a etapa: ${newStage}`, currentUser.name);
+    }
     
     // Actualizar el cliente seleccionado en el estado local
     if (selectedDeal && selectedDeal.id === dealId) {
@@ -232,7 +253,12 @@ export default function OperationsPipeline() {
                             👤 {formatEmployeeName(deal.salesAgent, teamMembers)}
                           </span>
                         )}
-                        {deal.technicalSurvey && (
+                        {deal.substage && SUBSTAGE_LABELS[deal.substage] && (
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded border font-bold self-start mt-0.5 ${SUBSTAGE_LABELS[deal.substage].color}`}>
+                            {SUBSTAGE_LABELS[deal.substage].label}
+                          </span>
+                        )}
+                        {deal.technicalSurvey && !deal.substage && (
                           <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#00FF66]/20 text-[#00FF66] font-bold self-start mt-0.5 flex items-center gap-1">
                             📋 Levantamiento Completado
                           </span>
@@ -361,6 +387,55 @@ export default function OperationsPipeline() {
                 </div>
               </div>
             )}
+
+            {/* Línea de Tiempo de la OT (Activity Log) */}
+            <div className="bg-black/30 border border-white/10 rounded-2xl p-4 space-y-3">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-[10px] font-black text-[#00D9FF] uppercase tracking-wider flex items-center gap-1.5">
+                  ⏱️ Línea de Tiempo de la OT ({selectedDeal.activityLog?.length || 0})
+                </span>
+                <span className="text-[9px] text-white/40 font-mono">
+                  Historial de auditoría
+                </span>
+              </div>
+
+              {selectedDeal.activityLog && selectedDeal.activityLog.length > 0 ? (
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {selectedDeal.activityLog.slice().reverse().map((entry) => (
+                    <div
+                      key={entry.id}
+                      className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-xs flex flex-col gap-1"
+                    >
+                      <div className="flex items-center justify-between text-[10px]">
+                        <span className="font-bold text-[#00D9FF] flex items-center gap-1">
+                          👤 {entry.actorName} ({entry.actorRole})
+                        </span>
+                        <span className="text-white/40 font-mono">
+                          {new Date(entry.timestamp).toLocaleString("es-ES", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                      <p className="font-semibold text-white/90 text-xs">
+                        {entry.action}
+                      </p>
+                      {entry.details && (
+                        <p className="text-[11px] text-white/60 bg-black/20 p-1.5 rounded border border-white/5">
+                          {entry.details}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-white/40 italic">
+                  Sin registros de actividad previos.
+                </p>
+              )}
+            </div>
 
             {/* Notas del proyecto */}
             <div>

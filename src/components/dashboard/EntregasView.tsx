@@ -4,6 +4,8 @@ import {
   ChevronLeft, FileText, Check, ShieldCheck
 } from "lucide-react";
 import { useCrmStore, ClientDeal } from "@/hooks/useCrmStore";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { makeService } from "@/lib/services/makeService";
 import ScreenshotUpload from "./ScreenshotUpload";
 import { toast } from "sonner";
 import { AdminView } from "./Sidebar";
@@ -13,7 +15,8 @@ interface EntregasViewProps {
 }
 
 export default function EntregasView({ onSelectView }: EntregasViewProps) {
-  const { deals, updateDeal } = useCrmStore();
+  const { deals, updateDeal, logOtActivity } = useCrmStore();
+  const { currentUser } = useAuthStore();
   const [filterStage, setFilterStage] = useState<'pending' | 'completed'>('pending');
 
   // Estado local para capturas de ruta y km por deal
@@ -58,13 +61,33 @@ export default function EntregasView({ onSelectView }: EntregasViewProps) {
   const handleMarkAsDelivered = async (deal: ClientDeal) => {
     const proofs = dealProofs[deal.id] || deal.deliveryProof || [];
     const km = dealKms[deal.id] !== undefined ? dealKms[deal.id] : deal.deliveryKm;
+    const fromSubstage = deal.substage || 'almacen_preparado';
+    const toSubstage = 'en_instalacion';
+    const actorName = currentUser?.name || 'Transportista';
 
     try {
       await updateDeal(deal.id, {
         stage: "Terminado",
+        substage: toSubstage,
         deliveryProof: proofs,
         deliveryKm: km,
       });
+
+      logOtActivity(
+        deal.id,
+        "Completó la ruta de transporte y entrega de insumos",
+        `Km reportados: ${km || 0} km. Evidencias WebP adjuntas: ${proofs.length}`,
+        toSubstage,
+        actorName,
+        "transportista"
+      );
+
+      makeService.dispatchOtSubstageEvent(
+        deal.otRef || deal.id,
+        fromSubstage,
+        toSubstage,
+        actorName
+      );
 
       toast.success(`¡Entrega completada para ${deal.name}! (OT: ${deal.otRef || deal.id})`);
     } catch (error) {

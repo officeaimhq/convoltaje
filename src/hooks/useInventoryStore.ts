@@ -9,6 +9,7 @@ export interface InventoryItem {
   name: string;
   category: ProductCategory;
   stock: number;
+  reservedStock?: number; // Stock reservado/preparado para OTs pendientes
   costPrice: number;
   salePrice: number;
   minStock: number;
@@ -20,6 +21,8 @@ interface InventoryState {
   updateItem: (id: string, updates: Partial<InventoryItem>) => void;
   deleteItem: (id: string) => void;
   adjustStock: (id: string, amount: number) => void;
+  reserveStock: (id: string, amount: number) => void;
+  deductReservedStock: (id: string, amount: number) => void;
 }
 
 const mockInventory: InventoryItem[] = [
@@ -69,10 +72,25 @@ export const useInventoryStore = create<InventoryState>()(
       
       adjustStock: (id, amount) => set((state) => ({
         items: state.items.map(i => i.id === id ? { ...i, stock: i.stock + amount } : i)
+      })),
+
+      reserveStock: (id, amount) => set((state) => ({
+        items: state.items.map(i => i.id === id ? { 
+          ...i, 
+          reservedStock: Math.max(0, (i.reservedStock || 0) + amount) 
+        } : i)
+      })),
+
+      deductReservedStock: (id, amount) => set((state) => ({
+        items: state.items.map(i => i.id === id ? { 
+          ...i, 
+          stock: Math.max(0, i.stock - amount),
+          reservedStock: Math.max(0, (i.reservedStock || 0) - amount)
+        } : i)
       }))
     }),
     {
-      name: 'convoltaje-inventory-storage',
+      name: 'convoltaje-crm-storage-inv',
     }
   )
 );

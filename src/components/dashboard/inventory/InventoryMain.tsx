@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Package, Search, AlertTriangle, TrendingUp, DollarSign, Calendar, Layers, ShieldAlert, ArrowRight } from 'lucide-react';
+import { Package, Search, AlertTriangle, TrendingUp, DollarSign, Calendar, Layers, ShieldAlert, ArrowRight, Box } from 'lucide-react';
 import { useInventoryStore, InventoryItem, ProductCategory } from '@/hooks/useInventoryStore';
 import { useCrmStore } from '@/hooks/useCrmStore';
+import { useAuthStore } from '@/hooks/useAuthStore';
+import PedidosPendientes from './PedidosPendientes';
 
 const CATEGORIES: ProductCategory[] = ['Inversores', 'Paneles Solares', 'Baterías', 'Estructuras', 'Accesorios'];
 
@@ -25,7 +27,7 @@ const getRequiredItems = (projectType: string): RequiredItem[] => {
   if (clean.includes('kit solar 5kw') || clean.includes('kit solar 6kw')) {
     return [
       { code: 'INV-DEYE-5KW', qty: 1 },
-      { code: 'PAN-JA-500', qty: 10 },
+      { code: 'PAN-[#00D9FF]', qty: 10 },
       { code: 'BAT-PYLON-4.8', qty: 1 },
       { code: 'EST-ALU-COPLANAR', qty: 3 }
     ];
@@ -95,7 +97,10 @@ const getRequiredItems = (projectType: string): RequiredItem[] => {
 export default function InventoryMain() {
   const { items } = useInventoryStore();
   const { deals } = useCrmStore();
+  const { currentUser } = useAuthStore();
   
+  const isAlmacenero = currentUser?.role === 'almacenero';
+  const [mainTab, setMainTab] = useState<'inventario' | 'pedidos'>(isAlmacenero ? 'pedidos' : 'inventario');
   const [activeCategory, setActiveCategory] = useState<ProductCategory>('Inversores');
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -108,7 +113,6 @@ export default function InventoryMain() {
   );
 
   // Obtener compromisos de inventario basados en el plan de trabajo (clientes activos)
-  // Contamos clientes en fase "Contacto" (planificados) y "En Producción" (en instalación)
   const activeDeals = deals.filter(d => d.stage === 'Contacto' || d.stage === 'En Producción');
 
   const getCommittedStock = (itemCode: string) => {
@@ -135,14 +139,46 @@ export default function InventoryMain() {
   return (
     <div className="w-full flex flex-col font-sans text-white pb-12">
       
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-white mb-1">Almacén e Inventario</h2>
-        <p className="text-white/60 text-xs">
-          Control de existencias y compromisos de material según obras activas.
-        </p>
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-bold text-white mb-1">Almacén e Inventario</h2>
+          <p className="text-white/60 text-xs">
+            Control de existencias y preparación de insumos por Orden de Trabajo.
+          </p>
+        </div>
+
+        {/* Top View Toggle Tabs */}
+        <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 self-start sm:self-auto">
+          <button
+            onClick={() => setMainTab('inventario')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              mainTab === 'inventario'
+                ? "bg-[#00D9FF] text-[#0b1b33] shadow-md"
+                : "text-white/60 hover:text-white"
+            }`}
+          >
+            <Package size={14} />
+            <span>Inventario General</span>
+          </button>
+          <button
+            onClick={() => setMainTab('pedidos')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              mainTab === 'pedidos'
+                ? "bg-[#00D9FF] text-[#0b1b33] shadow-md"
+                : "text-white/60 hover:text-white"
+            }`}
+          >
+            <Box size={14} />
+            <span>Pedidos Pendientes OT</span>
+          </button>
+        </div>
       </div>
 
-      {/* Input de Búsqueda */}
+      {mainTab === 'pedidos' ? (
+        <PedidosPendientes />
+      ) : (
+        <>
+          {/* Input de Búsqueda */}
       <div className="relative mb-6">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" size={16} />
         <input 
@@ -376,6 +412,8 @@ export default function InventoryMain() {
         })()}
 
       </div>
+        </>
+      )}
 
     </div>
   );

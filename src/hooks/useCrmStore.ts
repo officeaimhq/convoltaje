@@ -4,6 +4,34 @@ import { crmService } from '@/lib/services/crmService';
 
 export type DealStage = 'Contacto' | 'En Producción' | 'Terminado' | 'Facturado' | 'Feedback';
 
+export type DealSubstage = 
+  | 'lead_nuevo'
+  | 'comercial_asignado'
+  | 'fecha_agendada'
+  | 'pendiente_levantamiento'
+  | 'levantamiento_completado'
+  | 'pendiente_almacen'
+  | 'almacen_preparado'
+  | 'en_transporte'
+  | 'en_instalacion'
+  | 'instalacion_completada'
+  | 'pendiente_pago'
+  | 'pago_verificado'
+  | 'factura_emitida'
+  | 'feedback_pendiente'
+  | 'completado';
+
+export interface ActivityEntry {
+  id: string;
+  timestamp: string; // ISO timestamp
+  actorName: string;
+  actorRole: string;
+  action: string; // Ej: "Agendó fecha de instalación", "Guardó levantamiento técnico"
+  details?: string;
+  fromSubstage?: DealSubstage;
+  toSubstage?: DealSubstage;
+}
+
 export interface TechnicalSurvey {
   completedAt: string; // ISO timestamp
   proyectistaName: string;
@@ -29,6 +57,7 @@ export interface ClientDeal {
   email: string;
   value: number;
   stage: DealStage;
+  substage?: DealSubstage; // Tracking fino dentro de la etapa
   expectedDate: string; // Fecha de inicio
   source: string; // Notas adicionales
   otRef?: string; // Número de OT/Referencia que vincula oferta y factura
@@ -38,6 +67,7 @@ export interface ClientDeal {
   deliveryProof?: string[]; // Array de capturas de pantalla en WebP (data URLs)
   deliveryKm?: number; // Km reportados en la captura (opcional, lo escribe el transportista)
   technicalSurvey?: TechnicalSurvey; // Levantamiento Técnico en Terreno por Samuel
+  activityLog?: ActivityEntry[]; // Historial de actividad (máximo 50 entradas con auto-prune)
 }
 
 interface CrmState {
@@ -46,7 +76,15 @@ interface CrmState {
   addDeal: (deal: Omit<ClientDeal, 'id'>) => void;
   updateDeal: (id: string, updates: Partial<ClientDeal>) => void;
   deleteDeal: (id: string) => void;
-  moveDeal: (id: string, newStage: DealStage) => Promise<void>;
+  moveDeal: (id: string, newStage: DealStage, newSubstage?: DealSubstage) => Promise<void>;
+  logOtActivity: (
+    dealId: string,
+    action: string,
+    details?: string,
+    newSubstage?: DealSubstage,
+    actorName?: string,
+    actorRole?: string
+  ) => void;
 }
 
 export const useCrmStore = create<CrmState>()(
@@ -66,9 +104,25 @@ export const useCrmStore = create<CrmState>()(
         }
       },
 
-      addDeal: (deal) => set((state) => ({
-        deals: [{ ...deal, id: `deal-${Date.now()}` }, ...state.deals]
-      })),
+      addDeal: (deal) => set((state) => {
+        const newDeal: ClientDeal = {
+          ...deal,
+          id: `deal-${Date.now()}`,
+          substage: deal.substage || 'lead_nuevo',
+          activityLog: deal.activityLog || [
+            {
+              id: `log-${Date.now()}`,
+              timestamp: new Date().toISOString(),
+              actorName: deal.salesAgent || 'Sistema / Cliente',
+              actorRole: 'comercial',
+              action: 'Creó la Orden de Trabajo (OT)',
+              details: `Presupuesto inicial: $${deal.value} USD`,
+              toSubstage: deal.substage || 'lead_nuevo',
+            }
+          ]
+        };
+        return { deals: [newDeal, ...state.deals] };
+      }),
       
       updateDeal: (id, updates) => set((state) => ({
         deals: state.deals.map(d => d.id === id ? { ...d, ...updates } : d)
@@ -78,10 +132,31 @@ export const useCrmStore = create<CrmState>()(
         deals: state.deals.filter(d => d.id !== id)
       })),
       
-      moveDeal: async (id, newStage) => {
+      moveDeal: async (id, newStage, newSubstage) => {
         // Optimistic update
         set((state) => ({
-          deals: state.deals.map(d => d.id === id ? { ...d, stage: newStage } : d)
+          deals: state.deals.map(d => {
+            if (d.id !== id) return d;
+            const updatedSubstage = newSubstage || d.substage;
+            const newLogEntry: ActivityEntry = {
+              id: `log-${Date.now()}`,
+              timestamp: new Date().toISOString(),
+              actorName: 'Usuario',
+              actorRole: 'operaciones',
+              action: `Movió OT a la etapa "${newStage}"`,
+              fromSubstage: d.substage,
+              toSubstage: updatedSubstage,
+            };
+            const currentLog = d.activityLog || [];
+            // Auto-prune a 50 entradas máximas
+            const updatedLog = [...currentLog, newLogEntry].slice(-50);
+            return {
+              ...d,
+              stage: newStage,
+              substage: updatedSubstage,
+              activityLog: updatedLog,
+            };
+          })
         }));
 
         try {
@@ -89,7 +164,35 @@ export const useCrmStore = create<CrmState>()(
         } catch (error) {
           // El rollback o reintento se manejará o guardará en salvas_offline
         }
-      }
+      },
+
+      logOtActivity: (dealId, action, details, newSubstage, actorName = 'Usuario', actorRole = 'operaciones') => {
+        set((state) => ({
+          deals: state.deals.map((d) => {
+            if (d.id !== dealId) return d;
+            const fromSubstage = d.substage;
+            const toSubstage = newSubstage || d.substage;
+            const newLogEntry: ActivityEntry = {
+              id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+              timestamp: new Date().toISOString(),
+              actorName,
+              actorRole,
+              action,
+              details,
+              fromSubstage,
+              toSubstage,
+            };
+            const currentLog = d.activityLog || [];
+            // Auto-prune a un máximo de 50 entradas (elimina las más antiguas)
+            const updatedLog = [...currentLog, newLogEntry].slice(-50);
+            return {
+              ...d,
+              substage: toSubstage,
+              activityLog: updatedLog,
+            };
+          }),
+        }));
+      },
     }),
     {
       name: 'convoltaje-crm-storage',

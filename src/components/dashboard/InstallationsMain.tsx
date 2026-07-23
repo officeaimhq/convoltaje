@@ -6,6 +6,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useSettingsStore, formatEmployeeName } from "@/hooks/useSettingsStore";
+import { useCrmStore } from "@/hooks/useCrmStore";
+import { useInventoryStore } from "@/hooks/useInventoryStore";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { makeService } from "@/lib/services/makeService";
 
 export interface InstallationWorkOrder {
   id: string;
@@ -133,6 +137,10 @@ export default function InstallationsMain() {
     localStorage.setItem("convoltaje_installations", JSON.stringify(updated));
   };
 
+  const { deals, updateDeal, logOtActivity } = useCrmStore();
+  const { items, deductReservedStock } = useInventoryStore();
+  const { currentUser } = useAuthStore();
+
   // Toggle checklist item
   const handleToggleCheck = (instId: string, checkId: string) => {
     const updated = installations.map(inst => {
@@ -150,6 +158,48 @@ export default function InstallationsMain() {
         if (allDone && inst.status === "en_curso") {
           newStatus = "completada";
           toast.success(`¡Obra de ${inst.clientName} lista! Se movió a Completadas.`);
+
+          // Sincronizar con useCrmStore & useInventoryStore
+          const targetDeal = deals.find(d => d.name.toLowerCase().includes(inst.clientName.toLowerCase()));
+          if (targetDeal) {
+            const fromSubstage = targetDeal.substage || 'en_instalacion';
+            const toSubstage = 'instalacion_completada';
+            const actorName = currentUser?.name || inst.tecnico || 'Técnico Yasiel';
+
+            updateDeal(targetDeal.id, {
+              substage: toSubstage,
+            });
+
+            // Descontar stock físico reservado en almacén
+            if (targetDeal.company) {
+              const lower = targetDeal.company.toLowerCase();
+              items.forEach((item) => {
+                if (lower.includes("inversor") && item.category === "Inversores") {
+                  deductReservedStock(item.id, 1);
+                } else if (lower.includes("batería") && item.category === "Baterías") {
+                  deductReservedStock(item.id, 1);
+                } else if (lower.includes("kit") && (item.category === "Accesorios" || item.category === "Estructuras")) {
+                  deductReservedStock(item.id, 2);
+                }
+              });
+            }
+
+            logOtActivity(
+              targetDeal.id,
+              "Finalizó la instalación técnica (Stock Físico Descontado)",
+              `Checklist al 100%. Obra completada satisfactoriamente por ${actorName}`,
+              toSubstage,
+              actorName,
+              "tecnico"
+            );
+
+            makeService.dispatchOtSubstageEvent(
+              targetDeal.otRef || targetDeal.id,
+              fromSubstage,
+              toSubstage,
+              actorName
+            );
+          }
         } else if (!allDone && inst.status === "completada") {
           newStatus = "en_curso";
           toast.info(`Obra de ${inst.clientName} volvió a estado En Curso.`);

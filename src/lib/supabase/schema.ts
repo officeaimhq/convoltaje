@@ -72,6 +72,48 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['complaints']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['complaints']['Insert']>
       }
+      // SPRINT 2: ORDENES DE TRABAJO (DEALS)
+      deals: {
+        Row: {
+          id: string
+          created_at: string
+          name: string
+          company: string
+          phone: string
+          email: string
+          value: number
+          stage: 'Contacto' | 'En Producción' | 'Terminado' | 'Facturado' | 'Feedback'
+          substage: string | null
+          expected_date: string
+          source: string | null
+          ot_ref: string | null
+          sales_agent: string | null
+          address: string | null
+          delivery_address: string | null
+          delivery_proof: string[] | null
+          delivery_km: number | null
+          technical_survey: Json | null
+        }
+        Insert: Omit<Database['public']['Tables']['deals']['Row'], 'id' | 'created_at'>
+        Update: Partial<Database['public']['Tables']['deals']['Insert']>
+      }
+
+      // SPRINT 2: LOG DE ACTIVIDAD / AUDITORÍA OT
+      ot_activity_log: {
+        Row: {
+          id: string
+          created_at: string
+          deal_id: string
+          actor_name: string
+          actor_role: string
+          action: string
+          details: string | null
+          from_substage: string | null
+          to_substage: string | null
+        }
+        Insert: Omit<Database['public']['Tables']['ot_activity_log']['Row'], 'id' | 'created_at'>
+        Update: Partial<Database['public']['Tables']['ot_activity_log']['Insert']>
+      }
     }
   }
 }
