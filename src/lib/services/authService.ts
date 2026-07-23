@@ -2,14 +2,15 @@ import { supabase } from '../supabase';
 import { UserSession, UserRole } from '../../hooks/useAuthStore';
 
 const MOCK_PROFILES: UserSession[] = [
-  { id: "1", name: "Admin", role: "admin", title: "Administrador", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
-  { id: "2", name: "Niurki", role: "comercial", title: "Asesora Comercial", avatar: "", phone: "+5355144097", clientsCount: 15, reviewsCount: 45 },
-  { id: "3", name: "Diana Rosa", role: "comercial", title: "Asesora Comercial", avatar: "", phone: "+5355144097", clientsCount: 12, reviewsCount: 38 },
-  { id: "4", name: "Técnico", role: "tecnico", title: "Técnico Especialista", avatar: "", phone: "+5355144097", clientsCount: 30, reviewsCount: 10 },
-  { id: "5", name: "Contable", role: "contable", title: "Contabilidad", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
-  { id: "6", name: "Transportista", role: "transportista", title: "Transporte y Logística", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
-  { id: "7", name: "Samuel el Panel", role: "proyectista", title: "Proyectista", avatar: "", phone: "+5355144097", clientsCount: 5, reviewsCount: 5 },
-  { id: "8", name: "Almacenero", role: "almacenero", title: "Gestión de Almacén", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 }
+  { id: "1", name: "Ángel Eduardo", role: "admin", title: "CEO / Dueño", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
+  { id: "2", name: "Laura", role: "admin", title: "Vice Directora", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
+  { id: "3", name: "José Luis", role: "contable", title: "Contador / Marketing", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
+  { id: "4", name: "Samuel", role: "proyectista", title: "Proyectista Técnico", avatar: "", phone: "+5355144097", clientsCount: 15, reviewsCount: 10 },
+  { id: "5", name: "Yasiel", role: "tecnico", title: "Director Técnico", avatar: "", phone: "+5355144097", clientsCount: 30, reviewsCount: 25 },
+  { id: "6", name: "Niurki", role: "comercial", title: "Asesora Comercial", avatar: "", phone: "+5355144097", clientsCount: 15, reviewsCount: 45 },
+  { id: "7", name: "Diana Rosa", role: "comercial", title: "Asesora Comercial", avatar: "", phone: "+5355144097", clientsCount: 12, reviewsCount: 38 },
+  { id: "8", name: "Almacenero", role: "almacenero", title: "Gestión de Almacén", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 },
+  { id: "9", name: "Transportista", role: "transportista", title: "Transporte y Logística", avatar: "", phone: "+5355144097", clientsCount: 0, reviewsCount: 0 }
 ];
 
 export const authService = {
