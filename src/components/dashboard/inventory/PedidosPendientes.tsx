@@ -37,9 +37,35 @@ export default function PedidosPendientes({ onSelectView }: PedidosPendientesPro
       const toSubstage = 'almacen_preparado';
       const actorName = currentUser?.name || 'Almacenero';
 
-      // 1. Reservar stock tentativo en almacén (sin descontar físico)
+      // 1. Verificar disponibilidad de stock físico en almacén antes de reservar
       if (deal.company) {
         const lowerName = deal.company.toLowerCase();
+        const missingItems: string[] = [];
+
+        items.forEach((item) => {
+          let reqQty = 0;
+          if (lowerName.includes("inversor") && item.category === "Inversores") {
+            reqQty = 1;
+          } else if (lowerName.includes("batería") && item.category === "Baterías") {
+            reqQty = 1;
+          } else if (lowerName.includes("kit") && (item.category === "Accesorios" || item.category === "Estructuras")) {
+            reqQty = 2;
+          }
+
+          if (reqQty > 0 && item.stock < reqQty) {
+            missingItems.push(`${item.name} (Disponible: ${item.stock}, Requerido: ${reqQty})`);
+          }
+        });
+
+        if (missingItems.length > 0) {
+          toast.error(
+            `❌ Stock Insuficiente en Almacén. No se puede preparar el pedido:\n• ${missingItems.join('\n• ')}`,
+            { duration: 6000 }
+          );
+          return;
+        }
+
+        // Reservar stock tentativo si hay disponibilidad suficiente
         items.forEach((item) => {
           if (lowerName.includes("inversor") && item.category === "Inversores") {
             reserveStock(item.id, 1);

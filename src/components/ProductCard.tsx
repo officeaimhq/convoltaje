@@ -1,4 +1,4 @@
-import { Zap, Tv2, Wind, Refrigerator, Lightbulb, Smartphone, Laptop, Fan } from "lucide-react";
+import { Zap, Tv2, Wind, Refrigerator, Lightbulb, Smartphone, Laptop, Fan, Microwave, Coffee, Camera, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/products";
 
@@ -7,11 +7,15 @@ interface ProductCardProps {
   whatsappNumber: string;
   onWhatsappClick: (product: Product) => void;
   onViewDetails?: (product: Product) => void;
+  isComparing?: boolean;
+  onToggleCompare?: (product: Product) => void;
 }
 
 export default function ProductCard({
   product,
   onViewDetails,
+  isComparing,
+  onToggleCompare,
 }: ProductCardProps) {
 
   // Parse supports to icons
@@ -20,14 +24,40 @@ export default function ProductCard({
     const s = product.supports.toLowerCase();
     const icons = [];
     
-    if (s.includes("aire acondicionado")) icons.push(<span key="wind" title="Aire acondicionado"><Wind className="w-5 h-5 text-muted-foreground" /></span>);
-    if (s.includes("nevera") || s.includes("refrigerador")) icons.push(<span key="fridge" title="Nevera/Refrigerador"><Refrigerator className="w-5 h-5 text-muted-foreground" /></span>);
-    if (s.includes("tv") || s.includes("televisor")) icons.push(<span key="tv" title="Televisor"><Tv2 className="w-5 h-5 text-muted-foreground" /></span>);
-    if (s.includes("luces") || s.includes("led")) icons.push(<span key="lights" title="Luces LED"><Lightbulb className="w-5 h-5 text-muted-foreground" /></span>);
-    if (s.includes("celular") || s.includes("carga de equipos") || s.includes("celulares") || s.includes("smartphone")) icons.push(<span key="phone" title="Celulares"><Smartphone className="w-5 h-5 text-muted-foreground" /></span>);
-    if (s.includes("laptop")) icons.push(<span key="laptop" title="Laptops"><Laptop className="w-5 h-5 text-muted-foreground" /></span>);
-    if (s.includes("ventilador")) icons.push(<span key="fan" title="Ventilador"><Fan className="w-5 h-5 text-muted-foreground" /></span>);
-    
+    if (s.includes("cámara") || s.includes("camara") || s.includes("cámaras") || s.includes("camaras")) {
+      icons.push(<span key="camera" title="Cámaras de seguridad"><Camera className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("motor") || s.includes("motores") || s.includes("bomba")) {
+      icons.push(<span key="motor" title="Motores/Bombas de agua"><Gauge className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("aire acondicionado") || s.includes("aires")) {
+      icons.push(<span key="wind" title="Aire acondicionado"><Wind className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("nevera") || s.includes("refrigerador") || s.includes("neveras")) {
+      icons.push(<span key="fridge" title="Nevera/Refrigerador"><Refrigerator className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("microondas")) {
+      icons.push(<span key="microwave" title="Microondas"><Microwave className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("cafetera")) {
+      icons.push(<span key="coffee" title="Cafetera"><Coffee className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("tv") || s.includes("televisor")) {
+      icons.push(<span key="tv" title="Televisor"><Tv2 className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("laptop") || s.includes("laptops")) {
+      icons.push(<span key="laptop" title="Laptops"><Laptop className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("ventilador") || s.includes("ventiladores")) {
+      icons.push(<span key="fan" title="Ventilador"><Fan className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("luces") || s.includes("led")) {
+      icons.push(<span key="lights" title="Luces LED"><Lightbulb className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+    if (s.includes("celular") || s.includes("carga de equipos") || s.includes("celulares") || s.includes("smartphone")) {
+      icons.push(<span key="phone" title="Celulares"><Smartphone className="w-5 h-5 text-muted-foreground" /></span>);
+    }
+
     if (icons.length === 0) return null;
     
     return (
@@ -101,6 +131,22 @@ export default function ProductCard({
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-2 py-1 md:px-4 md:py-1.5 rounded-md text-xs md:text-sm font-bold uppercase tracking-wider z-20 shadow-lg whitespace-nowrap">
               Agotado
             </div>
+          )}
+
+          {onToggleCompare && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleCompare(product);
+              }}
+              className={`absolute bottom-2 right-2 z-20 px-2.5 py-1 rounded-full text-[10px] font-bold transition-all border shadow-sm flex items-center gap-1 active:scale-95 ${
+                isComparing
+                  ? "bg-[#00D9FF] text-black border-[#00D9FF]"
+                  : "bg-black/60 text-white border-white/20 hover:bg-black/80"
+              }`}
+            >
+              {isComparing ? "✓ Comparando" : "+ Comparar"}
+            </button>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   ClipboardCheck, Zap, Home, Cpu, CheckCircle2, 
   AlertTriangle, Calculator, Save, User, ShieldCheck, ArrowRight 
@@ -57,6 +57,45 @@ export default function LevantamientoForm() {
   const [customSuggestedPrice, setCustomSuggestedPrice] = useState<string>("");
 
   const selectedDeal = deals.find(d => d.id === selectedDealId);
+
+  // Cargar borrador offline guardado cuando se selecciona una OT
+  useEffect(() => {
+    if (!selectedDealId) return;
+    try {
+      const savedDraft = localStorage.getItem(`convoltaje_survey_draft_${selectedDealId}`);
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed.roofType) setRoofType(parsed.roofType);
+        if (parsed.availableAreaM2) setAvailableAreaM2(parsed.availableAreaM2);
+        if (parsed.electricalGrid) setElectricalGrid(parsed.electricalGrid);
+        if (parsed.groundingStatus) setGroundingStatus(parsed.groundingStatus);
+        if (parsed.cableDistanceMeters) setCableDistanceMeters(parsed.cableDistanceMeters);
+        if (parsed.appliances) setAppliances(parsed.appliances);
+        if (parsed.technicalNotes !== undefined) setTechnicalNotes(parsed.technicalNotes);
+        if (parsed.customSuggestedPrice !== undefined) setCustomSuggestedPrice(parsed.customSuggestedPrice);
+        toast.info("📑 Borrador offline recuperado automáticamente para esta OT.");
+      }
+    } catch (e) {
+      console.error("Error al cargar borrador de levantamiento:", e);
+    }
+  }, [selectedDealId]);
+
+  // Guardar borrador en tiempo real en localStorage
+  useEffect(() => {
+    if (!selectedDealId) return;
+    const draftData = {
+      roofType,
+      availableAreaM2,
+      electricalGrid,
+      groundingStatus,
+      cableDistanceMeters,
+      appliances,
+      technicalNotes,
+      customSuggestedPrice,
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem(`convoltaje_survey_draft_${selectedDealId}`, JSON.stringify(draftData));
+  }, [selectedDealId, roofType, availableAreaM2, electricalGrid, groundingStatus, cableDistanceMeters, appliances, technicalNotes, customSuggestedPrice]);
 
   // Auto-cálculos de Cargas
   const grossKwh = appliances.reduce((sum, a) => sum + (a.watts * a.quantity * a.hoursPerDay) / 1000, 0);
@@ -147,6 +186,7 @@ export default function LevantamientoForm() {
       proyectista
     );
 
+    localStorage.removeItem(`convoltaje_survey_draft_${selectedDeal.id}`);
     toast.success(`Levantamiento de terreno guardado en OT (${selectedDeal.otRef || selectedDeal.name}). ¡Notificado a Comercial!`);
   };
 

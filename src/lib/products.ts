@@ -43,6 +43,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
       "Instalación profesional incluida",
       "Garantía 3 meses — equipos e instalación"
     ],
+    supports: "Aire acondicionado, 4 neveras, TV, microondas, ventiladores, luces LED",
     manuals: [{ nombre: "Manual Inversor MUST Axpert MAX II 6.5-8kW (ES)", url: "https://www.solarstore.cl/wp-content/uploads/2024/06/AXPERT-MAX-II-MANUAL.-espanol.pdf" }]
   },
   {
@@ -222,7 +223,8 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     category: "Sistemas Solares Completos",
     popular: true,
     slug: "sistema-hibrido-5000w",
-    images: []
+    images: [],
+    supports: "Aire acondicionado, 4 neveras, TV, microondas, ventiladores, luces LED"
   },
   {
     id: "conv-12",
@@ -248,6 +250,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     discount: 14,
     slug: "ecoflow-delta-2",
     images: ["https://nl.ecoflow.com/cdn/shop/files/ecoflow-delta-2-portable-power-station-52097645347159.png"],
+    supports: "Laptop, celulares, ventilador, luces LED",
     manuals: [{ nombre: "Manual EcoFlow DELTA 2 (ES)", url: "https://manuals.ecoflow.com/eu/product/delta-2-portable-power-station?lang=es_ES" }]
   },
   {
@@ -260,6 +263,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     popular: true,
     slug: "ecoflow-delta-2-max",
     images: ["data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAFEAXAMBIgACEQEDEQH/xAAcAAABBAMBAAAAAAAAAAAAAAAAAQQFBwIDBgj/xABBEAABAwICBAoFCAsAAAAAAAABAAIDBBEFIQYSMUEHEzZRYXF0kbGyIjJyksEUFRYmNVNUoSMlMzREUlViY3PR/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFxEBAQEBAAAAAAAAAAAAAAAAABEBMf/aAAwDAQACEQMRAD8AvFCEh2FBUGK6TY2/FqyH5ymZFHO9jGx2ZZocQNgusqesq5s5quokv/PK4/FQc4/WdV/ud4rbVOxAQtbh7bEjOTVuR1LUYdHAbVUgccjZwuVJsfFq5vj7wqulwmtneZJ5nSuO0ySZ/mk+Y5t7We+EWLLqns1SWuaeoqM15IqeMske0lt7tcQuG+Y59waOp4UhQRYxSkMhkdPCNsbzrNt0HaEE3LjeLUx/Q4lVttu40kdxVgcHuKVmK4LJNiE5mlZO5gcWgHVsDuHSVWNbfeCDvB3LveCj7JrD/n+CmmO4QhCjQSHYUqEFB1csUeK1bZJGNIneCHOtb0jzrZiNTHJh0UUU7HBz7vax4NxnttuuuO0i5VYt26bzlP6Mji2dR+C0kTVNQNmY1wfE2+4hR2kNXDghiY6I1Uj2l7mwt9Ruy56Cb9xS4VpDDh1bP8pcBEz1gRe4BvbaEwrtKKCtqHTGcxuuCXZgnLa0ZgnK1nEDvKJuwz+ltN/Tp+4KfwHEIqttNXQtMLXPsdYgWF7G/QuTr8TwuakLIIGRyW3MaAMucZqT0YdbR+Af3O8yiutxOqp3SvAqITnukCsDgnN8FqnDNpqMiNmwKiMazlf1q6eAjkZN22TwamkWMhCFFCEIQeVdIeVWLdum85TumNms9k+ITTSLlXi/bpvOVuhdZrfZ+IVxG2SgpJ3OdLTMeXesSNqG4Php/goe5F28e0mR17D0A7I5cyyaLF54yQ63O7Z1KjH5ow38FD7qcsjip4BFDG2ONuxrRYbVrc9rWelI4G/rG3/LJHPHFizr5bedBFYwbyOV1cBPIyXtsng1Ulipu9yu3gJ5Fy9tk8GoqxkIQoBCEIPKekh+teL9um85Wcbsm+z8QtWkp+teL9um85SMds9n4qoeNewkExguAsHXN1uhlhGtxrHuy9HVcBY9NwckwD0+oKGrr21DqSDjRBHryekBqjnzOZyOWaWdGJcwghzA4HcUkj7g2FhbZdN9dBfkepAyxI3cVePATyKk7bJ4NVFV5u5XpwEciX9tk8GoqxkIQoBCEIPJ+k2WleL9um85WnjA22tldtvzU3wg6O4lg2k2Iy1NBMaWoqJJoalrCWPa52t6w2EXsQc8lzUFVBJ6F2X5iQVUPg5bIqiWIPEUj2B7S14a4jWHMehM7Rfdxe6Etovu4vdCBzrrF0gbtOZyAWi0X3cXuhI58MLS4iJg57AINdYblXxwD3+hL7/AIyTwaqEiLq6XUpIJKh5Ng2Jhee4L0bwSYJW4FohHBiUHyeommfMYTtYDYAHpsL26UV2iEIUAhCEGLvVPUqy4QP2MnWhCCrxtWR2IQqE3FS2i32mxKhBemA/ubepSaEKAQhCD//Z"],
+    supports: "Nevera, TV, laptop, celulares, ventilador, luces LED",
     manuals: [{ nombre: "Manual EcoFlow DELTA 2 Max (ES)", url: "https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/manual/1704188312270/EcoFlow%20DELTA%202%20Max%20-%20Manual%20de%20usuario(es).pdf" }]
   },
   {
@@ -273,6 +277,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     discount: 9,
     slug: "bluetti-ac200p",
     images: ["https://www.bluettipower.eu/cdn/shop/files/AC200PL-ZT1.png?v=1710490177&width=1200"],
+    supports: "Nevera, TV, laptop, celulares, ventilador, luces LED",
     manuals: [{ nombre: "Manual Bluetti AC200P (ES)", url: "https://www.manualslib.es/manual/674258/Bluetti-Ac200P.html" }]
   },
   {
@@ -284,6 +289,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     category: "PowerStations",
     slug: "anker-solix-f2000",
     images: ["https://www.onlinecamerashop.nl//media/nextgenimages/media/catalog/product/cache/350c0dac84622638a906c7177340801e/2/0/20d8f5342c9a21c250d1547fb9db5abb74d6704de36c87931d5cc21f009a492c-c769c233.webp"],
+    supports: "Nevera, TV, laptop, celulares, ventilador, luces LED",
     manuals: [{ nombre: "Manual Anker Solix F2000 (ES/EN)", url: "https://cdn.solarpowersupply.eu/files/A1780_EU_Manual_210x145mm_20230927-20231218.pdf" }]
   },
   {
@@ -296,6 +302,7 @@ export const CONVOLTAJE_PRODUCTS: Product[] = [
     popular: true,
     slug: "ecoflow-river-2",
     images: ["https://eu.ecoflow.com/cdn/shop/products/ecoflow-river-2-portable-power-station-42462876860580.png"],
+    supports: "Celulares, laptop, luces LED, ventilador",
     manuals: [{ nombre: "Manual EcoFlow RIVER 2 (ES)", url: "https://manuals.ecoflow.com/eu/product/river-2-portable-power-station?lang=es_ES" }]
   },
   {

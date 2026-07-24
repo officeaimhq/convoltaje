@@ -612,6 +612,39 @@ export default function OperationsPipeline() {
                   <span>💰 Pasar a Pendiente de Pago</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
+
+                <button
+                  onClick={() => {
+                    const isAuthorized = currentUser?.role === 'admin' || currentUser?.role === 'contable' || currentUser?.name === 'Laura';
+                    if (!isAuthorized) {
+                      toast.error("⛔ Permiso Denegado: Solo Admin (Ángel/Laura) y Contabilidad (José) pueden verificar pagos.");
+                      return;
+                    }
+                    handleSubstageChange(
+                      'pago_verificado',
+                      'Verificó y validó el cobro de la OT',
+                      'Pago acreditado en cuenta/caja. Habilitado para emisión de factura',
+                      'Facturado'
+                    );
+                  }}
+                  className="px-3 py-2 text-xs font-bold rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 transition-all flex items-center justify-between group active:scale-[0.96]"
+                >
+                  <span>💳 Verificar Pago (Admin/Contable)</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <button
+                  onClick={() => handleSubstageChange(
+                    'factura_emitida',
+                    'Emitió la factura final con sello de garantía',
+                    'Garantía real registrada y enviada al cliente',
+                    'Facturado'
+                  )}
+                  className="px-3 py-2 text-xs font-bold rounded-xl border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 transition-all flex items-center justify-between group active:scale-[0.96]"
+                >
+                  <span>📄 Emitir Factura & Garantía</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
 
