@@ -3,19 +3,24 @@ import { AdminView } from '@/components/dashboard/Sidebar';
 
 // Matriz de permisos por rol (Módulo x Rol)
 const PERMISSIONS_MATRIX: Record<UserRole, AdminView[]> = {
+  superadmin: [
+    'inicio', 'pipeline', 'calendario', 'almacen', 'finanzas', 'instalaciones',
+    'quejas', 'ajustes', 'calculadora', 'historial', 'plantillas', 'errores',
+    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas', 'levantamiento', 'kits', 'ofertas', 'servicios'
+  ],
   admin: [
     'inicio', 'pipeline', 'calendario', 'almacen', 'finanzas', 'instalaciones',
     'quejas', 'ajustes', 'calculadora', 'historial', 'plantillas', 'errores',
-    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas', 'levantamiento'
+    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas', 'levantamiento', 'kits', 'ofertas', 'servicios'
   ],
   ceo: [
     'inicio', 'pipeline', 'calendario', 'almacen', 'finanzas', 'instalaciones',
     'quejas', 'ajustes', 'calculadora', 'historial', 'plantillas', 'errores',
-    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas', 'levantamiento'
+    'manuales', 'asignaciones', 'validacion', 'herramientas', 'utiles', 'entregas', 'levantamiento', 'kits', 'ofertas', 'servicios'
   ],
   comercial: [
     'inicio', 'pipeline', 'calendario', 'quejas', 'calculadora',
-    'plantillas', 'utiles', 'manuales', 'levantamiento'
+    'plantillas', 'utiles', 'manuales', 'levantamiento', 'kits'
   ],
   tecnico: [
     'inicio', 'calendario', 'instalaciones', 'almacen', 'asignaciones',
@@ -23,7 +28,7 @@ const PERMISSIONS_MATRIX: Record<UserRole, AdminView[]> = {
   ],
   proyectista: [
     'inicio', 'levantamiento', 'calendario', 'calculadora', 'utiles', 'manuales',
-    'herramientas', 'errores'
+    'herramientas', 'errores', 'kits'
   ],
   transportista: [
     'inicio', 'entregas', 'almacen', 'utiles', 'manuales'

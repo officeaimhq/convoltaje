@@ -1,14 +1,21 @@
 import { useState, useEffect } from "react";
+import { useParticipationStore } from "@/hooks/useParticipationStore";
 
 interface HeaderProps {
   onResetBrand?: () => void;
+  onOpenRaffle?: () => void;
 }
 
-export default function Header({ onResetBrand }: HeaderProps) {
+export default function Header({ onResetBrand, onOpenRaffle }: HeaderProps) {
   const [activeTab, setActiveTab] = useState<string>("inicio");
+  const { currentParticipant } = useParticipationStore();
 
   const scrollTo = (id: string) => {
     setActiveTab(id);
+    if (id === "inicio") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -40,25 +47,38 @@ export default function Header({ onResetBrand }: HeaderProps) {
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
       <div className="container mx-auto px-4">
         {/* Mobile: Logo + Access Button */}
-        <div className="md:hidden py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo("inicio")}>
+        <div className="md:hidden py-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 cursor-pointer min-w-0" onClick={() => scrollTo("inicio")}>
             <img
               src="https://img2.elyerromenu.com/images/convoltaje/logo-c/img.webp"
               alt="Convoltaje Logo"
-              className="w-9 h-9 object-contain rounded-md"
+              className="w-8 h-8 object-contain rounded-md flex-shrink-0"
             />
-            <div className="flex flex-col text-left">
-              <h1 className="font-display text-base text-primary font-bold leading-none">Convoltaje</h1>
+            <div className="flex flex-col text-left truncate">
+              <h1 className="font-display text-sm text-primary font-bold leading-none truncate">Convoltaje</h1>
               <p className="text-[9px] text-muted-foreground leading-none">Energía Solar</p>
             </div>
           </div>
-          <a
-            href="/admin/login"
-            className="px-3 py-1.5 rounded-xl bg-[#0b3c8f] text-white text-[11px] font-bold shadow-sm flex items-center gap-1"
-          >
-            <span>Acceso Equipo</span>
-            <span>➔</span>
-          </a>
+          
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {onOpenRaffle && (
+              <button
+                onClick={onOpenRaffle}
+                className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#f0551a] text-white text-[10px] font-black shadow-sm flex items-center gap-1 active:scale-95"
+              >
+                <span>🎟️</span>
+                <span>{currentParticipant ? currentParticipant.ticketNumber : 'Rifa Solar'}</span>
+              </button>
+            )}
+
+            <a
+              href="/admin/login"
+              className="px-2.5 py-1.5 rounded-xl bg-[#0b3c8f] text-white text-[10px] font-bold shadow-sm flex items-center gap-1"
+            >
+              <span>Equipo</span>
+              <span>➔</span>
+            </a>
+          </div>
         </div>
 
         {/* Desktop: Logo + Tabs + Acceso Equipo */}
@@ -100,14 +120,16 @@ export default function Header({ onResetBrand }: HeaderProps) {
             >
               Contáctanos
             </button>
-            {onResetBrand && (
+            {onOpenRaffle && (
               <button
-                onClick={onResetBrand}
-                className="text-xs text-muted-foreground hover:text-cyan-500 transition-colors font-medium flex items-center gap-1 border-r border-border pr-3"
+                onClick={onOpenRaffle}
+                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#f0551a] hover:brightness-110 text-white text-xs font-black shadow-md shadow-orange-500/20 flex items-center gap-1.5 transition-all active:scale-95"
               >
-                <span>← Cambiar Marca</span>
+                <span>🎟️</span>
+                <span>{currentParticipant ? `Ticket: ${currentParticipant.ticketNumber}` : 'Rifa Solar'}</span>
               </button>
             )}
+
             <a
               href="/admin/login"
               className="px-4 py-2 rounded-xl bg-[#0b3c8f] hover:bg-[#092d6e] text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5"
